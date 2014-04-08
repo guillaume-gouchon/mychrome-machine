@@ -1,0 +1,58 @@
+function Car(id, image) {
+	// in game
+	this.id = id;
+	this.life = 3;
+	this.isOut = false;
+	this.x = id * 60;
+	this.y = 50;
+	this.rotation = 0;
+	this.dx = 0;// force centrifuge (centripete ?)
+	this.dy = 0;// force moteur
+
+	// graphism
+	this.image = image;
+	this.color = PLAYER_COLORS[id];
+
+	// car characteristics
+	this.acceleration = 0.08;
+	this.maxAcceleration = 4;
+	this.brakePower = 0.06;
+	this.rotationSpeed = 0.07;
+	this.glide = 0.1;
+	this.maxGlide = 1.6;
+	this.naturalDecceleration = 0.03;
+	this.adherence = 0.11;
+
+	this.accelerate = function () {
+		this.dy = Math.min(this.dy + this.acceleration, this.maxAcceleration);
+	}
+
+	this.brake = function () {
+		this.dy = Math.max(0, this.dy - this.brakePower);
+	}
+
+	this.turn = function (isLeft) {
+		this.rotation += (isLeft ? -1 : 1) * this.rotationSpeed;
+		this.dx += (isLeft ? -1 : 1) * this.glide * this.dy;
+		if (Math.abs(this.dx) > this.maxGlide) {
+			this.dx = this.dx / Math.abs(this.dx) * this.maxGlide;
+		}
+	}
+
+	this.update = function () {
+		if (!this.isOut) {
+			this.x += this.dy * Math.cos(this.rotation) + this.dx * Math.cos(this.rotation - 90);
+			this.y += this.dy * Math.sin(this.rotation) + this.dx * Math.sin(this.rotation - 90);
+
+			if (this.dy > 0) {
+				this.dy = Math.max(0, this.dy - this.naturalDecceleration);
+			}
+
+			if (this.dx < 0) {
+				this.dx = Math.min(0, this.dx + this.adherence);
+			} else if (this.dx > 0) {
+				this.dx = Math.max(0, this.dx - this.adherence);
+			}
+		}
+	}
+}

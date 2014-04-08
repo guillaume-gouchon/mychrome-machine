@@ -1,0 +1,17 @@
+$icon-font-path: "/bower_components/sass-bootstrap/fonts/";
+
+@import 'sass-bootstrap/lib/bootstrap';
+
+
+canvas {
+    height: 100%;
+    width: 100%;
+}
+
+body {
+    background-color: #ccc;
+    background-image: linear-gradient(90deg, rgba(0,0,150, 0.1) 50%, transparent 50%),
+    linear-gradient(rgba(0,0,150, 0.1) 50%, transparent 50%);
+    background-size: 70px 70px;
+    background-attachment: fixed;
+}
