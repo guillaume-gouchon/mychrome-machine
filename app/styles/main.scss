@@ -1,6 +1,13 @@
-$icon-font-path: "/bower_components/sass-bootstrap/fonts/";
-
+@import "compass";
 @import 'sass-bootstrap/lib/bootstrap';
+
+@import 'variables';
+
+
+body {
+    background-color: #000;
+    overflow: hidden;
+}
 
 
 canvas {
@@ -8,10 +15,149 @@ canvas {
     width: 100%;
 }
 
-body {
-    background-color: #ccc;
-    background-image: linear-gradient(90deg, rgba(0,0,150, 0.1) 50%, transparent 50%),
-    linear-gradient(rgba(0,0,150, 0.1) 50%, transparent 50%);
-    background-size: 70px 70px;
-    background-attachment: fixed;
+
+.blink {
+    -webkit-animation: blink $pointsAnimationDuration alternate infinite;
+    -moz-animation: blink $pointsAnimationDuration alternate infinite;
+}
+@-webkit-keyframes blink {
+    from { opacity: 1 }
+    to   { opacity: 0.7 }
+}
+@-moz-keyframes blink {
+    from { opacity: 1 }
+    to   { opacity: 0.7 }
+}
+
+
+#gui {
+	height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+
+    .playerPoints {
+    	position: absolute;
+
+    	.point {
+    		height: 16px;
+    		width: 16px;
+    		border-radius: 100%;
+    		@include single-transition(all, 1000ms, false, false);
+    		opacity: 0.2;
+    		margin-bottom: 4px;
+
+    		&.active {
+	    		@extend .blink;
+    		}
+    	}
+    }
+
+    .playerPoints:nth-child(1) {
+    	top: $playerPointsSpace;
+    	left: $playerPointsSpace;
+
+    	.point {
+	        @include gradient(#00f, $pointsToColor);
+    	}
+    }
+
+    .playerPoints:nth-child(2) {
+    	top: $playerPointsSpace;
+    	right: $playerPointsSpace;
+
+    	.point {
+    		@include gradient(#f00, $pointsToColor);
+    	}
+    }
+
+    .playerPoints:nth-child(3) {
+    	bottom: $playerPointsSpace;
+    	left: $playerPointsSpace;
+
+    	.point {
+    		@include gradient(#ff0, $pointsToColor);
+    	}
+    }
+
+    .playerPoints:nth-child(4) {
+    	bottom: $playerPointsSpace;
+    	right: $playerPointsSpace;
+
+    	.point {
+    		@include gradient(#0f0, $pointsToColor);
+    	}
+    }
+
+    #bigMessage {
+    	position: absolute;
+    	top: 40%;
+    	left: 0%;
+    	width: 100%;
+    	color: #eee;
+    	text-align: center;
+    	background: rgba(200, 200, 200, 0.1);
+    	opacity: 0;
+    	
+    	&.showLeave {
+	    	-webkit-animation: showBigMessage 2200ms 1 ease-in-out;
+		    -moz-animation: showBigMessage 2200ms 1 ease-in-out;
+	    }
+
+	    &.show {
+	    	-webkit-animation: showBigMessage 2200ms 1 ease-in-out;
+		    -moz-animation: showBigMessage 2200ms 1 ease-in-out;
+	    }
+    }
+}
+
+@-webkit-keyframes showBigMessage {
+    0% {
+        font-size: 0.0em;
+        opacity: 1;
+    }
+    45% {
+    	font-size: 7.0em;
+    	left: 0%;
+    	opacity: 1;
+    }
+    75% {
+    	font-size: 7.0em;
+    	left: 0%;
+    	opacity: 1;
+    }
+    100% {
+    	font-size: 7.0em;
+        left: -100%;
+        opacity: 0;
+    }
+}
+
+@-moz-keyframes showBigMessage {
+    0% {
+        font-size: 0.0em;
+        opacity: 1;
+    }
+    45% {
+    	font-size: 7.0em;
+    	left: 0%;
+    	opacity: 1;
+    }
+    75% {
+    	font-size: 7.0em;
+    	left: 0%;
+    	opacity: 1;
+    }
+    100% {
+    	font-size: 7.0em;
+        left: -100%;
+        opacity: 0;
+    }
+}
+
+
+
+.hide {
+	display: none;
 }

@@ -1,0 +1,16 @@
+$playerPointsSpace: 10px;
+
+$pointsAnimationDuration: 1.0s;
+$pointsToColor: #fff;
+$pointsFromColorPercentage: 20%;
+$pointsToColorPercentage: 100%;
+
+@mixin gradient($from-color, $to-color) {
+    background: -moz-radial-gradient(center, ellipse cover, $from-color $pointsFromColorPercentage, $to-color $pointsToColorPercentage);
+	background: -webkit-gradient(radial, center center, 0px, center center, $pointsToColorPercentage, color-stop($pointsFromColorPercentage,$from-color), color-stop($pointsToColorPercentage,$to-color));
+	background: -webkit-radial-gradient(center, ellipse cover, $from-color $pointsFromColorPercentage,$to-color $pointsToColorPercentage);
+	background: -o-radial-gradient(center, ellipse cover, $from-color $pointsFromColorPercentage,$to-color $pointsToColorPercentage);
+	background: -ms-radial-gradient(center, ellipse cover, $from-color $pointsFromColorPercentage,$to-color $pointsToColorPercentage);
+	background: radial-gradient(ellipse at center, $from-color $pointsFromColorPercentage,$to-color $pointsToColorPercentage);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$from-color', endColorstr='$to-color',GradientType=1 );
+}

@@ -3,7 +3,8 @@ function Car(id, image) {
 	this.id = id;
 	this.life = 3;
 	this.isOut = false;
-	this.x = id * 60;
+	this.outRank = 0;
+	this.x = 50 + id * 60;
 	this.y = 50;
 	this.rotation = 0;
 	this.dx = 0;// force centrifuge (centripete ?)
@@ -25,11 +26,11 @@ function Car(id, image) {
 
 	this.accelerate = function () {
 		this.dy = Math.min(this.dy + this.acceleration, this.maxAcceleration);
-	}
+	};
 
 	this.brake = function () {
 		this.dy = Math.max(0, this.dy - this.brakePower);
-	}
+	};
 
 	this.turn = function (isLeft) {
 		this.rotation += (isLeft ? -1 : 1) * this.rotationSpeed;
@@ -37,7 +38,7 @@ function Car(id, image) {
 		if (Math.abs(this.dx) > this.maxGlide) {
 			this.dx = this.dx / Math.abs(this.dx) * this.maxGlide;
 		}
-	}
+	};
 
 	this.update = function () {
 		if (!this.isOut) {
@@ -54,5 +55,13 @@ function Car(id, image) {
 				this.dx = Math.max(0, this.dx - this.adherence);
 			}
 		}
-	}
+	};
+
+	this.reset = function () {
+		this.isOut = false;
+		this.outRank = 0;
+		this.rotation = 0;
+		this.dx = 0;
+		this.dy = 0;
+	};
 }

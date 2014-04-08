@@ -27,10 +27,12 @@ function animate() {
 
 	drawGame();
 
-	// request new frame
-	requestAnimFrame(function () {
-	  animate();
-	});
+	if (!game.isPaused) {
+		// request new frame
+		requestAnimFrame(function () {
+		  animate();
+		});
+	}
 
 }
 
@@ -75,6 +77,10 @@ function drawGame() {
 	
 }
 
+
+function endGame(victoriousCar) {
+	console.log('Victorious car is ' + victoriousCar.id + ' !');
+}
 
 
 
