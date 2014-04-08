@@ -66,9 +66,11 @@ function drawGame() {
 	for (var i = 0; i < game.nbPlayers; i++) {
 		var car = game.cars[i];
 		if (!car.isOut) {
-			ctx.fillStyle = car.color;
 			ctx.translate(car.x - 35/2, car.y - 20/2);
 			ctx.rotate(car.rotation);
+			ctx.fillStyle = '#fff';
+			ctx.fillRect(- 35/2 + Math.abs(car.dx) * 3, - 20/2 + car.dx * 3, -car.dy * 3, 20)
+			ctx.fillStyle = car.color;
 			ctx.fillRect(- 35/2, - 20/2, 35, 20);
 			ctx.rotate(-car.rotation);
 			ctx.translate(-car.x + 35/2, -car.y + 20/2);
@@ -78,11 +80,13 @@ function drawGame() {
 }
 
 
-function endGame(victoriousCar) {
-	console.log('Victorious car is ' + victoriousCar.id + ' !');
+var game = null;
+
+function startGame() {
+	$('#bigMessage').removeClass('show');
+	game = new Game(2, new Race(1, 'car'));
+	game.start();	
 }
 
 
-
-var game = new Game(2, new Race(1, 'car'));
-game.start();
+startGame();

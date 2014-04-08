@@ -1,5 +1,3 @@
-
-
 function GUI (nbPlayers, victory) {
 
 	this.nbPlayers = nbPlayers;
@@ -11,29 +9,37 @@ function GUI (nbPlayers, victory) {
 			for (var n = 0; n < this.victory; n++) {
 				s += '<div class="point ' + (n >= this.victory - 3 ? 'active' : '') + '">&nbsp;</div>';
 			}
-			$('.playerPoints:nth(' + i + ')').append(s);
+			$('.playerPoints:nth(' + i + ')').html(s);
 		}
-
-		this.showLabel('GO !')
+		this.showLabel('GO !', true)
 	};
 
 	this.showVictory = function (car) {
-		this.showLabel('<div>Player ' + (car.id + 1) + ' has won !</div><button id="btnReplay" class="btn">Replay ?</button>', false);
+		this.showLabel('<div>Player ' + (car.id + 1) + ' has won !</div><button class="btn" onClick="startGame()">Replay ?</button>', false);
 	};
 
 	this.updatePoints = function (cars) {
-		$('.playerPoints .point').removeClass('active');
 		for (var i = 0; i < this.nbPlayers; i++) {
 			var car = cars[i];
 			for (var n = 0; n < this.victory; n++) {
-				if (n >= this.victory - car.life) {
-					$('.playerPoints:nth(' + i + ') .point:nth(' + n + ')').addClass('active');
+				var element = $('.playerPoints:nth(' + i + ') .point:nth(' + n + ')');
+				if (n >= this.victory - car.life && !element.hasClass('active')) {
+					element.addClass('active new');
+				} else if (n < this.victory - car.life && element.hasClass('active')) {
+					element.removeClass('active');
+					element.outerWidth();// trick to stop the CSS animation and start another one
+					element.addClass('new');
 				}
 			}
 		}
+
+		setTimeout(function () {
+			$('.playerPoints .point.new').removeClass('new').outerWidth();
+		}, 1500);
 	};
 
 	this.showLabel = function (text, isLeaving) {
+		console.log('GUI', 'showLabel', text);
 		var bigMessage = $('#bigMessage');
 		bigMessage.html(text);
 		if (isLeaving) {

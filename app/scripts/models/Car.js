@@ -17,8 +17,8 @@ function Car(id, image) {
 	// car characteristics
 	this.acceleration = 0.08;
 	this.maxAcceleration = 4;
-	this.brakePower = 0.06;
-	this.rotationSpeed = 0.07;
+	this.brakePower = 0.08;
+	this.rotationSpeed = 0.05;
 	this.glide = 0.1;
 	this.maxGlide = 1.6;
 	this.naturalDecceleration = 0.03;

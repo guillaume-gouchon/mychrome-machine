@@ -102,7 +102,6 @@ function Game(nbPlayers, race) {
 		var victoriousCar = this.checkVictory();
 		if (victoriousCar != null) {
 			this.GUI.showVictory(victoriousCar);
-			endGame(victoriousCar);
 		} else {
 			var _this = this;
 			setTimeout(function () {

@@ -1,18 +1,29 @@
 @import "compass";
-@import 'sass-bootstrap/lib/bootstrap';
-
 @import 'variables';
-
+@include font-face("Exo", font-files("/fonts/exo.woff"));
 
 body {
     background-color: #000;
     overflow: hidden;
+    font-family: 'Exo';
 }
 
 
 canvas {
     height: 100%;
     width: 100%;
+}
+
+button {
+    font-family: 'Exo';
+    font-size: 0.4em;
+    padding: 20px;
+    background: #ddd;
+    cursor: pointer;
+
+    &:hover {
+        opacity: 0.7;
+    }
 }
 
 
@@ -27,6 +38,18 @@ canvas {
 @-moz-keyframes blink {
     from { opacity: 1 }
     to   { opacity: 0.7 }
+}
+.heavyBlink {
+    -webkit-animation: heavyblink $pointsHeavyAnimationDuration alternate infinite;
+    -moz-animation: heavyblink $pointsHeavyAnimationDuration alternate infinite;
+}
+@-webkit-keyframes heavyblink {
+    from { opacity: 1 }
+    to   { opacity: 0.2 }
+}
+@-moz-keyframes heavyblink {
+    from { opacity: 1 }
+    to   { opacity: 0.2 }
 }
 
 
@@ -51,6 +74,10 @@ canvas {
     		&.active {
 	    		@extend .blink;
     		}
+
+            &.new {
+                @extend .heavyBlink;
+            }
     	}
     }
 
@@ -97,62 +124,89 @@ canvas {
     	width: 100%;
     	color: #eee;
     	text-align: center;
-    	background: rgba(200, 200, 200, 0.1);
+    	background: rgba(200, 200, 200, 0.15);
     	opacity: 0;
+        font-size: 7.0em;
     	
     	&.showLeave {
-	    	-webkit-animation: showBigMessage 2200ms 1 ease-in-out;
-		    -moz-animation: showBigMessage 2200ms 1 ease-in-out;
+	    	-webkit-animation: showLeave 2200ms 1 ease-in-out;
+		    -moz-animation: showLeave 2200ms 1 ease-in-out;
 	    }
 
 	    &.show {
-	    	-webkit-animation: showBigMessage 2200ms 1 ease-in-out;
-		    -moz-animation: showBigMessage 2200ms 1 ease-in-out;
+	    	-webkit-animation: show 2200ms 1 ease-in-out;
+		    -moz-animation: show 2200ms 1 ease-in-out;
+            left: 0%;
+            opacity: 1;
 	    }
     }
 }
 
-@-webkit-keyframes showBigMessage {
+@-webkit-keyframes showLeave {
     0% {
-        font-size: 0.0em;
-        opacity: 1;
+        opacity: 0;
     }
-    45% {
-    	font-size: 7.0em;
+    50% {
     	left: 0%;
     	opacity: 1;
     }
     75% {
-    	font-size: 7.0em;
     	left: 0%;
     	opacity: 1;
     }
     100% {
-    	font-size: 7.0em;
         left: -100%;
         opacity: 0;
     }
 }
 
-@-moz-keyframes showBigMessage {
+@-moz-keyframes showLeave {
     0% {
-        font-size: 0.0em;
         opacity: 1;
     }
-    45% {
-    	font-size: 7.0em;
+    50% {
     	left: 0%;
     	opacity: 1;
     }
     75% {
-    	font-size: 7.0em;
     	left: 0%;
     	opacity: 1;
     }
     100% {
-    	font-size: 7.0em;
         left: -100%;
         opacity: 0;
+    }
+}
+
+@-webkit-keyframes show {
+    0% {
+        opacity: 1;
+    }
+    45% {
+        left: 0%;
+        opacity: 1;
+    }
+    75% {
+        left: 0%;
+        opacity: 1;
+    }
+    100% {
+    }
+}
+
+@-moz-keyframes show {
+    0% {
+        opacity: 1;
+    }
+    45% {
+        left: 0%;
+        opacity: 1;
+    }
+    75% {
+        left: 0%;
+        opacity: 1;
+    }
+    100% {
     }
 }
 
