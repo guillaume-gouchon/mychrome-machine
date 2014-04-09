@@ -7,10 +7,12 @@ window.requestAnimFrame = (function(callback) {
 })();
 
 
-var screenwidth = window.innerWidth, screenheight = window.innerWidth;
 
 var carCanvas = document.getElementById("cars");
 var ctx = carCanvas.getContext("2d");
+
+var screenwidth = carCanvas.width, screenheight = carCanvas.height;
+
 
 var PLAYER_COLORS = ['#0000ff', '#ff0000', '#ffff00', '#00ff00'];
 var PLAYER_START_POINTS = 3;
@@ -62,13 +64,20 @@ function clearCanvas() {
 }
 
 function drawGame() {
+	// draw direction
+	ctx.strokeStyle = '#fff';
+	ctx.beginPath();
+	ctx.moveTo(screenwidth/2,screenheight/2);
+	ctx.lineTo(screenwidth / 2 + screenheight / 2 / Math.tan(degToRad(game.whereToGo)),screenheight);
+	ctx.stroke();
+
 	// draw cars
 	for (var i = 0; i < game.nbPlayers; i++) {
 		var car = game.cars[i];
 		if (!car.isOut) {
 			ctx.translate(car.x - 35/2, car.y - 20/2);
 			ctx.rotate(car.rotation);
-			ctx.fillStyle = '#fff';
+			ctx.fillStyle = '#aaa';
 			ctx.fillRect(- 35/2 + Math.abs(car.dx) * 3, - 20/2 + car.dx * 3, -car.dy * 3, 20)
 			ctx.fillStyle = car.color;
 			ctx.fillRect(- 35/2, - 20/2, 35, 20);
@@ -93,4 +102,33 @@ function restartGame() {
 }
 
 
-startGame(2, 1);
+startGame(4, 1);
+
+
+
+
+
+/**
+*	Utils
+*/
+function degToRad(deg) {
+	return deg * Math.PI / 180;
+}
+
+function getAngleCar(deg, x, y) {
+	var angle = Math.PI / 2 - degToRad(deg) - Math.asin(x / (x * x + y * y));
+	// console.log(180 * angle / Math.PI);
+	return angle;
+}
+
+function getTranslationDiff(distance, angle) {
+    if (angle > 0  && angle < Math.PI) {
+        return [distance * Math.cos(angle), distance * Math.sin(angle)];
+    } else {
+        return [- distance * Math.cos(angle), distance * Math.sin(angle + Math.PI)];
+    }
+}
+
+function getDistanceBetween(x1, y1, x2, y2) {
+	return Math.pow(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2), 0.5);
+}

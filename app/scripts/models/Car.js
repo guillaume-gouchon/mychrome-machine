@@ -17,7 +17,7 @@ function Car(id, image) {
 	// car characteristics
 	this.acceleration = 0.08;
 	this.maxAcceleration = 4;
-	this.brakePower = 0.08;
+	this.brakePower = 0.16;
 	this.rotationSpeed = 0.05;
 	this.glide = 0.1;
 	this.maxGlide = 1.6;
@@ -43,8 +43,8 @@ function Car(id, image) {
 	this.update = function (updatePosition) {
 		if (!this.isOut) {
 			if (updatePosition) {
-				this.x += this.dy * Math.cos(this.rotation) + this.dx * Math.cos(this.rotation - 90);
-				this.y += this.dy * Math.sin(this.rotation) + this.dx * Math.sin(this.rotation - 90);
+				this.x += this.dy * Math.cos(this.rotation) + this.dx * Math.cos(this.rotation - Math.PI / 2);
+				this.y += this.dy * Math.sin(this.rotation) + this.dx * Math.sin(this.rotation - Math.PI / 2);
 			}
 
 			if (this.dy > 0) {
