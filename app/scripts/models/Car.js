@@ -11,7 +11,7 @@ function Car(id, image) {
 	this.dy = 0;// force moteur
 
 	// graphism
-	this.image = image;
+	this.image = IMAGES_PATH + image + '_' + id + '.png';
 	this.color = PLAYER_COLORS[id];
 
 	// car characteristics

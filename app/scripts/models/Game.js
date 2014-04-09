@@ -61,6 +61,7 @@ function Game(nbPlayers, race) {
 			}
 
 			if (this.carsOut >= this.nbPlayers - 1 && !this.isPaused) {
+				this.carsOut = 0;
 				this.endRound();
 			}
 		}
@@ -68,6 +69,7 @@ function Game(nbPlayers, race) {
 
 	this.endRound = function () {
 		console.log('GAME', 'end round');
+
 		// pause game
 		this.isPaused = true;
 
@@ -84,6 +86,9 @@ function Game(nbPlayers, race) {
 				}
 			} else {
 				car.life = Math.min(this.victory, car.life + 2);
+
+				// show winner car
+				this.GUI.showWinnerCar(car);
 			}
 		}
 
@@ -106,7 +111,9 @@ function Game(nbPlayers, race) {
 
 	this.startRound = function () {
 		console.log('GAME', 'start new round');
-		this.carsOut = 0;
+
+		// hide winner car
+		this.GUI.hideWinnerCar(car);
 
 		// replace cars
 		for (var i = 0; i < this.nbPlayers; i++) {

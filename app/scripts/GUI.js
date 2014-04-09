@@ -16,7 +16,19 @@ function GUI (nbPlayers, victory) {
 
 	this.showVictory = function (car) {
 		console.log('GUI', 'showVictory');
-		this.showLabel('<div>Player ' + (car.id + 1) + ' has won !</div><button class="btn" onClick="startGame()">Replay ?</button>', false);
+		this.showWinnerCar(car);
+		this.showLabel('<div>Player ' + (car.id + 1) + ' has won !</div><button class="btn" onClick="restartGame()">Replay ?</button>', false);
+	};
+
+	this.showWinnerCar = function (car) {
+		console.log('GUI', 'showWinnerCar');
+		$('#victory img').attr('src', car.image);
+		$('#victory').removeClass('hide');
+	};
+
+	this.hideWinnerCar = function () {
+		console.log('GUI', 'hideWinnerCar');
+		$('#victory').addClass('hide');
 	};
 
 	this.updatePoints = function (cars) {

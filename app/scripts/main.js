@@ -14,8 +14,10 @@ var ctx = carCanvas.getContext("2d");
 
 var PLAYER_COLORS = ['#0000ff', '#ff0000', '#ffff00', '#00ff00'];
 var PLAYER_START_POINTS = 3;
-var NEW_ROUND_PAUSE_DURATION = 1500;
-var TRAFFIC_LIGHTS_EACH_DURATION = 500;
+var NEW_ROUND_PAUSE_DURATION = 2000;
+var TRAFFIC_LIGHTS_EACH_DURATION = 700;
+
+var IMAGES_PATH = '../images/';
 
 function animate() {
 
@@ -84,6 +86,10 @@ function startGame(nbPlayers, raceId) {
 	$('#bigMessage').removeClass('show');
 	game = new Game(nbPlayers, new Race(raceId, 'car'));
 	game.start();	
+}
+
+function restartGame() {
+	startGame(game.nbPlayers, game.race.id);
 }
 
 
