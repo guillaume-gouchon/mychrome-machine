@@ -12,10 +12,10 @@ var screenwidth = window.innerWidth, screenheight = window.innerWidth;
 var carCanvas = document.getElementById("cars");
 var ctx = carCanvas.getContext("2d");
 
-
-
 var PLAYER_COLORS = ['#0000ff', '#ff0000', '#ffff00', '#00ff00'];
-
+var PLAYER_START_POINTS = 3;
+var NEW_ROUND_PAUSE_DURATION = 1500;
+var TRAFFIC_LIGHTS_EACH_DURATION = 500;
 
 function animate() {
 
@@ -35,8 +35,6 @@ function animate() {
 	}
 
 }
-
-
 
 function clearCanvas() {
 	var minX = carCanvas.width, minY = carCanvas.height, maxX = 0, maxY = 0;
@@ -82,11 +80,11 @@ function drawGame() {
 
 var game = null;
 
-function startGame() {
+function startGame(nbPlayers, raceId) {
 	$('#bigMessage').removeClass('show');
-	game = new Game(2, new Race(1, 'car'));
+	game = new Game(nbPlayers, new Race(raceId, 'car'));
 	game.start();	
 }
 
 
-startGame();
+startGame(2, 1);

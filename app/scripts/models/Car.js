@@ -1,7 +1,7 @@
 function Car(id, image) {
 	// in game
 	this.id = id;
-	this.life = 3;
+	this.life = PLAYER_START_POINTS;
 	this.isOut = false;
 	this.outRank = 0;
 	this.x = 50 + id * 60;
@@ -40,10 +40,12 @@ function Car(id, image) {
 		}
 	};
 
-	this.update = function () {
+	this.update = function (updatePosition) {
 		if (!this.isOut) {
-			this.x += this.dy * Math.cos(this.rotation) + this.dx * Math.cos(this.rotation - 90);
-			this.y += this.dy * Math.sin(this.rotation) + this.dx * Math.sin(this.rotation - 90);
+			if (updatePosition) {
+				this.x += this.dy * Math.cos(this.rotation) + this.dx * Math.cos(this.rotation - 90);
+				this.y += this.dy * Math.sin(this.rotation) + this.dx * Math.sin(this.rotation - 90);
+			}
 
 			if (this.dy > 0) {
 				this.dy = Math.max(0, this.dy - this.naturalDecceleration);
