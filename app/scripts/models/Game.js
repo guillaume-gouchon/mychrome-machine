@@ -6,6 +6,7 @@ function Game(nbPlayers, race) {
 	this.victory = 8;
 
 	this.GUI = new GUI(this.nbPlayers, this.victory);
+	this.physics = new Physics();
 
 	this.isPaused = false;
 	this.isAccelerationPhase = false;
@@ -14,7 +15,9 @@ function Game(nbPlayers, race) {
 
 	// init cars
 	for (var i = 0; i < nbPlayers; i++) {
-		this.cars.push(new Car(i, race.carImage));
+		var car = new Car(i, race.carImage);
+		this.cars.push(car);
+		this.physics.addActiveElement(car);
 	}
 
 	this.start = function () {
@@ -31,6 +34,9 @@ function Game(nbPlayers, race) {
 		}
 
 		if (!game.isAccelerationPhase) {
+			// resolve collisions
+			this.physics.update();
+
 			// find first car
 			var firstCar = this.getFirstCar();
 
@@ -108,10 +114,18 @@ function Game(nbPlayers, race) {
 		// hide winner car
 		this.GUI.hideWinnerCar(car);
 
-		// replace cars
+		// reposition cars
 		var translationBetweenCars = getTranslationDiff(30, degToRad(this.whereToGo) - Math.PI / 2);
+		// shuffle car order
+		var shuffleArray = [];
 		for (var i = 0; i < this.nbPlayers; i++) {
-			var car = this.cars[i];
+			shuffleArray.push(i);
+		}
+		for (var i = 0; i < this.nbPlayers; i++) {
+			// get random index
+			var randomIndex = Math.floor(Math.random() * shuffleArray.length);
+			var car = this.cars[shuffleArray[randomIndex]];
+			shuffleArray.splice(randomIndex, 1);
 			car.reset();
 			car.x = screenwidth / 2 + translationBetweenCars[0] * (i - this.nbPlayers / 2);
 			car.y = screenheight / 2 + translationBetweenCars[1] * (i - this.nbPlayers / 2);
@@ -164,6 +178,19 @@ function Game(nbPlayers, race) {
 			}
 		}
 		return firstCar;
+	}
+
+
+	this.checkCollisions = function (object) {
+		var l = this.rigidBodies.length;
+		for (var i = 0; i < l; i++) {
+			var rigidBody = this.rigidBodies[i];
+			if (object != rigidBody && !rigidBody.isOut) {
+				if (getDistanceBetween(object.x, object.y, rigidBody.x, rigidBody.y) < 10) {
+					console.log('GAME', 'collision !');
+				}
+			}
+		}
 	}
 
 }

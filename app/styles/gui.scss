@@ -92,17 +92,21 @@
 
     #trafficLights {
         position: absolute;
-        top : 30%;
-        left: 0px;
+        top : 15%;
+        left: 10%;
         width: 100%;
-        text-align: center;
+        text-align: left;
         opacity: 0;
 
-        div {
+        #lights {
+            display: inline-block;
+            width: 120px;
+            background: rgba(30, 30, 30, 0.98);
+            border-radius: 80px;
             text-align: center;
+            padding: 18px;
 
             div {
-                display: inline-block;
                 height: 100px;
                 width: 100px;
                 border-radius: 100%;
@@ -175,11 +179,9 @@
         opacity: 0;
     }
     45% {
-        left: 0%;
         opacity: 1;
     }
     75% {
-        left: 0%;
         opacity: 1;
     }
     100% {

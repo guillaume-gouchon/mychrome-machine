@@ -36,9 +36,11 @@
             <div class="playerPoints"></div>
 
             <div id="trafficLights">
-                <div><div>&nbsp;</div></div>
-                <div><div>&nbsp;</div></div>
-                <div><div>&nbsp;</div></div>
+                <div id="lights">
+                    <div>&nbsp;</div>
+                    <div>&nbsp;</div>
+                    <div>&nbsp;</div>
+                </div>
             </div>
 
             <div id="victory" class="hide">
@@ -65,9 +67,17 @@
         </script>
 
         <!-- build:js({app,.tmp}) scripts/main.js -->
+        <script src="scripts/physics/inheritance.js"></script>
+        <script src="scripts/physics/utils.js"></script>
+        <script src="scripts/physics/elements/RigidBody.js"></script>
+        <script src="scripts/physics/elements/CircleBody.js"></script>
+        <script src="scripts/physics/elements/BoxBody.js"></script>
+        <script src="scripts/physics/physics.js"></script>
+
         <script src="scripts/models/Game.js"></script>
         <script src="scripts/models/Car.js"></script>
         <script src="scripts/models/Race.js"></script>
+        
         <script src="scripts/GUI.js"></script>
         <script src="scripts/input.js"></script>
         <script src="scripts/main.js"></script>
