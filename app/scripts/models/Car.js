@@ -3,7 +3,7 @@ var Car = CircleBody.extend({
 	init: function (id, image) {
 		var mass = 1000;
 		var restitution = 0.8;
-		var radius = 15;
+		var radius = 12;
 
 		this._super(radius, mass, restitution);
 

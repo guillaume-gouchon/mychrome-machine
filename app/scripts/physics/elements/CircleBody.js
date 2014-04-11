@@ -6,8 +6,7 @@ var CircleBody = RigidBody.extend({
 	},
 
 	doCollideWith: function (element) {
-		if (element instanceof BoxBody) {
-		} else if (element instanceof CircleBody) {
+		if (element instanceof CircleBody) {
 			return this.doCircleToCircleCollide(this, element);
 		}
 		return false;

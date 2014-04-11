@@ -19,6 +19,8 @@ var PLAYER_START_POINTS = 3;
 var NEW_ROUND_PAUSE_DURATION = 2000;
 var TRAFFIC_LIGHTS_EACH_DURATION = 700;
 
+var DISTANCE_SCREEN_OUT = 10;
+
 var IMAGES_PATH = '../images/';
 
 function animate() {
@@ -63,29 +65,49 @@ function clearCanvas() {
 	ctx.clearRect(minX, minY, maxX - minX, maxY - minY);
 }
 
-function drawGame() {
-	// draw direction
-	ctx.strokeStyle = '#fff';
-	ctx.beginPath();
-	ctx.moveTo(screenwidth/2,screenheight/2);
-	ctx.lineTo(screenwidth / 2 + screenheight / 2 / Math.tan(degToRad(game.whereToGo)),screenheight);
-	ctx.stroke();
+var img = document.getElementById("arrow");
 
-	// draw cars
-	for (var i = 0; i < game.nbPlayers; i++) {
-		var car = game.cars[i];
-		if (!car.isOut) {
-			ctx.translate(car.x - 35/2, car.y - 20/2);
-			ctx.rotate(car.rotation);
-			ctx.fillStyle = '#aaa';
-			ctx.fillRect(- 35/2 + Math.abs(car.dx) * 3, - 20/2 + car.dx * 3, -car.dy * 3, 20)
-			ctx.fillStyle = car.color;
-			ctx.fillRect(- 35/2, - 20/2, 35, 20);
-			ctx.rotate(-car.rotation);
-			ctx.translate(-car.x + 35/2, -car.y + 20/2);
+function drawGame() {
+
+	// draw pattern for table
+
+
+	// draw direction
+	var arrowPosition = getTranslationDiff(50, degToRad(game.whereToGo));
+	var x = Math.max(10, Math.min(screenwidth - 10, arrowPosition[0] + screenwidth / 2));
+	var y = Math.max(10, Math.min(screenheight - 10, arrowPosition[1] + screenheight / 2));
+	ctx.translate(x, y);
+	ctx.rotate(degToRad(game.whereToGo));
+	ctx.drawImage(img, -30, -30);
+	ctx.rotate(-degToRad(game.whereToGo));
+	ctx.translate(-x, -y);
+
+	// draw objects
+	for (var i = 0; i < game.objects.length; i++) {
+		var obj = game.objects[i];
+		if (obj instanceof Obstacle) {
+			ctx.translate(obj.x - obj.radius / 2, obj.y - obj.radius /2);
+			ctx.rotate(obj.rotation);
+			ctx.fillStyle = '#fff';
+			ctx.beginPath();
+			ctx.arc(- obj.radius /2, - obj.radius/2, obj.radius, 0, Math.PI*2, true); 
+			ctx.closePath();
+			ctx.fill();
+			ctx.rotate(-obj.rotation);
+			ctx.translate(-obj.x + obj.radius/2, -obj.y + obj.radius/2);
+		} else if (obj instanceof Car) {
+			if (!obj.isOut) {
+				ctx.translate(obj.x - 35/2, obj.y - 20/2);
+				ctx.rotate(obj.rotation);
+				ctx.fillStyle = '#aaa';
+				ctx.fillRect(- 35/2 + Math.abs(obj.dx) * 3, - 20/2 + obj.dx * 3, -obj.dy * 3, 20)
+				ctx.fillStyle = obj.color;
+				ctx.fillRect(- 35/2, - 20/2, 35, 20);
+				ctx.rotate(-obj.rotation);
+				ctx.translate(-obj.x + 35/2, -obj.y + 20/2);
+			}
 		}
-	}
-	
+	}	
 }
 
 
@@ -113,12 +135,6 @@ startGame(4, 1);
 */
 function degToRad(deg) {
 	return deg * Math.PI / 180;
-}
-
-function getAngleCar(deg, x, y) {
-	var angle = Math.PI / 2 - degToRad(deg) - Math.asin(x / (x * x + y * y));
-	// console.log(180 * angle / Math.PI);
-	return angle;
 }
 
 function getTranslationDiff(distance, angle) {
