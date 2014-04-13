@@ -12,8 +12,8 @@
     	position: absolute;
 
     	.point {
-    		height: 16px;
-    		width: 16px;
+    		height: 25px;
+    		width: 25px;
     		border-radius: 100%;
     		@include single-transition(all, 1000ms, false, false);
     		opacity: 0.2;
@@ -34,7 +34,7 @@
     	left: $playerPointsSpace;
 
     	.point {
-	        @include gradient(#00f, $pointsToColor);
+	        @include gradient(#006ac8, $pointsToColor);
     	}
     }
 
@@ -43,7 +43,7 @@
     	right: $playerPointsSpace;
 
     	.point {
-    		@include gradient(#f00, $pointsToColor);
+    		@include gradient(#b20000, $pointsToColor);
     	}
     }
 
@@ -61,7 +61,7 @@
     	right: $playerPointsSpace;
 
     	.point {
-    		@include gradient(#0f0, $pointsToColor);
+    		@include gradient(#21a626, $pointsToColor);
     	}
     }
 
@@ -94,17 +94,25 @@
         position: absolute;
         top : 15%;
         left: 10%;
-        width: 100%;
+        width: 80%;
         text-align: left;
         opacity: 0;
 
-        #lights {
+        .lights {
             display: inline-block;
             width: 120px;
             background: rgba(30, 30, 30, 0.98);
-            border-radius: 80px;
+            border-radius: 40px;
             text-align: center;
-            padding: 18px;
+            padding: 24px;
+            background: #000000; /* Old browsers */
+            background: -moz-linear-gradient(left, #000000 0%, #565656 51%, #1b1b1b 100%); /* FF3.6+ */
+            background: -webkit-gradient(linear, left top, right top, color-stop(0%,#000000), color-stop(51%,#565656), color-stop(100%,#1b1b1b)); /* Chrome,Safari4+ */
+            background: -webkit-linear-gradient(left, #000000 0%,#565656 51%,#1b1b1b 100%); /* Chrome10+,Safari5.1+ */
+            background: -o-linear-gradient(left, #000000 0%,#565656 51%,#1b1b1b 100%); /* Opera 11.10+ */
+            background: -ms-linear-gradient(left, #000000 0%,#565656 51%,#1b1b1b 100%); /* IE10+ */
+            background: linear-gradient(to right, #000000 0%,#565656 51%,#1b1b1b 100%); /* W3C */
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000000', endColorstr='#1b1b1b',GradientType=1 ); /* IE6-9 */
 
             div {
                 height: 100px;
@@ -120,8 +128,11 @@
                     @include box-shadow(rgba(green, 0.7) 0 0 25px, rgba(green, 0.5) 0 0 5px 5px inset);
                 }
             }
+
+            &:nth-child(2) {
+                float: right;
+            }
         }
-        
 
         &.show {
             opacity: 1;

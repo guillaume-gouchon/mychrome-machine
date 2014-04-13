@@ -39,6 +39,18 @@ var Obstacle = CircleBody.extend({
 				this.dx = Math.max(0, this.dx - this.adherence);
 			}
 		}
+	},
+
+	draw: function () {
+		ctx.translate(this.x - this.radius / 2, this.y - this.radius /2);
+		ctx.rotate(this.rotation);
+		ctx.fillStyle = '#fff';
+		ctx.beginPath();
+		ctx.arc(- this.radius /2, - this.radius/2, this.radius, 0, Math.PI*2, true); 
+		ctx.closePath();
+		ctx.fill();
+		ctx.rotate(-this.rotation);
+		ctx.translate(-this.x + this.radius/2, -this.y + this.radius/2);
 	}
 	
 

@@ -9,12 +9,14 @@ window.requestAnimFrame = (function(callback) {
 
 
 var carCanvas = document.getElementById("cars");
+carCanvas.width = 800;
+carCanvas.height = 500;
+
 var ctx = carCanvas.getContext("2d");
 
-var screenwidth = carCanvas.width, screenheight = carCanvas.height;
+var screenwidth = 800, screenheight = 500;
 
 
-var PLAYER_COLORS = ['#0000ff', '#ff0000', '#ffff00', '#00ff00'];
 var PLAYER_START_POINTS = 3;
 var NEW_ROUND_PAUSE_DURATION = 2000;
 var TRAFFIC_LIGHTS_EACH_DURATION = 700;
@@ -23,9 +25,11 @@ var DISTANCE_SCREEN_OUT = 10;
 
 var IMAGES_PATH = '../images/';
 
+var ARROW_SIZE = 60;
+
 function animate() {
 
-	checkInputs();
+	game.input.checkInputs();
 	
 	game.update();
 
@@ -65,49 +69,46 @@ function clearCanvas() {
 	ctx.clearRect(minX, minY, maxX - minX, maxY - minY);
 }
 
-var img = document.getElementById("arrow");
+var table = document.getElementById("table");
+var arrow = document.getElementById("arrow");
+
+var tablePosition = [0, 0];
 
 function drawGame() {
 
 	// draw pattern for table
+	var pat = ctx.createPattern(table,"repeat");
+	tablePosition[0] -= game.displacement[0] * 0.07;
+	tablePosition[1] -= game.displacement[1] * 0.07;
+	if (Math.abs(tablePosition[0]) >= 100) {
+		tablePosition[0] = 0;
+	}
+	if (Math.abs(tablePosition[1]) >= 120) {
+		tablePosition[1] = 0;
+	}
+	ctx.drawImage(table, 0, 0, screenwidth, screenheight, tablePosition[0] - 100, tablePosition[1] - 120, screenwidth + 200, screenheight + 240);
 
-
-	// draw direction
-	var arrowPosition = getTranslationDiff(50, degToRad(game.whereToGo));
+	// draw arrow
+	var arrowPosition = getTranslationDiff(120, degToRad(game.whereToGo));
 	var x = Math.max(10, Math.min(screenwidth - 10, arrowPosition[0] + screenwidth / 2));
 	var y = Math.max(10, Math.min(screenheight - 10, arrowPosition[1] + screenheight / 2));
 	ctx.translate(x, y);
 	ctx.rotate(degToRad(game.whereToGo));
-	ctx.drawImage(img, -30, -30);
+	ctx.drawImage(arrow, -ARROW_SIZE / 2, -ARROW_SIZE / 2, ARROW_SIZE, ARROW_SIZE);
 	ctx.rotate(-degToRad(game.whereToGo));
 	ctx.translate(-x, -y);
+
+	// draw smoke
+	for (var i = 0; i < game.cars.length; i++) {
+		var car = game.cars[i];
+		car.drawSmoke();
+	}
 
 	// draw objects
 	for (var i = 0; i < game.objects.length; i++) {
 		var obj = game.objects[i];
-		if (obj instanceof Obstacle) {
-			ctx.translate(obj.x - obj.radius / 2, obj.y - obj.radius /2);
-			ctx.rotate(obj.rotation);
-			ctx.fillStyle = '#fff';
-			ctx.beginPath();
-			ctx.arc(- obj.radius /2, - obj.radius/2, obj.radius, 0, Math.PI*2, true); 
-			ctx.closePath();
-			ctx.fill();
-			ctx.rotate(-obj.rotation);
-			ctx.translate(-obj.x + obj.radius/2, -obj.y + obj.radius/2);
-		} else if (obj instanceof Car) {
-			if (!obj.isOut) {
-				ctx.translate(obj.x - 35/2, obj.y - 20/2);
-				ctx.rotate(obj.rotation);
-				ctx.fillStyle = '#aaa';
-				ctx.fillRect(- 35/2 + Math.abs(obj.dx) * 3, - 20/2 + obj.dx * 3, -obj.dy * 3, 20)
-				ctx.fillStyle = obj.color;
-				ctx.fillRect(- 35/2, - 20/2, 35, 20);
-				ctx.rotate(-obj.rotation);
-				ctx.translate(-obj.x + 35/2, -obj.y + 20/2);
-			}
-		}
-	}	
+		obj.draw();
+	}
 }
 
 
@@ -141,7 +142,7 @@ function getTranslationDiff(distance, angle) {
     if (angle > 0  && angle < Math.PI) {
         return [distance * Math.cos(angle), distance * Math.sin(angle)];
     } else {
-        return [- distance * Math.cos(angle), distance * Math.sin(angle + Math.PI)];
+        return [distance * Math.cos(angle), - distance * Math.sin(angle + Math.PI)];
     }
 }
 

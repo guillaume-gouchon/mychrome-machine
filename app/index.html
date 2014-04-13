@@ -18,6 +18,7 @@
         <!-- build:css(.tmp) styles/main.css -->
         <link rel="stylesheet" href="styles/main.css">
         <link rel="stylesheet" href="styles/gui.css">
+        <link rel="stylesheet" href="styles/pad.css">
         <!-- endbuild -->
         <script src="bower_components/modernizr/modernizr.js"></script>
 
@@ -36,7 +37,12 @@
             <div class="playerPoints"></div>
 
             <div id="trafficLights">
-                <div id="lights">
+                <div class="lights">
+                    <div>&nbsp;</div>
+                    <div>&nbsp;</div>
+                    <div>&nbsp;</div>
+                </div>
+                <div class="lights">
                     <div>&nbsp;</div>
                     <div>&nbsp;</div>
                     <div>&nbsp;</div>
@@ -49,8 +55,28 @@
             <div id="bigMessage"></div>
         </div>
 
-        <img id="arrow" src="images/car_0.png"/>
-        
+        <img id="table" class="hide" src="images/table.png"/>
+        <img id="arrow" class="hide" src="images/arrow.png"/>
+        <img id="car0" class="car" src="images/car_0.png"/>
+        <img id="car1" class="car" src="images/car_1.png"/>
+        <img id="car2" class="car" src="images/car_2.png"/>
+        <img id="car3" class="car" src="images/car_3.png"/>
+        <img id="smoke" class="hide" src="images/smoke.png"/>
+        <img id="explosion" class="hide" src="images/explosion.png"/>
+
+        <div id="gamePad">
+            <div id="pad">
+                <div class="header">
+                    <div>Mychrome Machine</div>
+                </div>
+                <div class="controls">
+                    <button id="turnLeftBtn"><img alt="arrow left" src="../images/arrow.png"/></button>
+                    <button id="turnRightBtn"><img alt="arrow right" src="../images/arrow.png"/></button>
+                    <button id="brakeBtn"><img alt="brake button" src="../images/car_0.png"/></button>
+                    <button id="accelerateBtn"><img alt="accelerate button" src="../images/car_0.png"/></button>
+                </div>
+            </div>
+        </pad>
 
         <!-- build:js scripts/vendor.js -->
         <!-- bower:js -->

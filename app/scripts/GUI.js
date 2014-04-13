@@ -22,7 +22,7 @@ function GUI (nbPlayers, victory) {
 
 	this.showWinnerCar = function (car) {
 		console.log('GUI', 'showWinnerCar');
-		$('#victory img').attr('src', car.image);
+		$('#victory img').attr('src', car.image.src);
 		$('#victory').removeClass('hide');
 	};
 
@@ -65,13 +65,13 @@ function GUI (nbPlayers, victory) {
 
 	this.showTrafficLights = function (callback) {
 		console.log('GUI', 'showTrafficLights');
-		$('#trafficLights div div').removeClass('green');
+		$('#trafficLights .lights div').removeClass('green');
 		$('#trafficLights').removeClass('fadeOut').addClass('show');
 		var nbLightOn = -1;
 		var trafficLightingOn = setInterval(function () {
 			if (nbLightOn >= 0) {// wait first
 				// enlight traffic light
-				$('#trafficLights div div:nth(' + nbLightOn + ')').addClass('green');
+				$('div:nth(' + nbLightOn + ')', '.lights').addClass('green');
 				if (nbLightOn >= 2) {
 					// all lights are on, start !
 					$('#trafficLights').removeClass('show').addClass('fadeOut');

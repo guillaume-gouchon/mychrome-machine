@@ -3,7 +3,7 @@ var Car = CircleBody.extend({
 	init: function (id, image) {
 		var mass = 1000;
 		var restitution = 0.8;
-		var radius = 12;
+		var radius = 14;
 
 		this._super(radius, mass, restitution);
 
@@ -14,12 +14,17 @@ var Car = CircleBody.extend({
 		this.outRank = 0;
 
 		// graphism
-		this.image = IMAGES_PATH + image + '_' + id + '.png';
-		this.color = PLAYER_COLORS[id];
+		this.image = document.getElementById("car" + id);
+		this.smoke = document.getElementById("smoke");
+		this.explosion = document.getElementById("explosion");
+		this.smokeSprite = 0;
+		this.explosionSprite = 0;
+		this.width = 45;
+		this.height = 27;
 
 		// car characteristics
 		this.acceleration = 0.08;
-		this.maxAcceleration = 4;
+		this.maxAcceleration = 5;
 		this.brakePower = 0.16;
 		this.rotationSpeed = 0.05;
 		this.glide = 0.1;
@@ -72,6 +77,32 @@ var Car = CircleBody.extend({
 		this.rotation = 0;
 		this.dx = 0;
 		this.dy = 0;
+	},
+
+	drawSmoke: function () {
+		if (!this.isOut && this.dy > 0) {
+			this.smokeSprite = this.smokeSprite >= 44 ? 0 : this.smokeSprite + 2;
+			ctx.translate(this.x - this.width / 2, this.y - this.height / 2);
+			ctx.rotate(this.rotation);
+			ctx.drawImage(this.smoke, parseInt(this.smokeSprite / 15) * 100, 0, 100, 100, -this.width / 3 + Math.abs(this.dx) * 5, -this.height / 2 - this.dx * 3 + 3, - this.height / 4 * this.dy, this.height - 6 + Math.abs(this.dx) * 3)
+			ctx.rotate(-this.rotation);
+			ctx.translate(-this.x + this.width / 2, -this.y + this.height / 2);
+		}
+	},
+
+	draw: function () {
+		if (!this.isOut) {
+			ctx.translate(this.x - this.width / 2, this.y - this.height / 2);
+			ctx.rotate(this.rotation);
+			ctx.drawImage(this.image, -this.width / 2, -this.height / 2, this.width, this.height);
+			ctx.rotate(-this.rotation);
+			ctx.translate(-this.x + this.width / 2, -this.y + this.height / 2);
+		} //else {
+			// this.explosionSprite = this.explosionSprite >= 40 ? 0 : this.explosionSprite + 1;
+			// ctx.translate(this.x - this.width / 2, this.y - this.height / 2);
+			// ctx.drawImage(this.explosion, parseInt(this.explosionSprite / 5) * 128, 0, 128, 128, - this.width / 2 + this.explosionSprite / 40, - this.height / 2 + this.explosionSprite / 40, this.explosionSprite / 40 * this.width, this.explosionSprite / 40 * this.height)
+			// ctx.translate(-this.x + this.width / 2, -this.y + this.height / 2);
+		//}
 	}
 
 });

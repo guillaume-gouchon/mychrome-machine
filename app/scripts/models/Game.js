@@ -8,6 +8,7 @@ function Game(nbPlayers, race) {
 	this.victory = 8;
 
 	this.GUI = new GUI(this.nbPlayers, this.victory);
+	this.input = new Input(this.nbPlayers);
 	this.physics = new Physics(this);
 
 	this.isPaused = false;
@@ -15,6 +16,7 @@ function Game(nbPlayers, race) {
 
 	this.whereToGo = Math.random() * 360;
 	this.distance = 0;
+	this.displacement = [0, 0];
 
 	// add cars
 	for (var i = 0; i < nbPlayers; i++) {
@@ -39,7 +41,9 @@ function Game(nbPlayers, race) {
 
 		if (this.distance > 2000 + Math.random() * 1000) {
 			this.distance = 0;
-			this.popNewObstacle();
+			for (var i = 0; i < Math.random() * 6; i++) {
+				this.popNewObstacle();
+			}
 			this.rotateRoad();
 		}
 
@@ -60,6 +64,7 @@ function Game(nbPlayers, race) {
 			// center map on first car
 			var dx = firstCar.x - screenwidth / 2;
 			var dy = firstCar.y - screenheight / 2;
+			this.displacement = [dx, dy];
 
 			this.distance += Math.pow(dx * dx + dy * dy, 0.5);
 
@@ -74,7 +79,7 @@ function Game(nbPlayers, race) {
 						if (obj instanceof Obstacle) {
 							this.objects.splice(oLength, 1);
 						} else if (obj instanceof Car) {
-							console.log('GAME', 'car ' + i + ' is out');
+							console.log('GAME', 'car ' + obj.id + ' is out');
 							obj.isOut = true;
 							this.carsOut++;
 							obj.outRank = this.carsOut;
@@ -97,7 +102,7 @@ function Game(nbPlayers, race) {
 		this.GUI.hideWinnerCar(car);
 
 		// reposition cars
-		var translationBetweenCars = getTranslationDiff(30, degToRad(this.whereToGo) - Math.PI / 2);
+		var translationBetweenCars = getTranslationDiff(40, degToRad(this.whereToGo) - Math.PI / 2);
 		// shuffle car order
 		var shuffleArray = [];
 		for (var i = 0; i < this.nbPlayers; i++) {
@@ -117,9 +122,11 @@ function Game(nbPlayers, race) {
 		// start acceleration phase and show traffic light
 		this.isPaused = false;
 		this.isAccelerationPhase = true;
+		tablePosition = [0, 0];
+		this.displacement = [0, 0];
 		animate();
 		var _this = this;
-		// this.GUI.showTrafficLights(function () {
+		this.GUI.showTrafficLights(function () {
 			// go !!!
 			console.log('GAME', 'GO !');
 			_this.isAccelerationPhase = false;
@@ -131,7 +138,7 @@ function Game(nbPlayers, race) {
 					car.dy = 0;
 				}
 			}
-		// });		
+		});		
 	};
 
 	this.endRound = function () {
@@ -147,7 +154,7 @@ function Game(nbPlayers, race) {
 				if (car.outRank == 1) {
 					car.life = Math.max(0, car.life - 2);
 				} else if (car.outRank == 2) {
-					car.life -= Math.max(0, car.life - 1);
+					car.life = Math.max(0, car.life - 1);
 				} else if (car.outRank >= 3) {
 					// points do not change
 				}
@@ -211,7 +218,7 @@ function Game(nbPlayers, race) {
 		var obstaclePosition = getTranslationDiff(screenwidth, randomAngle);
 		var x = Math.max(10, Math.min(screenwidth - 10, obstaclePosition[0]));
 		var y = Math.max(10, Math.min(screenheight - 10, obstaclePosition[1]));
-		var obstacle = new Obstacle(0, null, x, y, 10 + 10 * Math.random());
+		var obstacle = new Obstacle(0, null, x, y, 10 + 30 * Math.random());
 		this.objects.push(obstacle);
 	};
 

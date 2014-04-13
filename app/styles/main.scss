@@ -3,7 +3,7 @@
 @include font-face("Exo", font-files("/fonts/exo.woff"));
 
 body {
-    background-color: #ddd;
+    background-color: #333;
     overflow: hidden;
     font-family: 'Exo';
 }
@@ -27,4 +27,8 @@ button {
 
 .hide {
 	display: none;
+}
+
+.car {
+    @extend .hide;
 }

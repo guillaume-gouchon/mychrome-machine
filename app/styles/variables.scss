@@ -1,4 +1,4 @@
-$playerPointsSpace: 10px;
+$playerPointsSpace: 20px;
 
 
 
@@ -30,11 +30,11 @@ $playerPointsSpace: 10px;
 /** ANIMATIONS **/
 $pointsAnimationDuration: 1.0s;
 $pointsHeavyAnimationDuration: 0.2s;
-$pointsToColor: #fff;
+$pointsToColor: #000;
 $pointsFromColorPercentage: 20%;
 $pointsToColorPercentage: 100%;
 
-$victoryJumpScaleFrom: 0.5;
-$victoryJumpScaleTo: 1.0;
+$victoryJumpScaleFrom: 1.5;
+$victoryJumpScaleTo: 3.0;
 $victoryJumpRotateFrom: 0deg;
 $victoryJumpRotateTo: 720deg;

@@ -61,7 +61,9 @@ function Physics (game) {
 			j * (element2.x - element1.x) / getDistanceBetween(element1.x, element1.y, element2.x, element2.y) * Math.cos(element1.rotation), 
 			j * (element2.y - element1.y) / getDistanceBetween(element1.x, element1.y, element2.x, element2.y) * Math.sin(element1.rotation)
 		];
-		
+		impulse[0] = Math.max(-5, Math.min(5, impulse[0]));
+		impulse[1] = Math.max(-5, Math.min(5, impulse[1]));
+
 		return impulse;	
 	}
 

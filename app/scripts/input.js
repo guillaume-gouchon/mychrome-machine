@@ -1,62 +1,79 @@
-var KEY_CODES = {
-	A: 65,
-	D: 68,
-	Left: 37,
-	Right: 39
-};
+function Input(nbPlayers) {
 
-var commands = {
-	accelerate: false,
-	brake: false,
-	turnRight: false,
-	turnLeft: false
-};
+	this.inputs = [];
+	for(var i = 0; i < nbPlayers; i++) {
+		this.inputs.push(new Command());
+	}
 
-window.addEventListener('keyup', function (event) {
-	switch(event.keyCode) {
-		case KEY_CODES.A:
-			commands.accelerate = false;
-			break;
-		case KEY_CODES.D:
-			commands.brake = false;
-			break;
-		case KEY_CODES.Left:
-			commands.turnLeft = false;
-			break;
-		case KEY_CODES.Right:
-			commands.turnRight = false;
-			break;
-	}
-},false);
+	this.checkInputs = function () {
+		for (var i = 0; i < this.inputs.length; i++) {
+			var input = this.inputs[i];
+			if (input.accelerate) {
+				game.cars[i].accelerate();
+			}
+			if (input.brake) {
+				game.cars[i].brake();
+			}
+			if (input.turnLeft) {
+				game.cars[i].turn(true);
+			}
+			if (input.turnRight) {
+				game.cars[i].turn(false);
+			}
+		}
+	};
+	
+	// TODO remove
+	var _this = this;
+	window.addEventListener('keyup', function (event) {
+		switch(event.keyCode) {
+			case KEY_CODES.A:
+				_this.inputs[0].accelerate = false;
+				break;
+			case KEY_CODES.D:
+				_this.inputs[0].brake = false;
+				break;
+			case KEY_CODES.Left:
+				_this.inputs[0].turnLeft = false;
+				break;
+			case KEY_CODES.Right:
+				_this.inputs[0].turnRight = false;
+				break;
+		}
+	},false);
 
-window.addEventListener('keydown', function (event) {
-	switch(event.keyCode) {
-		case KEY_CODES.A:
-			commands.accelerate = true;
-			break;
-		case KEY_CODES.D:
-			commands.brake = true;
-			break;
-		case KEY_CODES.Left:
-			commands.turnLeft = true;
-			break;
-		case KEY_CODES.Right:
-			commands.turnRight = true;
-			break;
-	}
-},false);
+	window.addEventListener('keydown', function (event) {
+		switch(event.keyCode) {
+			case KEY_CODES.A:
+				_this.inputs[0].accelerate = true;
+				break;
+			case KEY_CODES.D:
+				_this.inputs[0].brake = true;
+				break;
+			case KEY_CODES.Left:
+				_this.inputs[0].turnLeft = true;
+				break;
+			case KEY_CODES.Right:
+				_this.inputs[0].turnRight = true;
+				break;
+		}
+	},false);
 
-function checkInputs () {
-	if (commands.accelerate) {
-		game.cars[0].accelerate();
-	}
-	if (commands.brake) {
-		game.cars[0].brake();
-	}
-	if (commands.turnLeft) {
-		game.cars[0].turn(true);
-	}
-	if (commands.turnRight) {
-		game.cars[0].turn(false);
-	}
+}
+
+
+	// TODO remove
+	var KEY_CODES = {
+		A: 65,
+		D: 68,
+		Left: 37,
+		Right: 39
+	};
+
+
+function Command() {
+	this.accelerate = false;
+	this.brake = false;
+	this.turnRight = false;
+	this.turnLeft = false;
 }
