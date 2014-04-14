@@ -1,7 +1,6 @@
 $playerPointsSpace: 20px;
 
 
-
 @mixin gradient($from-color, $to-color) {
     background: -moz-radial-gradient(center, ellipse cover, $from-color $pointsFromColorPercentage, $to-color $pointsToColorPercentage);
 	background: -webkit-gradient(radial, center center, 0px, center center, $pointsToColorPercentage, color-stop($pointsFromColorPercentage,$from-color), color-stop($pointsToColorPercentage,$to-color));
@@ -10,6 +9,23 @@ $playerPointsSpace: 20px;
 	background: -ms-radial-gradient(center, ellipse cover, $from-color $pointsFromColorPercentage,$to-color $pointsToColorPercentage);
 	background: radial-gradient(ellipse at center, $from-color $pointsFromColorPercentage,$to-color $pointsToColorPercentage);
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$from-color', endColorstr='$to-color',GradientType=1 );
+}
+
+@mixin topBottomGradiant($from-color, $to-color) {
+	background: $from-color; /* Old browsers */
+	background: -moz-linear-gradient(top, $from-color 0%, $to-color 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, top, bottom, color-stop(0%,$from-color), color-stop(100%,$to-color)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, $from-color 0%,$to-color 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, $from-color 0%,$to-color 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, $from-color 0%,$to-color 100%); /* IE10+ */
+	background: linear-gradient(to bottom, $from-color 0%,$to-color 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$from-color', endColorstr='$to-color',GradientType=1 ); /* IE6-9 */
+}
+
+@mixin boxShadow($x, $y, $l, $b, $color, $inset) {
+	-webkit-box-shadow: $inset $x $y $l $b $color;
+	-moz-box-shadow:    $inset $x $y $l $b $color;
+	box-shadow:         $inset $x $y $l $b $color;
 }
 
 @mixin animation($animation) {

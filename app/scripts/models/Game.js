@@ -1,4 +1,14 @@
+// game constants
+var PLAYER_START_POINTS = 3;
+var NEW_ROUND_PAUSE_DURATION = 2000;
+var TRAFFIC_LIGHTS_EACH_DURATION = 700;
+var DISTANCE_SCREEN_OUT = 10;
+var IMAGES_PATH = '../images/';
+var ARROW_SIZE = 60;
+
+
 function Game(nbPlayers, race) {
+
 	this.nbPlayers = nbPlayers;
 	this.race = race;
 	this.cars = [];
@@ -11,12 +21,21 @@ function Game(nbPlayers, race) {
 	this.input = new Input(this.nbPlayers);
 	this.physics = new Physics(this);
 
+	// game states
 	this.isPaused = false;
 	this.isAccelerationPhase = false;
 
-	this.whereToGo = Math.random() * 360;
 	this.distance = 0;
 	this.displacement = [0, 0];
+
+	// table
+	this.tablePosition = [0, 0];
+	this.table = document.getElementById("table");
+
+	// arrow
+	this.arrow = document.getElementById("arrow");
+	this.whereToGo = Math.random() * 360;
+
 
 	// add cars
 	for (var i = 0; i < nbPlayers; i++) {
@@ -225,6 +244,44 @@ function Game(nbPlayers, race) {
 	this.rotateRoad = function () {
 		this.whereToGo += Math.random() * 20;
 		this.whereToGo %= 360;
+	};
+
+
+	this.draw = function () {
+
+		// draw table
+		this.tablePosition[0] -= this.displacement[0] * 0.07;
+		this.tablePosition[1] -= this.displacement[1] * 0.07;
+		if (Math.abs(this.tablePosition[0]) >= 100) {
+			this.tablePosition[0] = 0;
+		}
+		if (Math.abs(this.tablePosition[1]) >= 120) {
+			this.tablePosition[1] = 0;
+		}
+		ctx.drawImage(this.table, 0, 0, screenwidth, screenheight, this.tablePosition[0] - 100, this.tablePosition[1] - 120, screenwidth + 200, screenheight + 240);
+
+		// draw arrow
+		var arrowPosition = getTranslationDiff(120, degToRad(this.whereToGo));
+		var x = Math.max(10, Math.min(screenwidth - 10, arrowPosition[0] + screenwidth / 2));
+		var y = Math.max(10, Math.min(screenheight - 10, arrowPosition[1] + screenheight / 2));
+		ctx.translate(x, y);
+		ctx.rotate(degToRad(this.whereToGo));
+		ctx.drawImage(arrow, -ARROW_SIZE / 2, -ARROW_SIZE / 2, ARROW_SIZE, ARROW_SIZE);
+		ctx.rotate(-degToRad(this.whereToGo));
+		ctx.translate(-x, -y);
+
+		// draw car smokes
+		for (var i = 0; i < this.cars.length; i++) {
+			var car = this.cars[i];
+			car.drawSmoke();
+		}
+
+		// draw objects (= cars + obstacles)
+		for (var i = 0; i < this.objects.length; i++) {
+			var obj = this.objects[i];
+			obj.draw();
+		}
+
 	};
 
 }

@@ -6,11 +6,12 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>MyChrome Machine</title>
+        <title>MyChrome Machines</title>
         <meta name="description" content="">
-        <meta name="viewport" content="width=device-width">
+        <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1">
         <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
         <!-- build:css styles/vendor.css -->
+        <link rel="stylesheet" href="styles/font-awesome.min.css">
         <!-- bower:css -->
 
         <!-- endbower -->
@@ -28,59 +29,104 @@
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
 
-        <canvas id="cars"></canvas>
 
-        <div id="gui">
-            <div class="playerPoints"></div>
-            <div class="playerPoints"></div>
-            <div class="playerPoints"></div>
-            <div class="playerPoints"></div>
-
-            <div id="trafficLights">
-                <div class="lights">
-                    <div>&nbsp;</div>
-                    <div>&nbsp;</div>
-                    <div>&nbsp;</div>
-                </div>
-                <div class="lights">
-                    <div>&nbsp;</div>
-                    <div>&nbsp;</div>
-                    <div>&nbsp;</div>
-                </div>
+        <div id="mainPage" class="hide">
+            <div id="animatedCars">
+                <div><img src="images/car_0.png"/></div>
+                <div><img src="images/car_1.png"/></div>
+                <div><img src="images/car_2.png"/></div>
+                <div><img src="images/car_3.png"/></div>
             </div>
+            <div id="startGameDialog">
+                <div id="logo">
+                    <h2 class="farTop">MyChrome Machines</h2>
+                </div>
+                <h4>How to Play ?</h4>
+                <div id="tutorials">
+                    <div class="col-4"><i class="fa fa-gamepad fa-2x"></i> Plug USB Game Pads</div>
+                    <div class="col-4"><i class="fa fa-mobile-phone fa-2x"></i> Use Phones as Game Pads</div>
+                    <div class="col-4"><i class="fa fa-keyboard-o fa-2x"></i> Play with Keyboard</div>
+                </div>
+                <h4>Players</h4>
+                <div id="playersList">
 
-            <div id="victory" class="hide">
-                <img alt="victorious car" src=""/>
+                </div>
+                <button id="startGameBtn">Start Game !</button>
             </div>
-            <div id="bigMessage"></div>
+            <div id="credits">Credits&nbsp;&nbsp;<a href="http://glevelapps.blogspot.co.uk" target="_blank">Guillaume Gouchon</a></div>
         </div>
 
-        <img id="table" class="hide" src="images/table.png"/>
-        <img id="arrow" class="hide" src="images/arrow.png"/>
-        <img id="car0" class="car" src="images/car_0.png"/>
-        <img id="car1" class="car" src="images/car_1.png"/>
-        <img id="car2" class="car" src="images/car_2.png"/>
-        <img id="car3" class="car" src="images/car_3.png"/>
-        <img id="smoke" class="hide" src="images/smoke.png"/>
-        <img id="explosion" class="hide" src="images/explosion.png"/>
 
-        <div id="gamePad">
+        <div id="game" class="hide">
+            <canvas id="cars"></canvas>
+
+            <div id="gui">
+                <div class="playerPoints"></div>
+                <div class="playerPoints"></div>
+                <div class="playerPoints"></div>
+                <div class="playerPoints"></div>
+
+                <div id="trafficLights">
+                    <div class="lights">
+                        <div>&nbsp;</div>
+                        <div>&nbsp;</div>
+                        <div>&nbsp;</div>
+                    </div>
+                    <div class="lights">
+                        <div>&nbsp;</div>
+                        <div>&nbsp;</div>
+                        <div>&nbsp;</div>
+                    </div>
+                </div>
+
+                <div id="victory" class="hide">
+                    <img alt="victorious car" src=""/>
+                </div>
+                <div id="bigMessage"></div>
+            </div>
+
+            <img id="table" class="hide" src="images/table.png"/>
+            <img id="arrow" class="hide" src="images/arrow.png"/>
+            <img id="car0" class="car" src="images/car_0.png"/>
+            <img id="car1" class="car" src="images/car_1.png"/>
+            <img id="car2" class="car" src="images/car_2.png"/>
+            <img id="car3" class="car" src="images/car_3.png"/>
+            <img id="smoke" class="hide" src="images/smoke.png"/>
+            <img id="explosion" class="hide" src="images/explosion.png"/>
+        </div>
+
+
+        <div id="gamePad" class="hide">
+            <div id="cable"></div>
             <div id="pad">
                 <div class="header">
-                    <div>Mychrome Machine</div>
+                    <div>MyChrome Machines</div>
                 </div>
                 <div class="controls">
-                    <button id="turnLeftBtn"><img alt="arrow left" src="../images/arrow.png"/></button>
-                    <button id="turnRightBtn"><img alt="arrow right" src="../images/arrow.png"/></button>
-                    <button id="brakeBtn"><img alt="brake button" src="../images/car_0.png"/></button>
-                    <button id="accelerateBtn"><img alt="accelerate button" src="../images/car_0.png"/></button>
+                    <div class="centerVertical">
+                        <button id="turnLeftBtn"><img alt="arrow left" src="../images/arrow_pad.png"/></button>
+                        <button id="turnRightBtn"><img alt="arrow right" src="../images/arrow_pad.png"/></button>
+                        <button id="accelerateBtn"><img alt="accelerate button" src="../images/arrow_pad.png"/></button>
+                        <button id="brakeBtn"><img alt="brake button" src="../images/arrow_pad.png"/></button>
+                    </div>
                 </div>
             </div>
-        </pad>
+            <div id="joinGameDialog">
+                <div class="centerVertical">
+                    <h3>Enter the name of the game you want to join :</h3>
+                    <input type="text" placeholder="name of the game..."/>
+                    <button id="joinGameBtn">Join Game !</button>
+                </div>
+            </div>
+        </div>
+
+
+        <script src="/socket.io/socket.io.js"></script>
 
         <!-- build:js scripts/vendor.js -->
         <!-- bower:js -->
         <script src="bower_components/jquery/jquery.js"></script>
+        <script type='application/javascript' src='bower_components/fastclick/lib/fastclick.js'></script>
         <!-- endbower -->
         <!-- endbuild -->
 
@@ -106,9 +152,11 @@
         <script src="scripts/models/Obstacle.js"></script>
         <script src="scripts/models/Race.js"></script>
         
+        <script src="scripts/utils.js"></script>
         <script src="scripts/GUI.js"></script>
         <script src="scripts/input.js"></script>
         <script src="scripts/main.js"></script>
+        <script src="scripts/phonepad.js"></script>
         <!-- endbuild -->
 </body>
 </html>

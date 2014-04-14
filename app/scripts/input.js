@@ -2,7 +2,7 @@ function Input(nbPlayers) {
 
 	this.inputs = [];
 	for(var i = 0; i < nbPlayers; i++) {
-		this.inputs.push(new Command());
+		this.inputs.push(new Command(i));
 	}
 
 	this.checkInputs = function () {
@@ -71,7 +71,8 @@ function Input(nbPlayers) {
 	};
 
 
-function Command() {
+function Command(id) {
+	this.id = id;
 	this.accelerate = false;
 	this.brake = false;
 	this.turnRight = false;
