@@ -1,0 +1,68 @@
+$green: #20a125;
+$red: #b20000;
+$blue: #006ac8;
+$yellow: #ff0;
+
+
+
+$playerPointsSpace: 20px;
+
+
+@mixin gradient($from-color, $to-color) {
+    background: -moz-radial-gradient(center, ellipse cover, $from-color $pointsFromColorPercentage, $to-color $pointsToColorPercentage);
+	background: -webkit-gradient(radial, center center, 0px, center center, $pointsToColorPercentage, color-stop($pointsFromColorPercentage,$from-color), color-stop($pointsToColorPercentage,$to-color));
+	background: -webkit-radial-gradient(center, ellipse cover, $from-color $pointsFromColorPercentage,$to-color $pointsToColorPercentage);
+	background: -o-radial-gradient(center, ellipse cover, $from-color $pointsFromColorPercentage,$to-color $pointsToColorPercentage);
+	background: -ms-radial-gradient(center, ellipse cover, $from-color $pointsFromColorPercentage,$to-color $pointsToColorPercentage);
+	background: radial-gradient(ellipse at center, $from-color $pointsFromColorPercentage,$to-color $pointsToColorPercentage);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$from-color', endColorstr='$to-color',GradientType=1 );
+}
+
+@mixin topBottomGradiant($from-color, $to-color) {
+	background: $from-color; /* Old browsers */
+	background: -moz-linear-gradient(top, $from-color 0%, $to-color 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, top, bottom, color-stop(0%,$from-color), color-stop(100%,$to-color)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, $from-color 0%,$to-color 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, $from-color 0%,$to-color 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, $from-color 0%,$to-color 100%); /* IE10+ */
+	background: linear-gradient(to bottom, $from-color 0%,$to-color 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$from-color', endColorstr='$to-color',GradientType=1 ); /* IE6-9 */
+}
+
+@mixin boxShadow($x, $y, $l, $b, $color, $inset) {
+	-webkit-box-shadow: $inset $x $y $l $b $color;
+	-moz-box-shadow:    $inset $x $y $l $b $color;
+	box-shadow:         $inset $x $y $l $b $color;
+}
+
+@mixin animation($animation) {
+	-ms-animation: $animation;
+	-webkit-animation: $animation;
+	-moz-animation: $animation;
+	animation: $animation;
+}
+
+@mixin animationDelay($animationDelay) {
+	-webkit-animation-delay: $animationDelay;
+	animation-delay: $animationDelay;
+}
+
+@mixin transform($transform) {
+	-ms-transform: $transform;
+	-webkit-transform: $transform;
+	-moz-transform: $transform;
+	transform: $transform;
+}
+
+
+/** ANIMATIONS **/
+$pointsAnimationDuration: 1.0s;
+$pointsHeavyAnimationDuration: 0.2s;
+$pointsToColor: #000;
+$pointsFromColorPercentage: 20%;
+$pointsToColorPercentage: 100%;
+
+$victoryJumpScaleFrom: 1.5;
+$victoryJumpScaleTo: 3.0;
+$victoryJumpRotateFrom: 0deg;
+$victoryJumpRotateTo: 720deg;

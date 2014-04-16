@@ -1,0 +1,249 @@
+@import "compass";
+@import "variables";
+
+#gui {
+	height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+
+    .playerPoints {
+    	position: absolute;
+
+    	.point {
+    		height: 25px;
+    		width: 25px;
+    		border-radius: 100%;
+    		@include single-transition(all, 1000ms, false, false);
+    		opacity: 0.2;
+    		margin-bottom: 4px;
+
+    		&.active {
+	    		@extend .blink;
+    		}
+
+            &.new {
+                @extend .heavyBlink;
+            }
+    	}
+    }
+
+    .playerPoints:nth-child(1) {
+    	top: $playerPointsSpace;
+    	left: $playerPointsSpace;
+
+    	.point {
+	        @include gradient($blue, $pointsToColor);
+    	}
+    }
+
+    .playerPoints:nth-child(2) {
+    	top: $playerPointsSpace;
+    	right: $playerPointsSpace;
+
+    	.point {
+    		@include gradient($red, $pointsToColor);
+    	}
+    }
+
+    .playerPoints:nth-child(3) {
+    	bottom: $playerPointsSpace;
+    	left: $playerPointsSpace;
+
+    	.point {
+    		@include gradient($yellow, $pointsToColor);
+    	}
+    }
+
+    .playerPoints:nth-child(4) {
+    	bottom: $playerPointsSpace;
+    	right: $playerPointsSpace;
+
+    	.point {
+    		@include gradient($green, $pointsToColor);
+    	}
+    }
+
+    #bigMessage {
+    	position: absolute;
+    	top: 40%;
+    	left: 0%;
+    	width: 100%;
+    	color: #eee;
+    	text-align: center;
+    	background: rgba(200, 200, 200, 0.15);
+    	opacity: 0;
+        font-size: 7.0em;
+        display:none;
+
+    	&.showLeave {
+            display:block;
+	    	@include animation(showLeave 2200ms 1 ease-in-out);
+	    }
+
+	    &.show {
+            display:block;
+	    	@include animation(show 2200ms 1 ease-in-out);
+            left: 0%;
+            opacity: 1;
+	    }
+    }
+
+    #trafficLights {
+        position: absolute;
+        top : 15%;
+        left: 10%;
+        width: 80%;
+        text-align: left;
+        opacity: 0;
+
+        .lights {
+            display: inline-block;
+            width: 120px;
+            background: rgba(30, 30, 30, 0.98);
+            border-radius: 40px;
+            text-align: center;
+            padding: 24px;
+            background: #000000; /* Old browsers */
+            background: -moz-linear-gradient(left, #000000 0%, #565656 51%, #1b1b1b 100%); /* FF3.6+ */
+            background: -webkit-gradient(linear, left top, right top, color-stop(0%,#000000), color-stop(51%,#565656), color-stop(100%,#1b1b1b)); /* Chrome,Safari4+ */
+            background: -webkit-linear-gradient(left, #000000 0%,#565656 51%,#1b1b1b 100%); /* Chrome10+,Safari5.1+ */
+            background: -o-linear-gradient(left, #000000 0%,#565656 51%,#1b1b1b 100%); /* Opera 11.10+ */
+            background: -ms-linear-gradient(left, #000000 0%,#565656 51%,#1b1b1b 100%); /* IE10+ */
+            background: linear-gradient(to right, #000000 0%,#565656 51%,#1b1b1b 100%); /* W3C */
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000000', endColorstr='#1b1b1b',GradientType=1 ); /* IE6-9 */
+
+            div {
+                height: 100px;
+                width: 100px;
+                border-radius: 100%;
+                margin-bottom: 6px;
+                @include gradient(#f00, #333);
+                @include box-shadow(rgba(red, 0.7) 0 0 25px, rgba(red, 0.5) 0 0 5px 5px inset);
+                border: 10px solid rgba(0, 0, 0, 0.4);
+
+                &.green {
+                    @include gradient(#0f0, #333);
+                    @include box-shadow(rgba(green, 0.7) 0 0 25px, rgba(green, 0.5) 0 0 5px 5px inset);
+                }
+            }
+
+            &:nth-child(2) {
+                float: right;
+            }
+        }
+
+        &.show {
+            opacity: 1;
+            @include animation(show 2000ms 1 ease-in-out);
+        }
+    }
+
+    #victory {
+        position: absolute;
+        top : 50%;
+        left: 0px;
+        width: 100%;
+        text-align: center;
+        @include animation(victory 1600ms infinite ease-in-out);
+
+        img {
+            @include animation(jump 1600ms infinite ease-in-out);
+        }
+    }
+}
+
+.fadeOut {
+    @include animation(fadeOut 300ms 1 ease-in-out);
+}
+
+@-webkit-keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+@-webkit-keyframes showLeave {
+    0% {
+        opacity: 0;
+    }
+    50% {
+    	left: 0%;
+    	opacity: 1;
+    }
+    75% {
+    	left: 0%;
+    	opacity: 1;
+    }
+    100% {
+        left: -100%;
+        opacity: 0;
+    }
+}
+
+@-webkit-keyframes show {
+    0% {
+        opacity: 0;
+    }
+    45% {
+        opacity: 1;
+    }
+    75% {
+        opacity: 1;
+    }
+    100% {
+    }
+}
+
+@-webkit-keyframes victory {
+    0% {
+        @include transform(rotate($victoryJumpRotateFrom));
+    }
+  
+    100% {
+        @include transform(rotate($victoryJumpRotateTo));
+    }
+}
+
+@-webkit-keyframes jump {
+    0% {
+        @include transform(scale($victoryJumpScaleFrom));
+    }
+    25% {
+        @include transform(scale($victoryJumpScaleTo));
+    }
+    50% {
+        @include transform(scale($victoryJumpScaleFrom));
+    }
+    75% {
+        @include transform(scale($victoryJumpScaleTo));
+    }
+    100% {
+        @include transform(scale($victoryJumpScaleFrom));
+    }
+}
+
+
+
+
+.blink {
+    @include animation(blink $pointsAnimationDuration alternate infinite);
+}
+
+@-webkit-keyframes blink {
+    from { opacity: 1 }
+    to   { opacity: 0.7 }
+}
+
+.heavyBlink {
+    @include animation(heavyblink $pointsHeavyAnimationDuration alternate infinite);
+}
+
+@-webkit-keyframes heavyblink {
+    from { opacity: 1 }
+    to   { opacity: 0.2 }
+}
