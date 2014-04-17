@@ -1,3 +1,4 @@
+@import "compass";
 @import "variables";
 
 #gamePad {
@@ -156,12 +157,14 @@
 		background: rgba(0, 0, 0, 0.8);
 		z-index: 100000;
 		display: table;
-		font-size: 1.3em;
+		font-size: 1.2em;
+		animation: none;
 
 		h3 {
-			padding: 15px;
+			padding: 20px;
 			color: #111;
-			background: rgba(200, 200, 200, 0.7);
+			@include box-shadow(0px 3px 6px 3px rgba(0, 0, 0, 0.15));
+        	background: rgba(220, 220, 220, 0.85);
 		}
 
 		input {

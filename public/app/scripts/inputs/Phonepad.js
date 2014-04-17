@@ -2,14 +2,18 @@ function PhonePad () {
 
 	this.gameId = null;
 	this.socket = null;
-	
+	this.myCommand = null;
+	this.acceleratePosition = null;
+	this.brakePosition = null;
+	this.turnLeftPosition = null;
+	this.turnRightPosition = null;
+
 	var _this = this;
 
 	$('#joinGameBtn').click(function () {
 		var gameId = $('input', '#joinGameDialog').val();
 		if (gameId.length > 0) {
 			_this.connect(gameId);
-			$('#joinGameDialog').addClass('loading');
 		}
 	});
 
@@ -25,40 +29,52 @@ function PhonePad () {
 				_this.myCommand = new Command(playerId);
 				_this.bindEvents();
 				_this.gameId = gameId;
+				_this.acceleratePosition = $('#accelerateBtn').position();
+				_this.brakePosition = $('#brakeBtn').position();
+				_this.turnLeftPosition = $('#turnLeftBtn').position();
+				_this.turnRightPosition = $('#turnRightBtn').position();
+				requestFullscreen();
 				$('#pad .header div').addClass('player' + playerId % 4);
 				$('#joinGameDialog').remove();
 			});
-
 		} catch (e) {
-			console.log(e);
 			$('#joinGameDialog').removeClass('loading');
 		}
 	};
 
-	this.bindEvents = function () {
-		document.getElementById('pad').onmousedown = this.dispatchEvent;
-		document.getElementById('pad').ontouchmove = this.dispatchEvent;
-		document.getElementById('pad').onmouseup = this.dispatchRelease;
-	};
-
 	this.dispatchEvent = function (event) {
+		event.preventDefault();
 		var targetId = event.target.id;
-		console.log(event)
-		if (event.target.tagName == 'IMG') {
+		if (event.type == 'touchmove') {
+			var x = event.originalEvent.touches[0].clientX;
+			if (event.originalEvent.touches.length > 1) {
+				x = Math.min(event.originalEvent.touches[0].clientX, event.originalEvent.touches[1].clientX);
+			}
+			console.log(x, _this.turnLeftPosition)
+			if (x < _this.acceleratePosition.left 
+				&& x > _this.turnRightPosition.left) {
+				_this.turnRight();
+				return;
+			} else if (x < _this.turnRightPosition.left 
+				&& x > _this.turnLeftPosition.left) {
+				_this.turnLeft();
+				return;
+			}
+		} else if (event.target.tagName == 'IMG') {
 			targetId = event.target.parentElement.id;
 		}
 		switch(targetId) {
 			case 'accelerateBtn':
-				_this.accelerate(targetId);
+				_this.accelerate();
 				break;
 			case 'brakeBtn':
-				_this.brake(targetId);
+				_this.brake();
 				break;
 			case 'turnRightBtn':
-				_this.turnRight(targetId);
+				_this.turnRight();
 				break;
 			case 'turnLeftBtn':
-				_this.turnLeft(targetId);
+				_this.turnLeft();
 				break;
 		}
 	};
@@ -90,6 +106,15 @@ function PhonePad () {
 				_this.sendCommands();
 				break;
 		}
+	};
+
+	this.bindEvents = function () {
+		var el = $('.controls');
+		el.bind("touchstart", this.dispatchEvent);
+		el.bind("touchend", this.dispatchRelease);
+		el.bind("touchcancel", this.dispatchRelease);
+		el.bind("touchleave", this.dispatchRelease);
+		el.bind("touchmove", this.dispatchEvent);
 	};
 
 	this.turnLeft = function () {
@@ -133,6 +158,7 @@ function PhonePad () {
 	};
 
 	this.sendCommands = function () {
+		console.log('PHONEPAD', 'sending commands...');
 		this.socket.emit('commands', { gameId: this.gameId, commands: this.myCommand });
 	};
 

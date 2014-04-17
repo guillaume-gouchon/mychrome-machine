@@ -25,50 +25,56 @@ $(function() {
 		}, 200);
 
 		// phone pads
-		socket = io.connect('http://localhost:1234');
+		try {
+			socket = io.connect('http://localhost:1234');
 
-		// create game
-		socket.emit('createGame');
+			// create game
+			socket.emit('createGame');
 
-		// wait for response
-		socket.on('gameCreated', function (myGameId) {
-			gameId = myGameId;
-			$('#gameId').html(gameId);
-		});
+			// wait for response
+			socket.on('gameCreated', function (myGameId) {
+				gameId = myGameId;
+				$('#gameId').html(gameId);
+			});
 
-		// phonepads
-		socket.on('playerJoined', function () {
-			addPlayer(PHONEPAD_PLAYER);
-		});
-		socket.on('playerLeft', function (playerIndex) {
-			removePlayer(playerIndex);
-		});
+			// phonepads
+			socket.on('playerJoined', function () {
+				addPlayer(PHONEPAD_PLAYER);
+			});
+			socket.on('playerLeft', function (playerIndex) {
+				removePlayer(playerIndex);
+			});
+		} catch (e) {
+			console.log(e);
+		}
 
 		// gamepads
-		// TODO
+		var gamepadHelper = new GamepadHelper();
+		gamepadHelper.init();
 
 		//keyboard
-		document.addEventListener('keydown', function (event) {
-			if (event.keyCode == 81) {
-				if (players.length < 8) {
-					var keyboardPlayerIndex = players.indexOf(KEYBOARD_PLAYER);
-					if (keyboardPlayerIndex == -1) {
-						addPlayer(KEYBOARD_PLAYER);					
-					} else {
-						removePlayer(keyboardPlayerIndex);
-					}
-				}
-			}
-		});
+		document.addEventListener('keydown', addKeyboardPlayer);
 
 		$('#startGameBtn').click(function () {
-			if (players.length > 1) {
+			if (players.length > 0) {
 		    	startGame(players.length, 1);
 			}
 		})
 	}
 
 });
+
+function addKeyboardPlayer (event) {
+	if (game == null && players.length < 8) {
+		for (var i in players) {
+			if (players[i].type == KEYBOARD_PLAYER) {
+				removePlayer(i);
+				return;	
+			}
+		}
+		addPlayer(KEYBOARD_PLAYER);
+	}
+}
 
 function prepareCanvas() {
 	var carCanvas = document.getElementById("cars");
@@ -85,12 +91,6 @@ function startGame(nbPlayers, raceId) {
 	$('#game').removeClass('hide');
 	$('#bigMessage').removeClass('show');
 	game = new Game(nbPlayers, new Race(raceId, 'car'));
-
-	// init phone pad commands receiver
-	socket.on('commands', function (commands) {
-		game.input.inputs[commands.id] = commands;
-	});
-
 	game.start();
 }
 
@@ -98,13 +98,20 @@ function restartGame() {
 	startGame(game.nbPlayers, game.race.id);
 }
 
-function addPlayer(playerType) {
-	var player = new Player(players.length, playerType);
+function addPlayer(playerType, extra) {
+	var player = new Player(players.length, playerType, extra);
 	players.push(player);
 	updatePlayersLayout();
+	if (socket != null && player.type != PHONEPAD_PLAYER) {
+		socket.emit('updatePlayers', { gameId: gameId });
+	}
 }
 
 function removePlayer(index) {
+	var player = players[index];
+	if (socket != null && player.type != PHONEPAD_PLAYER) {
+		socket.emit('updatePlayers', { gameId: gameId, playerIndex: index });
+	}
 	players.splice(index, 1);
 	updatePlayersLayout();
 }
@@ -116,7 +123,7 @@ function updatePlayersLayout() {
 		var player = players[i];
 		$('#playersList div:nth(' + i + ')').addClass('active');
 		var element = $('#playersList div:nth(' + i + ') i');
-		switch(player.id) {
+		switch(player.type) {
 			case GAMEPAD_PLAYER:
 				element.addClass('fa-gamepad');
 				break;

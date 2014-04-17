@@ -45,16 +45,16 @@
                 <div id="tutorials">
                     <div class="col-4">
                         <div class="redText"><i class="fa fa-gamepad fa-2x"></i> Plug USB Game Pads</div>
-                        <small>X or A to accelerate<br/>B to brake</small>
+                        <small>Press any button to add a player<br/>A to accelerate, X to brake</small>
                     </div>
                     <div class="col-4">
                         <div class="blueText"><i class="fa fa-mobile-phone fa-2x"></i> Use Phones as Game Pads</div>
-                        <small>Go on the website with your phone and enter this :</small>
+                        <small>Go on the website with your phone<br/>and enter this :</small>
                         <strong id="gameId"></strong>
                     </div>
                     <div class="col-4">
                         <div class="greenText"><i class="fa fa-keyboard-o fa-2x"></i> Play with Keyboard</div>
-                        <small>Q to add a keyboard player<br/>Arrows to turn, A to accelerate, D to brake</small>
+                        <small>Press any key to add a player<br/>Arrows to turn, A to accelerate, D to brake</small>
                     </div>
                 </div>
                 <h4>Players</h4>
@@ -68,7 +68,7 @@
                     <div><span>7</span><i class="fa fa-1x"></i></div>
                     <div><span>8</span><i class="fa fa-1x"></i></div>
                 </div>
-                <button id="startGameBtn">Start&nbsp;&nbsp;Game !</button>
+                <button id="startGameBtn">Start&nbsp;Game !</button>
             </div>
             <div id="credits">Credits&nbsp;&nbsp;<a href="http://glevelapps.blogspot.co.uk" target="_blank">Guillaume Gouchon</a></div>
         </div>
@@ -137,6 +137,11 @@
             </div>
         </div>
 
+        <div id="audioTags">
+            <audio controls preload></audio>
+            <audio controls preload></audio>
+            <audio controls preload></audio>
+        </div>
 
         <script src="http://127.0.0.1:1234/socket.io/socket.io.js"></script>
 
@@ -166,14 +171,18 @@
 
         <script src="scripts/models/Game.js"></script>
         <script src="scripts/models/Car.js"></script>
+        <script src="scripts/models/Player.js"></script>
         <script src="scripts/models/Obstacle.js"></script>
         <script src="scripts/models/Race.js"></script>
         
         <script src="scripts/utils.js"></script>
         <script src="scripts/GUI.js"></script>
         <script src="scripts/input.js"></script>
+        <script src="scripts/sound.js"></script>
+        <script src="scripts/inputs/GamepadHelper.js"></script>
+        <script src="scripts/inputs/Phonepad.js"></script>
         <script src="scripts/main.js"></script>
-        <script src="scripts/phonepad.js"></script>
         <!-- endbuild -->
+        
 </body>
 </html>

@@ -1,14 +1,39 @@
-function Input(nbPlayers) {
+// inputs constants
+var KEY_CODES = {
+	A: 65,
+	D: 68,
+	Left: 37,
+	Right: 39
+};
+
+
+function Input() {
 
 	this.inputs = [];
-	for(var i = 0; i < nbPlayers; i++) {
-		this.inputs.push(new Command(i));
-	}
 
-	socket.on('commands', function (commands) {
-		this.inputs[commands.id] = commands;
-	});
+	this.init = function (nbPlayers) {
+		for(var i = 0; i < nbPlayers; i++) {
+			this.inputs.push(new Command(i));
+		}
 
+		if (socket != null) {
+			var _this = this;
+			// init phone pad commands receiver
+			socket.on('commands', function (commands) {
+				_this.inputs[commands.id] = commands;
+			});
+		}
+
+		// keyboard
+		for (var i in players) {
+			var player = players[i];
+			if (player.type == KEYBOARD_PLAYER) {
+				this.addKeyboardCommandsListener(player.id);
+				return;	
+			}
+		}
+	};
+	
 	this.checkInputs = function () {
 		for (var i = 0; i < this.inputs.length; i++) {
 			var input = this.inputs[i];
@@ -26,53 +51,45 @@ function Input(nbPlayers) {
 			}
 		}
 	};
-	
-	// TODO remove
-	var _this = this;
-	window.addEventListener('keyup', function (event) {
-		switch(event.keyCode) {
-			case KEY_CODES.A:
-				_this.inputs[0].accelerate = false;
-				break;
-			case KEY_CODES.D:
-				_this.inputs[0].brake = false;
-				break;
-			case KEY_CODES.Left:
-				_this.inputs[0].turnLeft = false;
-				break;
-			case KEY_CODES.Right:
-				_this.inputs[0].turnRight = false;
-				break;
-		}
-	},false);
 
-	window.addEventListener('keydown', function (event) {
-		switch(event.keyCode) {
-			case KEY_CODES.A:
-				_this.inputs[0].accelerate = true;
-				break;
-			case KEY_CODES.D:
-				_this.inputs[0].brake = true;
-				break;
-			case KEY_CODES.Left:
-				_this.inputs[0].turnLeft = true;
-				break;
-			case KEY_CODES.Right:
-				_this.inputs[0].turnRight = true;
-				break;
-		}
-	},false);
+	this.addKeyboardCommandsListener = function (playerIndex) {
+		var _this = this;
+		window.addEventListener('keyup', function (event) {
+			switch(event.keyCode) {
+				case KEY_CODES.A:
+					_this.inputs[playerIndex].accelerate = false;
+					break;
+				case KEY_CODES.D:
+					_this.inputs[playerIndex].brake = false;
+					break;
+				case KEY_CODES.Left:
+					_this.inputs[playerIndex].turnLeft = false;
+					break;
+				case KEY_CODES.Right:
+					_this.inputs[playerIndex].turnRight = false;
+					break;
+			}
+		},false);
+
+		window.addEventListener('keydown', function (event) {
+			switch(event.keyCode) {
+				case KEY_CODES.A:
+					_this.inputs[playerIndex].accelerate = true;
+					break;
+				case KEY_CODES.D:
+					_this.inputs[playerIndex].brake = true;
+					break;
+				case KEY_CODES.Left:
+					_this.inputs[playerIndex].turnLeft = true;
+					break;
+				case KEY_CODES.Right:
+					_this.inputs[playerIndex].turnRight = true;
+					break;
+			}
+		},false);
+	};
 
 }
-
-
-	// TODO remove
-	var KEY_CODES = {
-		A: 65,
-		D: 68,
-		Left: 37,
-		Right: 39
-	};
 
 
 function Command(id) {

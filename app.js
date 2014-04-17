@@ -66,6 +66,8 @@ app.io.sockets.on('connection', function (socket) {
     console.log('a phonepad joined game '.debug + gameId);
     var game = games[gameId];
     if (game != null) {
+      console.log('sending response to client...'.debug);
+      socket.emit('gameAccepted', game.players.length);
       game.socket.emit('playerJoined');
       game.players.push(socket);
     }
@@ -83,18 +85,10 @@ app.io.sockets.on('connection', function (socket) {
     }
   });
 
-  socket.on('newPlayer', function (data) {
-    console.log('new player for game '.debug + data.gameId);
-    var game = games[data.gameId];
-    if (game != null) {
-      game.players.push('offlinePlayer');
-    }
-  });
-
   socket.on('commands', function (data) {
     var game = games[data.gameId];
     if (game != null) {
-      game[0].emit('commands', data.commands);
+      game.socket.emit('commands', data.commands);
     }
   });
 
@@ -103,6 +97,7 @@ app.io.sockets.on('connection', function (socket) {
     for (var i = 0; i < l; i++) {
       var game = games[i];
       if (socket.id == game.socket) {
+        game.socket.emit('playerLeft', i);
         games.splice(i, 1);
         return;
       }

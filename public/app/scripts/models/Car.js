@@ -14,7 +14,7 @@ var Car = CircleBody.extend({
 		this.outRank = 0;
 
 		// graphism
-		this.image = document.getElementById("car" + id);
+		this.image = document.getElementById("car" + id % 4);
 		this.smoke = document.getElementById("smoke");
 		this.explosion = document.getElementById("explosion");
 		this.smokeSprite = 0;
@@ -84,7 +84,19 @@ var Car = CircleBody.extend({
 			this.smokeSprite = this.smokeSprite >= 44 ? 0 : this.smokeSprite + 2;
 			ctx.translate(this.x - this.width / 2, this.y - this.height / 2);
 			ctx.rotate(this.rotation);
-			ctx.drawImage(this.smoke, parseInt(this.smokeSprite / 15) * 100, 0, 100, 100, -this.width / 3 + Math.abs(this.dx) * 5, -this.height / 2 - this.dx * 3 + 3, - this.height / 4 * this.dy, this.height - 6 + Math.abs(this.dx) * 3)
+			var dy = this.dy;
+			if (this.dy > 5) {
+				dy = 5;
+			} else if (this.dy < -5) {
+				dy = -5;
+			}
+			var dx = this.dx;
+			if (this.dx > 3) {
+				dx = 3;
+			} else if (this.dx < -3) {
+				dx = -3;
+			}
+			ctx.drawImage(this.smoke, parseInt(this.smokeSprite / 15) * 100, 0, 100, 100, -this.width / 3 + Math.abs(dx) * 5, -this.height / 2 - dx * 3 + 3, - this.height / 4 * dy, this.height - 6 + Math.abs(dx) * 3)
 			ctx.rotate(-this.rotation);
 			ctx.translate(-this.x + this.width / 2, -this.y + this.height / 2);
 		}

@@ -52,6 +52,7 @@ function Game(nbPlayers, race) {
 	}
 
 	this.start = function () {
+		this.input.init(this.nbPlayers);
 		this.GUI.init();
 		this.startRound();
 	};
@@ -122,6 +123,8 @@ function Game(nbPlayers, race) {
 
 		// reposition cars
 		var translationBetweenCars = getTranslationDiff(40, degToRad(this.whereToGo) - Math.PI / 2);
+		var translationBetweenCarsRows = getTranslationDiff(70, degToRad(this.whereToGo) + Math.PI);
+
 		// shuffle car order
 		var shuffleArray = [];
 		for (var i = 0; i < this.nbPlayers; i++) {
@@ -132,9 +135,10 @@ function Game(nbPlayers, race) {
 			var randomIndex = Math.floor(Math.random() * shuffleArray.length);
 			var car = this.cars[shuffleArray[randomIndex]];
 			shuffleArray.splice(randomIndex, 1);
+			// reset cars
 			car.reset();
-			car.x = screenwidth / 2 + translationBetweenCars[0] * (i - this.nbPlayers / 2);
-			car.y = screenheight / 2 + translationBetweenCars[1] * (i - this.nbPlayers / 2);
+			car.x = screenwidth / 2 + translationBetweenCars[0] * (i % 4 - (this.nbPlayers % 4) / 2) + Math.floor(i / 4) * translationBetweenCarsRows[0];
+			car.y = screenheight / 2 + translationBetweenCars[1] * (i % 4 - (this.nbPlayers % 4) / 2) + Math.floor(i / 4) * translationBetweenCarsRows[1];
 			car.rotation = degToRad(this.whereToGo);
 		}
 
@@ -166,24 +170,8 @@ function Game(nbPlayers, race) {
 		// pause game
 		this.isPaused = true;
 
-		// distribute points, reset cars
-		for (var i = 0; i < this.nbPlayers; i++) {
-			var car = this.cars[i];
-			if (car.isOut) {
-				if (car.outRank == 1) {
-					car.life = Math.max(0, car.life - 2);
-				} else if (car.outRank == 2) {
-					car.life = Math.max(0, car.life - 1);
-				} else if (car.outRank >= 3) {
-					// points do not change
-				}
-			} else {
-				car.life = Math.min(this.victory, car.life + 2);
-
-				// show winner car
-				this.GUI.showWinnerCar(car);
-			}
-		}
+		// update points, show winner car
+		this.distributePoints();		
 
 		// update players points
 		this.GUI.updatePoints(this.cars);
@@ -202,15 +190,43 @@ function Game(nbPlayers, race) {
 		}
 	};
 
+	this.distributePoints = function () {
+		for (var i = 0; i < this.nbPlayers; i++) {
+			var car = this.cars[i];
+			var leaderCar = this.cars[i % 4];// when more than 4 players, there are teams
+			if (car.isOut) {
+				if (car.outRank == 1) {
+					leaderCar.life = Math.max(0, leaderCar.life - 2);
+				} else if (car.outRank == 2) {
+					leaderCar.life = Math.max(0, leaderCar.life - 1);
+				} else if (car.outRank == this.nbPlayers  - 1) {
+					leaderCar.life = Math.max(0, leaderCar.life + 1);
+				} else {
+					// points do not change
+				}
+			} else {
+				leaderCar.life = Math.min(this.victory, leaderCar.life + 2);
+
+				// show winner car
+				this.GUI.showWinnerCar(car);
+			}
+		}
+	};
+
 	this.checkVictory = function () {
+		var winner = null;
 		for (var i = 0; i < this.nbPlayers; i++) {
 			var car = this.cars[i];
 			if (car.life == this.victory) {
-				// we have a winner
-				return car;
+				if (winner != null) {
+					// the winner is the winner of the round
+					winner = winner.isOut ? car : winner;
+				} else {
+					winner = car;
+				}
 			}
 		}
-		return null;
+		return winner;
 	};
 
 	this.getFirstCar = function () {
@@ -262,8 +278,8 @@ function Game(nbPlayers, race) {
 
 		// draw arrow
 		var arrowPosition = getTranslationDiff(120, degToRad(this.whereToGo));
-		var x = Math.max(10, Math.min(screenwidth - 10, arrowPosition[0] + screenwidth / 2));
-		var y = Math.max(10, Math.min(screenheight - 10, arrowPosition[1] + screenheight / 2));
+		var x = Math.max(10, Math.min(screenwidth - 10, arrowPosition[0] + screenwidth / 2 - ARROW_SIZE / 2));
+		var y = Math.max(10, Math.min(screenheight - 10, arrowPosition[1] + screenheight / 2 - ARROW_SIZE / 2));
 		ctx.translate(x, y);
 		ctx.rotate(degToRad(this.whereToGo));
 		ctx.drawImage(arrow, -ARROW_SIZE / 2, -ARROW_SIZE / 2, ARROW_SIZE, ARROW_SIZE);
