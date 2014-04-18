@@ -26,7 +26,9 @@ $(function() {
 
 		// phone pads
 		try {
-			socket = io.connect('http://localhost:1234');
+			socket = io.connect();
+			console.log(socket.socket.connecting);
+			console.log(socket.socket.connected);
 
 			// create game
 			socket.emit('createGame');

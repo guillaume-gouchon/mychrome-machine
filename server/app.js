@@ -9,7 +9,7 @@ app.configure(function () {
   app.use(express.methodOverride());
   app.use(app.router);
   app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-  app.use(express.static(__dirname + '/public/dist', { maxAge: 100000 * 1000 }));
+  // app.use(express.static(__dirname + '/public', { maxAge: 100000 * 1000 }));
 });
 
 // console colors
@@ -23,12 +23,12 @@ colors.setTheme({
 });
 
 // setup routes
-app.get('/', function (req, res) {
-  if (!res.getHeader('Cache-Control')) {
-    res.setHeader('Cache-Control', 'public, max-age=' + 100000);
-  }
-  res.sendfile(__dirname + '/public/dist/index.html');
-});
+// app.get('/', function (req, res) {
+//   if (!res.getHeader('Cache-Control')) {
+//     res.setHeader('Cache-Control', 'public, max-age=' + 100000);
+//   }
+//   res.sendfile(__dirname + '/public/index.html');
+// });
 
 // start server
 var port = 1234;

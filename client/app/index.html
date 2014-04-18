@@ -9,8 +9,12 @@
         <title>Mychrome Machines</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1">
+        <meta name="mobile-web-app-capable" content="yes">
 
-        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+        <!-- Place favicon.ico in the root directory -->
+        <link rel="icon" sizes="196x196" href="images/icon.png">
+        <link rel="icon" sizes="128x128" href="images/icon_128.png">
+        <link rel="apple-touch-icon" sizes="128x128" href="images/icon_128.png">
 
         <!-- build:css styles/vendor.css -->
         <link rel="stylesheet" href="styles/font-awesome.min.css">
@@ -143,7 +147,7 @@
             <audio controls preload></audio>
         </div>
 
-        <script src="http://127.0.0.1:1234/socket.io/socket.io.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
 
         <!-- build:js scripts/vendor.js -->
         <!-- bower:js -->
