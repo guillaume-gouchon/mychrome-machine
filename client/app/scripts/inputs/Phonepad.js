@@ -19,7 +19,7 @@ function PhonePad () {
 
 	this.connect = function (gameId) {
 		try {
-			this.socket = io.connect('http://mychrome.aws.af.cm');
+			this.socket = io.connect('http://warnode.com:1234/');
 
 			// join game
 			this.socket.emit('joinGame', gameId);

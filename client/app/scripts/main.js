@@ -26,7 +26,7 @@ $(function() {
 
 		// phone pads
 		try {
-			socket = io.connect();
+			socket = io.connect('http://warnode.com:1234/');
 			console.log(socket.socket.connecting);
 			console.log(socket.socket.connected);
 
