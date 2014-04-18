@@ -22,7 +22,7 @@ module.exports = function (grunt) {
         yeoman: {
             // Configurable paths
             app: 'app',
-            dist: '../server/public'
+            dist: '../mychrome'
         },
 
         // Watches files for changes and runs tasks based on the changed files
