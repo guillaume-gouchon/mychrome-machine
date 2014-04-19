@@ -2,7 +2,7 @@
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" manifest=".appcache"> <!--<![endif]-->
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -25,8 +25,6 @@
         <link rel="stylesheet" href="styles/gui.css">
         <link rel="stylesheet" href="styles/pad.css">
         <!-- endbuild -->
-
-        <script src="bower_components/modernizr/modernizr.js"></script>
     </head>
     <body>
         <!--[if lt IE 10]>
@@ -135,8 +133,10 @@
             <div id="joinGameDialog">
                 <div class="centerVertical">
                     <h3>Enter the name of the game you want to join</h3>
-                    <input type="text" placeholder="name of the game..."/>
-                    <button id="joinGameBtn">Join Game !</button>
+                    <form>
+                        <input type="text" placeholder="name of the game..." tabindex="1" />
+                        <button id="joinGameBtn" >Join Game !</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -147,10 +147,11 @@
             <audio controls preload></audio>
         </div>
 
-        <script src="http://warnode.com/socket.io/socket.io.js"></script>
+        <script src="http://107.170.64.17:1234/socket.io/socket.io.js"></script>
 
         <!-- build:js scripts/vendor.js -->
         <!-- bower:js -->
+        <script src="bower_components/modernizr/modernizr.js"></script>
         <script src="bower_components/jquery/jquery.js"></script>
         <script type='application/javascript' src='bower_components/fastclick/lib/fastclick.js'></script>
         <!-- endbower -->

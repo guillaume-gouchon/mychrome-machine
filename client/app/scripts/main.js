@@ -5,14 +5,14 @@ var players = [];
 var socket = null;
 
 $(function() {
-	if (Modernizr.touch && ($(window).height() <= 480 || $(window).width() <= 480)) {
+	if (Math.random() < 0.5 || Modernizr.touch && ($(window).height() <= 480 || $(window).width() <= 480)) {
 	   // it is a phone : display phone pad !
 	   $('#gamePad').removeClass('hide');
 	   $('#game').remove();
 	   	   FastClick.attach(document.body);
 
 	   	// init phonepad
-	   	var phonePad = new PhonePad();
+	   	var phonepad = new PhonePad();
 	} else {
 		// it is a screen : display game !
 		$('#mainPage').removeClass('hide');
@@ -26,9 +26,7 @@ $(function() {
 
 		// phone pads
 		try {
-			socket = io.connect('http://warnode.com:1234/');
-			console.log(socket.socket.connecting);
-			console.log(socket.socket.connected);
+			socket = io.connect('http://107.170.64.17:1234/');
 
 			// create game
 			socket.emit('createGame');

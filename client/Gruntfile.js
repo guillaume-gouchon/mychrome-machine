@@ -12,6 +12,9 @@ module.exports = function (grunt) {
     // Load grunt tasks automatically
     require('load-grunt-tasks')(grunt);
 
+    grunt.loadNpmTasks('grunt-ftp-deploy');
+    grunt.loadNpmTasks('grunt-appcache');
+
     // Time how long tasks take. Can help when optimizing build times
     require('time-grunt')(grunt);
 
@@ -148,11 +151,11 @@ module.exports = function (grunt) {
                 generatedImagesDir: '.tmp/images/generated',
                 imagesDir: '<%= yeoman.app %>/images',
                 javascriptsDir: '<%= yeoman.app %>/scripts',
-                fontsDir: '<%= yeoman.app %>/styles/fonts',
+                fontsDir: '<%= yeoman.app %>/fonts',
                 importPath: '<%= yeoman.app %>/bower_components',
                 httpImagesPath: '/images',
                 httpGeneratedImagesPath: '/images/generated',
-                httpFontsPath: '/styles/fonts',
+                httpFontsPath: '../fonts',
                 relativeAssets: false,
                 assetCacheBuster: false
             },
@@ -346,6 +349,30 @@ module.exports = function (grunt) {
                 'imagemin',
                 'svgmin'
             ]
+        },
+
+        'ftp-deploy': {
+          build: {
+            auth: {
+              host: 'gouchstudio.com',
+              port: 21,
+              authKey: 'key1'
+            },
+            src: '../build',
+            dest: '/machines',
+            exclusions: []
+          }
+        },
+
+        appcache: {
+            options: {
+              basePath: '<%= yeoman.dist %>/'
+            },
+            all: {
+              dest: '<%= yeoman.dist %>/.appcache',
+              cache: '<%= yeoman.dist %>/**/*',
+              network: '*'
+            }
         }
     });
 
@@ -396,7 +423,9 @@ module.exports = function (grunt) {
         'modernizr',
         'rev',
         'usemin',
-        'htmlmin'
+        'htmlmin',
+        'appcache',
+        'ftp-deploy'
     ]);
 
     grunt.registerTask('default', [

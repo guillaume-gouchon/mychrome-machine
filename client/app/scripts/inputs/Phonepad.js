@@ -9,17 +9,19 @@ function PhonePad () {
 	this.turnRightPosition = null;
 
 	var _this = this;
-
-	$('#joinGameBtn').click(function () {
+	
+	$('#joinGameDialog form').submit(function () {
 		var gameId = $('input', '#joinGameDialog').val();
 		if (gameId.length > 0) {
 			_this.connect(gameId);
 		}
+		return false;
 	});
+
 
 	this.connect = function (gameId) {
 		try {
-			this.socket = io.connect('http://warnode.com:1234/');
+			this.socket = io.connect('http://107.170.64.17:1234/');
 
 			// join game
 			this.socket.emit('joinGame', gameId);
@@ -37,6 +39,12 @@ function PhonePad () {
 				$('#pad .header div').addClass('player' + playerId % 4);
 				$('#joinGameDialog').remove();
 			});
+
+			// update player id
+			this.socket.on('updatePlayerId', function (newPlayerId) {
+				_this.myCommand = new Command(newPlayerId);
+				$('#pad .header div').addClass('player' + newPlayerId % 4);
+			});
 		} catch (e) {
 			$('#joinGameDialog').removeClass('loading');
 		}
@@ -50,7 +58,6 @@ function PhonePad () {
 			if (event.originalEvent.touches.length > 1) {
 				x = Math.min(event.originalEvent.touches[0].clientX, event.originalEvent.touches[1].clientX);
 			}
-			console.log(x, _this.turnLeftPosition)
 			if (x < _this.acceleratePosition.left 
 				&& x > _this.turnRightPosition.left) {
 				_this.turnRight();
@@ -89,22 +96,24 @@ function PhonePad () {
 				_this.myCommand.accelerate = false;
 				_this.release('#' + targetId);
 				_this.sendCommands();
-				break;
+				return;
 			case 'brakeBtn':
 				_this.myCommand.brake = false;
 				_this.release('#' + targetId);
 				_this.sendCommands();
-				break;
+				return;
 			case 'turnRightBtn':
 				_this.myCommand.turnRight = false;
-				_this.release('#' + targetId);
+				_this.release('#turnLeftBtn');
+				_this.release('#turnRightBtn');
 				_this.sendCommands();
-				break;
+				return;
 			case 'turnLeftBtn':
 				_this.myCommand.turnLeft = false;
-				_this.release('#' + targetId);
+				_this.release('#turnLeftBtn');
+				_this.release('#turnRightBtn');
 				_this.sendCommands();
-				break;
+				return;
 		}
 	};
 

@@ -1,6 +1,6 @@
 @import "compass";
 @import "variables";
-@include font-face("myFont", font-files("/fonts/font.ttf"));
+@include font-face("myFont", font-files("font.ttf"));
 
 body {
     background-color: #333;
@@ -287,6 +287,56 @@ canvas {
 }
 
 @-webkit-keyframes turn {
+    0% {
+        @include transform(rotate(0deg));
+    }
+    30% {
+        @include transform(rotate(0deg));
+    }
+    33% {
+        @include transform(rotate(90deg));
+    }
+    47% {
+        @include transform(rotate(90deg));
+    }
+    50% {
+        @include transform(rotate(180deg));
+    }
+    80% {
+        @include transform(rotate(180deg));
+    }
+    83% {
+        @include transform(rotate(270deg));
+    }
+    97% {
+        @include transform(rotate(270deg));
+    }
+    100% {
+        @include transform(rotate(360deg));
+    }
+}
+
+
+
+@-moz-keyframes animateCars {
+    0% {
+        @include transform(translate(0, 0px));
+    }
+    33% {
+        @include transform(translate(800px, 0px));
+    }
+    50% {
+        @include transform(translate(800px, 300px));
+    }
+    83% {
+        @include transform(translate(0px, 300px));
+    }
+    100% {
+        @include transform(translate(0px, 0px));
+    }
+}
+
+@-moz-keyframes turn {
     0% {
         @include transform(rotate(0deg));
     }

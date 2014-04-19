@@ -9,7 +9,6 @@ app.configure(function () {
   app.use(express.methodOverride());
   app.use(app.router);
   app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-  // app.use(express.static(__dirname + '/public', { maxAge: 100000 * 1000 }));
 });
 
 // console colors
@@ -21,14 +20,6 @@ colors.setTheme({
   info: 'yellow',
   debug: 'grey'
 });
-
-// setup routes
-// app.get('/', function (req, res) {
-//   if (!res.getHeader('Cache-Control')) {
-//     res.setHeader('Cache-Control', 'public, max-age=' + 100000);
-//   }
-//   res.sendfile(__dirname + '/public/index.html');
-// });
 
 // start server
 var port = 1234;
@@ -81,6 +72,13 @@ app.io.sockets.on('connection', function (socket) {
         game.players.splice(data.playerIndex, 1);
       } else {
         game.players.push('offlinePlayer');
+      }
+
+      for (var i in game.players) {
+        var playerSocket = game.players[i];
+        if (playerSocket != 'offlinePlayer') {
+          playerSocket.emit('updatePlayerId', i);
+        }
       }
     }
   });
