@@ -7,7 +7,7 @@ var OBSTACLES = {
 	},
 	macaron: {
 		image: 'macaron',
-		mass: 0,
+		mass: 900,
 		size: 45
 	},
 	coffee: {
@@ -19,7 +19,7 @@ var OBSTACLES = {
 
 var Obstacle = CircleBody.extend({
 
-	restitution: 0.8,
+	restitution: 0.6,
 	size : null,
 	image : null,
 	mass: null,

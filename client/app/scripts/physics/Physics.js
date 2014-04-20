@@ -6,64 +6,66 @@ function Physics (game) {
 		var collisions = [];
 		var allLength = game.objects.length;
 		for (var i = 0; i < allLength; i++) {
-			var active = game.objects[i]; 
-			for (var j = 0; j < allLength; j++) {
-				var passive = game.objects[j];
-				if (active != passive && active.doCollideWith(passive)) {
-					var impulse = this.resolveCollision(active, passive);
-					if (impulse != null) {
-						collisions.push({ element: active, impulse: impulse });
+			var active = game.objects[i];
+			if (collisions.indexOf(active) == -1) {
+				for (var j = 0; j < allLength; j++) {
+					var passive = game.objects[j];
+					if (active != passive && active.doCollideWith(passive)) {
+						var impulsePassive = this.resolveCollision(active, passive);
+						var impulseActive = this.resolveCollision(passive, active);
+						if (impulseActive != null) {
+							active.dx = impulseActive[0];
+							active.dy = impulseActive[1];
+						}
+						if (impulsePassive != null) {
+							passive.dx = impulsePassive[0];
+							passive.dy = impulsePassive[1];
+						}
+						collisions.push(passive);
+						break;
 					}
 				}
 			}
-		}
-
-		// resolve collision impulses
-		var collisionsLength = collisions.length;
-		for (var i = 0; i < collisionsLength; i++) {
-			var collision = collisions[i];
-			var impulse = collision.impulse;
-			if (collision.element instanceof Obstacle) {
-				console.log(impulse)
-			}
-			collision.element.dx = impulse[0];
-			collision.element.dy = impulse[1];
 		}
 	};
 
 
 	/**
-	*	Resolve action of element2 on element1
+	*	Resolve action of active on passive.
 	*/
-	this.resolveCollision = function (element1, element2) {
-		if (element1.mass == 0) return null;
+	this.resolveCollision = function (active, passive) {
+		if (passive.mass == 0) return null;
 
 		// calculate relative velocity
-		var velocity1 = element1.getVelocityInWorldReference();
-		var velocity2 = element2.getVelocityInWorldReference();
+		var velocity1 = passive.getVelocityInWorldReference();
+		var velocity2 = active.getVelocityInWorldReference();
 		var  rvx = velocity2[0] - velocity1[0];
 		var  rvy = velocity2[1] - velocity1[1];
 
 		// calculate relative velocity in terms of the normal direction
-	  	var velAlongNormal = rvx * (element2.x - element1.x) + rvy * (element2.y - element1.y);
+	  	var velAlongNormal = rvx * (active.x - passive.x) + rvy * (active.y - passive.y);
 	 
 		// do not resolve if velocities are separating
 		if (velAlongNormal > 0) return null;
 
 		// calculate restitution
-		var e = Math.min(element1.restitution, element2.restitution);
+		var res = Math.min(passive.restitution, active.restitution);
 
 		// calculate impulse scalar
-		var impulseScalarConstant = 0.01 * (1 + e) / (1 + (element2.mass == 0 ? 0 : 1.0 * element1.mass / element2.mass));
-		var j = impulseScalarConstant * velAlongNormal;
+		var massRatio = active.mass == 0 ? 1 : (passive.mass == 0 ? 0 : 2.2 * active.mass / passive.mass);
+		var impulseScalarConstant = 0.01 * (1 + res) * massRatio;
+		var j = Math.abs(impulseScalarConstant * velAlongNormal);
+
+		var dx = j * (active.x - passive.x) / getDistanceBetween(passive.x, passive.y, active.x, active.y);
+		var dy = j * (active.y - passive.y) / getDistanceBetween(passive.x, passive.y, active.x, active.y);
 
 		// apply impulse
 		var impulse = [
-			j * (element2.x - element1.x) / getDistanceBetween(element1.x, element1.y, element2.x, element2.y) * Math.cos(element1.rotation), 
-			j * (element2.y - element1.y) / getDistanceBetween(element1.x, element1.y, element2.x, element2.y) * (element1.rotation == 0 ? 1 : Math.sin(element1.rotation))
+			dy * Math.cos(passive.rotation) + dx * Math.sin(passive.rotation), 
+			dy * Math.sin(passive.rotation + Math.PI) - dx * Math.cos(passive.rotation)
 		];
 
-		return impulse;	
+		return impulse;
 	}
 
 }
