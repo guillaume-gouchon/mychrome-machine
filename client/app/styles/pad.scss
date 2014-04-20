@@ -99,11 +99,15 @@
 				@include transform(translateY(2px));
 			}
 
-			img {
+			div {
 				height: 30%;
 				width: 30%;
 				padding: 35%;
 				opacity: 0.8;
+
+				img {
+					width: 100%;
+				}
 			}
 
 			&#turnLeftBtn {

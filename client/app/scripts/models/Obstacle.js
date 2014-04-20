@@ -1,19 +1,41 @@
+// obstactles constants
+var OBSTACLES = {
+	sugar: {
+		image: 'sugar',
+		mass: 0,
+		size: 80
+	},
+	macaron: {
+		image: 'macaron',
+		mass: 0,
+		size: 45
+	},
+	coffee: {
+		image: 'coffee',
+		mass: 0,
+		size: 140
+	}
+};
+
 var Obstacle = CircleBody.extend({
 
-	init: function (id, image, x, y, size) {
-		var mass = 0;
-		var restitution = 0.8;
+	restitution: 0.8,
+	size : null,
+	image : null,
+	mass: null,
 
-		this._super(size, mass, restitution);
+	init: function (x, y) {
+		var randomObstacle = OBSTACLES[Object.keys(OBSTACLES)[Math.floor(Object.keys(OBSTACLES).length * Math.random())]]; 
+		this.size = randomObstacle.size;
+		this.mass = randomObstacle.mass;
 
-		// in game
-		this.id = id;
+		this._super(this.size / 2, this.mass, this.restitution);
 
 		// graphism
-		this.image = IMAGES_PATH + image + '_' + id + '.png';
+		this.image = document.getElementById(randomObstacle.image);
 
 		// characteristics
-		this.naturalDecceleration = mass * 0.00004;
+		this.naturalDecceleration = randomObstacle.mass * 0.00004;
 		this.adherence = 0.11;
 
 		this.x = x;
@@ -42,15 +64,11 @@ var Obstacle = CircleBody.extend({
 	},
 
 	draw: function () {
-		ctx.translate(this.x - this.radius / 2, this.y - this.radius /2);
+		ctx.translate(this.x, this.y);
 		ctx.rotate(this.rotation);
-		ctx.fillStyle = '#fff';
-		ctx.beginPath();
-		ctx.arc(- this.radius /2, - this.radius/2, this.radius, 0, Math.PI*2, true); 
-		ctx.closePath();
-		ctx.fill();
+		ctx.drawImage(this.image, - this.size / 2, - this.size / 2, this.size, this.size);
 		ctx.rotate(-this.rotation);
-		ctx.translate(-this.x + this.radius/2, -this.y + this.radius/2);
+		ctx.translate(-this.x, -this.y);
 	}
 	
 

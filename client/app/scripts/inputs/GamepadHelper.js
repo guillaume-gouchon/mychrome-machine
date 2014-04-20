@@ -10,14 +10,14 @@ function GamepadHelper () {
 	var _this = this;
 
 	this.init = function () {
-		var gamepadSupportAvailable = navigator.getGamepads || !!navigator.webkitGetGamepads || !!navigator.webkitGamepads;
-		if (!gamepadSupportAvailable) {
-			this.callbacks.showNotSupported();
+		if ('ongamepadconnected' in window || !!navigator.mozGamepads) {
+			// add Firefox events
+			window.addEventListener('gamepadconnected', this.onGamepadConnect, false);
+			window.addEventListener('gamepaddisconnected', this.onGamepadDisconnect, false);
 		} else {
-			if ('ongamepadconnected' in window) {
-				// add Firefox events
-				window.addEventListener('gamepadconnected', this.onGamepadConnected, false);
-				window.addEventListener('gamepaddisconnected', this.onGamepadDisconnected, false);
+			var gamepadSupportAvailable = navigator.getGamepads || !!navigator.webkitGetGamepads || !!navigator.webkitGamepads;
+			if (!gamepadSupportAvailable) {
+				this.callbacks.showNotSupported();
 			} else {
 				// start polling (Google Chrome)
 				this.startPolling();

@@ -3,9 +3,10 @@ var game = null;
 var gameId = null;
 var players = [];
 var socket = null;
+var pendingPlayers = [];
 
 $(function() {
-	if (Math.random() < 0.5 || Modernizr.touch && ($(window).height() <= 480 || $(window).width() <= 480)) {
+	if (Modernizr.touch && ($(window).height() <= 480 || $(window).width() <= 480)) {
 	   // it is a phone : display phone pad !
 	   $('#gamePad').removeClass('hide');
 	   $('#game').remove();
@@ -35,6 +36,9 @@ $(function() {
 			socket.on('gameCreated', function (myGameId) {
 				gameId = myGameId;
 				$('#gameId').html(gameId);
+				for (var i in pendingPlayers) {
+					socket.emit('updatePlayers', { gameId: gameId });
+				}
 			});
 
 			// phonepads
@@ -102,8 +106,12 @@ function addPlayer(playerType, extra) {
 	var player = new Player(players.length, playerType, extra);
 	players.push(player);
 	updatePlayersLayout();
-	if (socket != null && player.type != PHONEPAD_PLAYER) {
-		socket.emit('updatePlayers', { gameId: gameId });
+	if (player.type != PHONEPAD_PLAYER) {
+		if (socket != null && gameId != null) {
+			socket.emit('updatePlayers', { gameId: gameId });
+		} else {
+			pendingPlayers.push('pendingPlayer');
+		}
 	}
 }
 

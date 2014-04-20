@@ -2,7 +2,7 @@
 var PLAYER_START_POINTS = 3;
 var NEW_ROUND_PAUSE_DURATION = 2000;
 var TRAFFIC_LIGHTS_EACH_DURATION = 700;
-var DISTANCE_SCREEN_OUT = 10;
+var DISTANCE_SCREEN_OUT = 50;
 var IMAGES_PATH = '../images/';
 var ARROW_SIZE = 60;
 
@@ -44,14 +44,11 @@ function Game(nbPlayers, race) {
 		this.objects.push(car);
 	}
 
-	// add obstacles
-	for (var i = 0; i < Math.random() * 3; i++) {
-		var obstaclePosition = getTranslationDiff(screenwidth, this.whereToGo);
-		var obstacle = new Obstacle(0, null, obstaclePosition[0] + screenwidth / 2, obstaclePosition[1] + screenheight / 2, 20 + 20 * Math.random());
-		this.objects.push(obstacle);
-	}
-
 	this.start = function () {
+		// add obstacles
+		for (var i = 0; i < Math.random() * 3; i++) {
+			this.popNewObstacle();
+		}
 		this.input.init(this.nbPlayers);
 		this.GUI.init();
 		this.startRound();
@@ -61,7 +58,7 @@ function Game(nbPlayers, race) {
 
 		if (this.distance > 2000 + Math.random() * 1000) {
 			this.distance = 0;
-			for (var i = 0; i < Math.random() * 6; i++) {
+			for (var i = 0; i < Math.random() * 3; i++) {
 				this.popNewObstacle();
 			}
 			this.rotateRoad();
@@ -248,17 +245,31 @@ function Game(nbPlayers, race) {
 
 	this.popNewObstacle = function () {
 		// pop random obstacle
-		var randomAngle = degToRad(this.whereToGo) + Math.PI / 2 * (Math.random() - 0.5);
-		randomAngle %= 2 * Math.PI;
-		var obstaclePosition = getTranslationDiff(screenwidth, randomAngle);
-		var x = Math.max(10, Math.min(screenwidth - 10, obstaclePosition[0]));
-		var y = Math.max(10, Math.min(screenheight - 10, obstaclePosition[1]));
-		var obstacle = new Obstacle(0, null, x, y, 10 + 30 * Math.random());
+		var x, y;
+		var ok, close = 10;
+		do {
+			ok = true;
+			var randomAngle = degToRad(this.whereToGo) + Math.PI / 2 * (Math.random() - 0.5);
+			randomAngle %= 2 * Math.PI;
+			var obstaclePosition = getTranslationDiff(screenwidth, randomAngle);
+			x = Math.max(-DISTANCE_SCREEN_OUT, Math.min(screenwidth + DISTANCE_SCREEN_OUT, obstaclePosition[0]));
+			y = Math.max(-DISTANCE_SCREEN_OUT, Math.min(screenheight + DISTANCE_SCREEN_OUT, obstaclePosition[1]));
+			for (var i in this.objects) {
+				var object = this.objects[i];
+				if(getDistanceBetween(x, y, object.x, object.y) < 120) {
+					ok = false;
+					break;
+				}
+			}
+
+			if (--close < 0) return;
+		} while (!ok)
+		var obstacle = new Obstacle(x, y);
 		this.objects.push(obstacle);
 	};
 
 	this.rotateRoad = function () {
-		this.whereToGo += Math.random() * 20;
+		this.whereToGo += Math.random() * 40 - 20;
 		this.whereToGo %= 360;
 	};
 

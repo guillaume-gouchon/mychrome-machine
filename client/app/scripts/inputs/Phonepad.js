@@ -42,8 +42,8 @@ function PhonePad () {
 
 			// update player id
 			this.socket.on('updatePlayerId', function (newPlayerId) {
+				$('#pad .header div').removeClass('player' + _this.myCommand.id).addClass('player' + newPlayerId % 4);
 				_this.myCommand = new Command(newPlayerId);
-				$('#pad .header div').addClass('player' + newPlayerId % 4);
 			});
 		} catch (e) {
 			$('#joinGameDialog').removeClass('loading');
@@ -68,6 +68,8 @@ function PhonePad () {
 				return;
 			}
 		} else if (event.target.tagName == 'IMG') {
+			targetId = event.target.parentElement.parentElement.id;
+		} else if (event.target.tagName == 'DIV') {
 			targetId = event.target.parentElement.id;
 		}
 		switch(targetId) {
@@ -89,6 +91,8 @@ function PhonePad () {
 	this.dispatchRelease = function (event) {
 		var targetId = event.target.id;
 		if (event.target.tagName == 'IMG') {
+			targetId = event.target.parentElement.parentElement.id;
+		} else if (event.target.tagName == 'DIV') {
 			targetId = event.target.parentElement.id;
 		}
 		switch(targetId) {
@@ -104,11 +108,13 @@ function PhonePad () {
 				return;
 			case 'turnRightBtn':
 				_this.myCommand.turnRight = false;
+				_this.myCommand.turnLeft = false;
 				_this.release('#turnLeftBtn');
 				_this.release('#turnRightBtn');
 				_this.sendCommands();
 				return;
 			case 'turnLeftBtn':
+				_this.myCommand.turnRight = false;
 				_this.myCommand.turnLeft = false;
 				_this.release('#turnLeftBtn');
 				_this.release('#turnRightBtn');

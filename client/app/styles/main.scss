@@ -318,7 +318,7 @@ canvas {
 
 
 
-@-moz-keyframes animateCars {
+@keyframes animateCars {
     0% {
         @include transform(translate(0, 0px));
     }
@@ -336,7 +336,7 @@ canvas {
     }
 }
 
-@-moz-keyframes turn {
+@keyframes turn {
     0% {
         @include transform(rotate(0deg));
     }

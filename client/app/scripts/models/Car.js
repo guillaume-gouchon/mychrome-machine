@@ -82,7 +82,7 @@ var Car = CircleBody.extend({
 	drawSmoke: function () {
 		if (!this.isOut && this.dy > 0) {
 			this.smokeSprite = this.smokeSprite >= 44 ? 0 : this.smokeSprite + 2;
-			ctx.translate(this.x - this.width / 2, this.y - this.height / 2);
+			ctx.translate(this.x, this.y);
 			ctx.rotate(this.rotation);
 			var dy = this.dy;
 			if (this.dy > 5) {
@@ -96,25 +96,24 @@ var Car = CircleBody.extend({
 			} else if (this.dx < -3) {
 				dx = -3;
 			}
-			ctx.drawImage(this.smoke, parseInt(this.smokeSprite / 15) * 100, 0, 100, 100, -this.width / 3 + Math.abs(dx) * 5, -this.height / 2 - dx * 3 + 3, - this.height / 4 * dy, this.height - 6 + Math.abs(dx) * 3)
+			var sx = parseInt(this.smokeSprite / 15) * 100, sy = 0;
+			var sw = 100, sh = 100;
+			var dw = this.height / 4 * dy, dh = this.height - 6 + Math.abs(dx) * 3;
+			var ddx = -this.width / 3 + Math.abs(dx) * 5 - dw, ddy = -this.height / 2 - dx * 3 + 3;
+			ctx.drawImage(this.smoke, sx, sy, sw, sh, ddx, ddy, dw, dh);
 			ctx.rotate(-this.rotation);
-			ctx.translate(-this.x + this.width / 2, -this.y + this.height / 2);
+			ctx.translate(-this.x, -this.y);
 		}
 	},
 
 	draw: function () {
 		if (!this.isOut) {
-			ctx.translate(this.x - this.width / 2, this.y - this.height / 2);
+			ctx.translate(this.x, this.y);
 			ctx.rotate(this.rotation);
 			ctx.drawImage(this.image, -this.width / 2, -this.height / 2, this.width, this.height);
 			ctx.rotate(-this.rotation);
-			ctx.translate(-this.x + this.width / 2, -this.y + this.height / 2);
-		} //else {
-			// this.explosionSprite = this.explosionSprite >= 40 ? 0 : this.explosionSprite + 1;
-			// ctx.translate(this.x - this.width / 2, this.y - this.height / 2);
-			// ctx.drawImage(this.explosion, parseInt(this.explosionSprite / 5) * 128, 0, 128, 128, - this.width / 2 + this.explosionSprite / 40, - this.height / 2 + this.explosionSprite / 40, this.explosionSprite / 40 * this.width, this.explosionSprite / 40 * this.height)
-			// ctx.translate(-this.x + this.width / 2, -this.y + this.height / 2);
-		//}
+			ctx.translate(-this.x, -this.y);
+		}
 	}
 
 });

@@ -278,7 +278,7 @@
 
 
 
-@-moz-keyframes fadeOut {
+@keyframes fadeOut {
     0% {
         opacity: 1;
     }
@@ -287,7 +287,7 @@
     }
 }
 
-@-moz-keyframes showLeave {
+@keyframes showLeave {
     0% {
         opacity: 0;
     }
@@ -305,7 +305,7 @@
     }
 }
 
-@-moz-keyframes show {
+@keyframes show {
     0% {
         opacity: 0;
     }
@@ -319,7 +319,7 @@
     }
 }
 
-@-moz-keyframes victory {
+@keyframes victory {
     0% {
         @include transform(rotate($victoryJumpRotateFrom));
     }
@@ -329,7 +329,7 @@
     }
 }
 
-@-moz-keyframes jump {
+@keyframes jump {
     0% {
         @include transform(scale($victoryJumpScaleFrom));
     }
@@ -347,12 +347,12 @@
     }
 }
 
-@-moz-keyframes blink {
+@keyframes blink {
     from { opacity: 1 }
     to   { opacity: 0.7 }
 }
 
-@-moz-keyframes heavyblink {
+@keyframes heavyblink {
     from { opacity: 1 }
     to   { opacity: 0.2 }
 }
