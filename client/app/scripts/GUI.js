@@ -17,7 +17,7 @@ function GUI (nbPlayers, victory) {
 	this.showVictory = function (car) {
 		console.log('GUI', 'showVictory');
 		this.showWinnerCar(car);
-		this.showLabel('<div>Player ' + (car.id + 1) + ' has won !</div><button class="btn" onClick="restartGame()">Replay ?</button>', false);
+		this.showLabel('<div>' + PLAYER_NAMES[car.id] + (nbPlayers > 4 ? ' Team': ' Player') + ' has won !</div><button class="btn" onClick="restartGame()">Replay ?</button>', false);
 	};
 
 	this.showWinnerCar = function (car) {

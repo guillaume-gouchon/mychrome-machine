@@ -5,7 +5,7 @@ var TRAFFIC_LIGHTS_EACH_DURATION = 700;
 var DISTANCE_SCREEN_OUT = 50;
 var IMAGES_PATH = '../images/';
 var ARROW_SIZE = 60;
-
+var PLAYER_NAMES = ['Blue', 'Red', 'Yellow', 'Green'];
 
 function Game(nbPlayers, race) {
 

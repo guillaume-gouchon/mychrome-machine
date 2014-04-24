@@ -10,6 +10,7 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1">
         <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
 
         <!-- Place favicon.ico in the root directory -->
         <link rel="icon" sizes="196x196" href="images/icon.png">
@@ -135,10 +136,13 @@
             <div id="joinGameDialog">
                 <div class="centerVertical">
                     <h3>Enter the name of the game you want to join</h3>
-                    <form>
-                        <input type="text" placeholder="name of the game..." tabindex="1" />
-                        <button id="joinGameBtn" >Join Game !</button>
-                    </form>
+                    <input type="text" placeholder="name of the game..." tabindex="1" />
+                    <button id="joinGameBtn" >Join Game !</button>
+                    <br/>
+                    <br/>
+                    <label id="wheel" class="hide">
+                        <input type="checkbox" value="1"/> Use Phone as Wheel ?
+                    </label>
                 </div>
             </div>
         </div>

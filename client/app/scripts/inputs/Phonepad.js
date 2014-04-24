@@ -1,16 +1,26 @@
+// phonepad constants
+var PHONEPAD_ACCELEROMETER_THRESHOLD = 30.0;
+
 function PhonePad () {
 
 	this.gameId = null;
 	this.socket = null;
 	this.myCommand = null;
+	this.isWheel = false;
+	this.baseAngle = null;
 	this.acceleratePosition = null;
 	this.brakePosition = null;
 	this.turnLeftPosition = null;
 	this.turnRightPosition = null;
 
 	var _this = this;
+
+	// check if accelerometer is enabled
+	if ('deviceorientation' in window || window.DeviceMotionEvent || 'MozOrientation' in window) {
+		// $('#wheel').removeClass('hide');
+	}
 	
-	$('#joinGameDialog form').submit(function () {
+	$('#joinGameDialog button').click(function () {
 		var gameId = $('input', '#joinGameDialog').val().toLowerCase();
 		if (gameId.length > 0) {
 			_this.connect(gameId);
@@ -29,6 +39,7 @@ function PhonePad () {
 			// wait for response
 			this.socket.on('gameAccepted', function (playerId) {
 				_this.myCommand = new Command(playerId);
+				_this.isWheel = $('#wheel input').is(':checked') ;
 				_this.bindEvents();
 				_this.gameId = gameId;
 				_this.acceleratePosition = $('#accelerateBtn').position();
@@ -37,13 +48,20 @@ function PhonePad () {
 				_this.turnRightPosition = $('#turnRightBtn').position();
 				requestFullscreen();
 				$('#pad .header div').addClass('player' + playerId % 4);
-				$('#joinGameDialog').remove();
+				$('#joinGameDialog').addClass('hide');
 			});
 
 			// update player id
 			this.socket.on('updatePlayerId', function (newPlayerId) {
 				$('#pad .header div').removeClass('player' + _this.myCommand.id).addClass('player' + newPlayerId % 4);
 				_this.myCommand = new Command(newPlayerId);
+			});
+
+			this.socket.on('disconnect', function () {
+				$('#joinGameDialog').removeClass('hide');
+				_this.socket = null;
+				_this.gameId = null;
+
 			});
 		} catch (e) {
 			$('#joinGameDialog').removeClass('loading');
@@ -107,18 +125,10 @@ function PhonePad () {
 				_this.sendCommands();
 				return;
 			case 'turnRightBtn':
-				_this.myCommand.turnRight = false;
-				_this.myCommand.turnLeft = false;
-				_this.release('#turnLeftBtn');
-				_this.release('#turnRightBtn');
-				_this.sendCommands();
+				_this.releaseDirections();
 				return;
 			case 'turnLeftBtn':
-				_this.myCommand.turnRight = false;
-				_this.myCommand.turnLeft = false;
-				_this.release('#turnLeftBtn');
-				_this.release('#turnRightBtn');
-				_this.sendCommands();
+				_this.releaseDirections();
 				return;
 		}
 	};
@@ -130,6 +140,42 @@ function PhonePad () {
 		el.bind("touchcancel", this.dispatchRelease);
 		el.bind("touchleave", this.dispatchRelease);
 		el.bind("touchmove", this.dispatchEvent);
+
+		if (this.isWheel) {
+			// add accelerometer events
+			if (window.DeviceOrientationEvent) {
+			    window.addEventListener("deviceorientation", function () {
+			        _this.acceleroTurn(event.alpha);
+			    }, true);
+			} else if (window.DeviceMotionEvent) {
+			    window.addEventListener('devicemotion', function () {
+			        _this.acceleroTurn(event.acceleration.z * 2);
+			    }, true);
+			} else {
+			    window.addEventListener("MozOrientation", function () {
+			        _this.acceleroTurn(orientation.z * 50);
+			    }, true);
+			}
+		}
+	};
+
+	this.acceleroTurn = function (angle) {
+		if (angle) {
+			if (this.baseAngle == null) {
+				this.baseAngle = angle;
+			}
+			console.log(this.baseAngle - angle)
+			if (this.myCommand.turnRight === false && this.baseAngle - angle > PHONEPAD_ACCELEROMETER_THRESHOLD) {
+				console.log('right')
+				this.turnRight();
+			} else if (this.myCommand.turnLeft === false && this.baseAngle - angle < - PHONEPAD_ACCELEROMETER_THRESHOLD) {
+				this.turnLeft();
+				console.log('left')
+			} else if (this.myCommand.turnRight === true || this.myCommand.turnLeft === true) {
+				this.releaseDirections();
+				console.log('release')
+			}
+		}
 	};
 
 	this.turnLeft = function () {
@@ -145,6 +191,14 @@ function PhonePad () {
 		this.myCommand.turnRight = true;
 		this.press('#turnRightBtn');
 		this.release('#turnLeftBtn');
+		this.sendCommands();
+	};
+
+	this.releaseDirections = function () {
+		this.myCommand.turnRight = false;
+		this.myCommand.turnLeft = false;
+		this.release('#turnLeftBtn');
+		this.release('#turnRightBtn');
 		this.sendCommands();
 	};
 
