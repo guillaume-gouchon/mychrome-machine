@@ -21,7 +21,7 @@ function PhonePad () {
 
 	this.connect = function (gameId) {
 		try {
-			this.socket = io.connect('http://107.170.64.17:1234/');
+			this.socket = io.connect(SERVER_URL);
 
 			// join game
 			this.socket.emit('joinGame', gameId);

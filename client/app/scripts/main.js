@@ -4,6 +4,7 @@ var gameId = null;
 var players = [];
 var socket = null;
 var pendingPlayers = [];
+var SERVER_URL = 'http://warnode.com:443';
 
 $(function() {
 	if (Modernizr.touch && ($(window).height() <= 480 || $(window).width() <= 480)) {
@@ -27,7 +28,7 @@ $(function() {
 
 		// phone pads
 		try {
-			socket = io.connect('http://107.170.64.17:1234/');
+			socket = io.connect(SERVER_URL);
 
 			// create game
 			socket.emit('createGame');
@@ -60,7 +61,7 @@ $(function() {
 		document.addEventListener('keydown', addKeyboardPlayer);
 
 		$('#startGameBtn').click(function () {
-			if (players.length > 0) {
+			if (players.length > 1) {
 		    	startGame(players.length, 1);
 			}
 		})

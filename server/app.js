@@ -22,7 +22,7 @@ colors.setTheme({
 });
 
 // start server
-var port = 1234;
+var port = 443;
 var server = app.listen(port);
 
 // initializes Socket IO
