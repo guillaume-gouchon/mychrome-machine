@@ -370,7 +370,7 @@ module.exports = function (grunt) {
               basePath: '<%= yeoman.dist %>/'
             },
             all: {
-              dest: '<%= yeoman.dist %>/.appcache',
+              dest: '<%= yeoman.dist %>/machines.appcache',
               cache: '<%= yeoman.dist %>/**/*',
               network: '*'
             }

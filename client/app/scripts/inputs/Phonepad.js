@@ -11,7 +11,7 @@ function PhonePad () {
 	var _this = this;
 	
 	$('#joinGameDialog form').submit(function () {
-		var gameId = $('input', '#joinGameDialog').val();
+		var gameId = $('input', '#joinGameDialog').val().toLowerCase();
 		if (gameId.length > 0) {
 			_this.connect(gameId);
 		}
