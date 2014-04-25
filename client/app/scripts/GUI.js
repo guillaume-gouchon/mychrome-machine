@@ -1,5 +1,7 @@
 function GUI (nbPlayers, victory) {
 
+	this.TRAFFIC_LIGHTS_EACH_DURATION = 700;
+
 	this.nbPlayers = nbPlayers;
 	this.victory = victory;
 
@@ -22,6 +24,7 @@ function GUI (nbPlayers, victory) {
 
 	this.showWinnerCar = function (car) {
 		console.log('GUI', 'showWinnerCar');
+		soundManager.play(GAME_SOUNDS.victory);
 		$('#victory img').attr('src', car.image.src);
 		$('#victory').removeClass('hide');
 	};
@@ -49,7 +52,7 @@ function GUI (nbPlayers, victory) {
 
 		setTimeout(function () {
 			$('.playerPoints .point.new').removeClass('new').outerWidth();
-		}, NEW_ROUND_PAUSE_DURATION);
+		}, game.NEW_ROUND_PAUSE_DURATION);
 	};
 
 	this.showLabel = function (text, isLeaving) {
@@ -74,13 +77,16 @@ function GUI (nbPlayers, victory) {
 				$('div:nth(' + nbLightOn + ')', '.lights').addClass('green');
 				if (nbLightOn >= 2) {
 					// all lights are on, start !
+					soundManager.play(GAME_SOUNDS.start);
 					$('#trafficLights').removeClass('show').addClass('fadeOut');
 					clearInterval(trafficLightingOn);
 					callback();
+				} else {
+					soundManager.play(GAME_SOUNDS.trafficLight);
 				}
 			}
 			nbLightOn++;
-		}, TRAFFIC_LIGHTS_EACH_DURATION);
+		}, this.TRAFFIC_LIGHTS_EACH_DURATION);
 	}
 
 }

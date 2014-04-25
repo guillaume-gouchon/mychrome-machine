@@ -1,7 +1,6 @@
-// phonepad constants
-var PHONEPAD_ACCELEROMETER_THRESHOLD = 30.0;
-
 function PhonePad () {
+
+	this.PHONEPAD_ACCELEROMETER_THRESHOLD = 30.0;
 
 	this.gameId = null;
 	this.socket = null;
@@ -165,10 +164,10 @@ function PhonePad () {
 				this.baseAngle = angle;
 			}
 			console.log(this.baseAngle - angle)
-			if (this.myCommand.turnRight === false && this.baseAngle - angle > PHONEPAD_ACCELEROMETER_THRESHOLD) {
+			if (this.myCommand.turnRight === false && this.baseAngle - angle > this.PHONEPAD_ACCELEROMETER_THRESHOLD) {
 				console.log('right')
 				this.turnRight();
-			} else if (this.myCommand.turnLeft === false && this.baseAngle - angle < - PHONEPAD_ACCELEROMETER_THRESHOLD) {
+			} else if (this.myCommand.turnLeft === false && this.baseAngle - angle < - this.PHONEPAD_ACCELEROMETER_THRESHOLD) {
 				this.turnLeft();
 				console.log('left')
 			} else if (this.myCommand.turnRight === true || this.myCommand.turnLeft === true) {

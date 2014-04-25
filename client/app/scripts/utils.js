@@ -1,5 +1,3 @@
-
-
 window.requestAnimFrame = (function(callback) {
 	return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame ||
 	function(callback) {
@@ -21,9 +19,7 @@ function getTranslationDiff(distance, angle) {
     }
 }
 
-/**
-*	FULLSCREEN
-*/
+
 function requestFullscreen () {
 	var element = document.body;
 
@@ -73,4 +69,9 @@ function requestFullscreen () {
 		}
 	}
 
+}
+
+
+function getDistanceBetween(x1, y1, x2, y2) {
+	return Math.pow(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2), 0.5);
 }

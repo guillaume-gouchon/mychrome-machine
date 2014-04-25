@@ -3,7 +3,7 @@ var Car = CircleBody.extend({
 	init: function (id, image) {
 		var mass = 1000;
 		var restitution = 0.8;
-		var radius = 14;
+		var radius = 11;
 
 		this._super(radius, mass, restitution);
 
@@ -35,6 +35,7 @@ var Car = CircleBody.extend({
 
 	accelerate: function () {
 		this.dy = Math.min(this.dy + this.acceleration, this.maxAcceleration);
+		soundManager.play(GAME_SOUNDS.accelerate);
 	},
 
 	brake: function () {
@@ -46,6 +47,9 @@ var Car = CircleBody.extend({
 		this.dx += (isLeft ? -1 : 1) * this.glide * this.dy;
 		if (Math.abs(this.dx) > this.maxGlide) {
 			this.dx = this.dx / Math.abs(this.dx) * this.maxGlide;
+			if (this.dy != 0) {
+				soundManager.play(GAME_SOUNDS.glide);
+			}
 		}
 	},
 
@@ -111,6 +115,9 @@ var Car = CircleBody.extend({
 			ctx.translate(this.x, this.y);
 			ctx.rotate(this.rotation);
 			ctx.drawImage(this.image, -this.width / 2, -this.height / 2, this.width, this.height);
+			// ctx.beginPath();
+			// ctx.arc(0, 0, 22, 0, 2 * Math.PI);
+			// ctx.stroke();
 			ctx.rotate(-this.rotation);
 			ctx.translate(-this.x, -this.y);
 		}

@@ -12,7 +12,7 @@
         <meta name="mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-capable" content="yes">
 
-        <!-- Place favicon.ico in the root directory -->
+        <link rel="icon" href="favicon.ico" />
         <link rel="icon" sizes="196x196" href="images/icon.png">
         <link rel="icon" sizes="128x128" href="images/icon_128.png">
         <link rel="apple-touch-icon" sizes="128x128" href="images/icon_128.png">
@@ -136,7 +136,7 @@
             <div id="joinGameDialog">
                 <div class="centerVertical">
                     <h3>Enter the name of the game you want to join</h3>
-                    <input type="text" placeholder="name of the game..." tabindex="1" />
+                    <input id="inputName" type="text" placeholder="name of the game..." tabindex="1" />
                     <button id="joinGameBtn" >Join Game !</button>
                     <br/>
                     <br/>
@@ -148,6 +148,7 @@
         </div>
 
         <div id="audioTags">
+            <audio controls preload></audio>
             <audio controls preload></audio>
             <audio controls preload></audio>
             <audio controls preload></audio>
@@ -175,8 +176,7 @@
         </script>
 
         <!-- build:js({app,.tmp}) scripts/main.js -->
-        <script src="scripts/physics/inheritance.js"></script>
-        <script src="scripts/physics/utils.js"></script>
+        <script src="scripts/libs/inheritance.js"></script>
         <script src="scripts/physics/elements/RigidBody.js"></script>
         <script src="scripts/physics/elements/CircleBody.js"></script>
         <script src="scripts/physics/Physics.js"></script>
@@ -189,10 +189,12 @@
         
         <script src="scripts/utils.js"></script>
         <script src="scripts/GUI.js"></script>
-        <script src="scripts/input.js"></script>
-        <script src="scripts/sound.js"></script>
+        <script src="scripts/sounds/Sound.js"></script>
+        <script src="scripts/sounds/SoundManager.js"></script>
+        <script src="scripts/inputs/Command.js"></script>
         <script src="scripts/inputs/GamepadHelper.js"></script>
         <script src="scripts/inputs/Phonepad.js"></script>
+        <script src="scripts/inputs/Input.js"></script>
         <script src="scripts/main.js"></script>
         <!-- endbuild -->
         

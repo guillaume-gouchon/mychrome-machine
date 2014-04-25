@@ -1,13 +1,8 @@
-// game constants
-var PLAYER_START_POINTS = 3;
-var NEW_ROUND_PAUSE_DURATION = 2000;
-var TRAFFIC_LIGHTS_EACH_DURATION = 700;
-var DISTANCE_SCREEN_OUT = 50;
-var IMAGES_PATH = '../images/';
-var ARROW_SIZE = 60;
-var PLAYER_NAMES = ['Blue', 'Red', 'Yellow', 'Green'];
-
 function Game(nbPlayers, race) {
+
+	this.ARROW_SIZE = 60;
+	this.DISTANCE_SCREEN_OUT = 50;
+	this.NEW_ROUND_PAUSE_DURATION = 2000;
 
 	this.nbPlayers = nbPlayers;
 	this.race = race;
@@ -19,7 +14,7 @@ function Game(nbPlayers, race) {
 
 	this.GUI = new GUI(this.nbPlayers, this.victory);
 	this.input = new Input(this.nbPlayers);
-	this.physics = new Physics(this);
+	this.physics = new Physics();
 
 	// game states
 	this.isPaused = false;
@@ -92,7 +87,7 @@ function Game(nbPlayers, race) {
 				if (!obj.isOut) {
 					obj.x -= dx * 0.07;
 					obj.y -= dy * 0.07;
-					if (obj.x < - DISTANCE_SCREEN_OUT || obj.x > screenwidth + DISTANCE_SCREEN_OUT || obj.y < -DISTANCE_SCREEN_OUT || obj.y > screenheight + DISTANCE_SCREEN_OUT) {
+					if (obj.x < - this.DISTANCE_SCREEN_OUT || obj.x > screenwidth + this.DISTANCE_SCREEN_OUT || obj.y < -this.DISTANCE_SCREEN_OUT || obj.y > screenheight + this.DISTANCE_SCREEN_OUT) {
 						if (obj instanceof Obstacle) {
 							this.objects.splice(oLength, 1);
 						} else if (obj instanceof Car) {
@@ -100,6 +95,7 @@ function Game(nbPlayers, race) {
 							obj.isOut = true;
 							this.carsOut++;
 							obj.outRank = this.carsOut;
+							soundManager.play(GAME_SOUNDS.carOut);
 						}
 					}
 				}
@@ -183,7 +179,7 @@ function Game(nbPlayers, race) {
 			var _this = this;
 			setTimeout(function () {
 				_this.startRound();	
-			}, NEW_ROUND_PAUSE_DURATION);
+			}, this.NEW_ROUND_PAUSE_DURATION);
 		}
 	};
 
@@ -252,8 +248,8 @@ function Game(nbPlayers, race) {
 			var randomAngle = degToRad(this.whereToGo) + Math.PI / 2 * (Math.random() - 0.5);
 			randomAngle %= 2 * Math.PI;
 			var obstaclePosition = getTranslationDiff(screenwidth, randomAngle);
-			x = Math.max(-DISTANCE_SCREEN_OUT, Math.min(screenwidth + DISTANCE_SCREEN_OUT, obstaclePosition[0]));
-			y = Math.max(-DISTANCE_SCREEN_OUT, Math.min(screenheight + DISTANCE_SCREEN_OUT, obstaclePosition[1]));
+			x = Math.max(-this.DISTANCE_SCREEN_OUT, Math.min(screenwidth + this.DISTANCE_SCREEN_OUT, obstaclePosition[0]));
+			y = Math.max(-this.DISTANCE_SCREEN_OUT, Math.min(screenheight + this.DISTANCE_SCREEN_OUT, obstaclePosition[1]));
 			for (var i in this.objects) {
 				var object = this.objects[i];
 				if(getDistanceBetween(x, y, object.x, object.y) < 120) {
@@ -289,11 +285,11 @@ function Game(nbPlayers, race) {
 
 		// draw arrow
 		var arrowPosition = getTranslationDiff(120, degToRad(this.whereToGo));
-		var x = Math.max(10, Math.min(screenwidth - 10, arrowPosition[0] + screenwidth / 2 - ARROW_SIZE / 2));
-		var y = Math.max(10, Math.min(screenheight - 10, arrowPosition[1] + screenheight / 2 - ARROW_SIZE / 2));
+		var x = Math.max(10, Math.min(screenwidth - 10, arrowPosition[0] + screenwidth / 2 - this.ARROW_SIZE / 2));
+		var y = Math.max(10, Math.min(screenheight - 10, arrowPosition[1] + screenheight / 2 - this.ARROW_SIZE / 2));
 		ctx.translate(x, y);
 		ctx.rotate(degToRad(this.whereToGo));
-		ctx.drawImage(arrow, -ARROW_SIZE / 2, -ARROW_SIZE / 2, ARROW_SIZE, ARROW_SIZE);
+		ctx.drawImage(arrow, -this.ARROW_SIZE / 2, -this.ARROW_SIZE / 2, this.ARROW_SIZE, this.ARROW_SIZE);
 		ctx.rotate(-degToRad(this.whereToGo));
 		ctx.translate(-x, -y);
 

@@ -1,6 +1,4 @@
-function Physics (game) {
-
-	var game = game;
+function Physics () {
 
 	this.update = function () {
 		var collisions = [];
@@ -22,6 +20,7 @@ function Physics (game) {
 							passive.dy = impulsePassive[1];
 						}
 						collisions.push(passive);
+						soundManager.play(GAME_SOUNDS.crash);
 						break;
 					}
 				}

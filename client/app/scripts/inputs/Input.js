@@ -1,18 +1,16 @@
-// inputs constants
-var KEY_CODES = {
-	A: 65,
-	D: 68,
-	Left: 37,
-	Right: 39
-};
+function Input () {
 
-
-function Input() {
+	this.KEY_CODES = {
+		A: 65,
+		D: 68,
+		Left: 37,
+		Right: 39
+	};
 
 	this.inputs = [];
 
-	this.init = function (nbPlayers) {
-		for(var i = 0; i < nbPlayers; i++) {
+	this.init = function () {
+		for(var i = 0; i < game.nbPlayers; i++) {
 			this.inputs.push(new Command(i));
 		}
 
@@ -34,7 +32,7 @@ function Input() {
 		}
 	};
 	
-	this.checkInputs = function () {
+	this.update = function () {
 		for (var i = 0; i < this.inputs.length; i++) {
 			var input = this.inputs[i];
 			if (input.accelerate) {
@@ -56,16 +54,16 @@ function Input() {
 		var _this = this;
 		window.addEventListener('keyup', function (event) {
 			switch(event.keyCode) {
-				case KEY_CODES.A:
+				case _this.KEY_CODES.A:
 					_this.inputs[playerIndex].accelerate = false;
 					break;
-				case KEY_CODES.D:
+				case _this.KEY_CODES.D:
 					_this.inputs[playerIndex].brake = false;
 					break;
-				case KEY_CODES.Left:
+				case _this.KEY_CODES.Left:
 					_this.inputs[playerIndex].turnLeft = false;
 					break;
-				case KEY_CODES.Right:
+				case _this.KEY_CODES.Right:
 					_this.inputs[playerIndex].turnRight = false;
 					break;
 			}
@@ -73,29 +71,20 @@ function Input() {
 
 		window.addEventListener('keydown', function (event) {
 			switch(event.keyCode) {
-				case KEY_CODES.A:
+				case _this.KEY_CODES.A:
 					_this.inputs[playerIndex].accelerate = true;
 					break;
-				case KEY_CODES.D:
+				case _this.KEY_CODES.D:
 					_this.inputs[playerIndex].brake = true;
 					break;
-				case KEY_CODES.Left:
+				case _this.KEY_CODES.Left:
 					_this.inputs[playerIndex].turnLeft = true;
 					break;
-				case KEY_CODES.Right:
+				case _this.KEY_CODES.Right:
 					_this.inputs[playerIndex].turnRight = true;
 					break;
 			}
 		},false);
 	};
 
-}
-
-
-function Command(id) {
-	this.id = id;
-	this.accelerate = false;
-	this.brake = false;
-	this.turnRight = false;
-	this.turnLeft = false;
 }

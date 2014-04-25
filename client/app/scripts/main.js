@@ -1,10 +1,15 @@
 var ctx, screenwidth, screenheight;
 var game = null;
+var soundManager = null;
 var gameId = null;
 var players = [];
 var socket = null;
 var pendingPlayers = [];
 var SERVER_URL = 'http://warnode.com:443';
+var IMAGES_PATH = '../images/';
+var PLAYER_NAMES = ['Blue', 'Red', 'Yellow', 'Green'];
+var PLAYER_START_POINTS = 3;
+var MINIMUM_NB_PLAYERS = 2;
 
 $(function() {
 	if (Modernizr.touch && ($(window).height() <= 480 || $(window).width() <= 480)) {
@@ -25,6 +30,13 @@ $(function() {
 			$('#logo h2').removeClass('farTop');
 			$('#animatedCars').addClass('animated');
 		}, 200);
+
+		// init sound
+		soundManager = new SoundManager();
+		// soundManager.init();
+
+		// play music
+		// soundManager.play(GAME_SOUNDS.mainMusic);
 
 		// phone pads
 		try {
@@ -61,10 +73,10 @@ $(function() {
 		document.addEventListener('keydown', addKeyboardPlayer);
 
 		$('#startGameBtn').click(function () {
-			if (players.length > 1) {
+			if (players.length >= MINIMUM_NB_PLAYERS) {
 		    	startGame(players.length, 1);
 			}
-		})
+		});
 	}
 
 });
@@ -152,7 +164,7 @@ function updatePlayersLayout() {
 */
 function animate() {
 
-	game.input.checkInputs();
+	game.input.update();
 	
 	game.update();
 
