@@ -22,7 +22,10 @@ function PhonePad () {
 		// check if any cookie
 		this.gameId = getCookie(this.COOKIE_GAME_ID);
 		if (this.gameId != null) {
-			this.connect(this.gameId, getCookie(this.COOKIE_PLAYER_INDEX));
+			$('#rejoinBtn').removeClass('hide').click(function () {
+				_this.connect(this.gameId, getCookie(this.COOKIE_PLAYER_INDEX));
+				return false;
+			});
 		}
 
 		// check if accelerometer is enabled

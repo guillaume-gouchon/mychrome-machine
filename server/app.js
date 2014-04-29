@@ -103,8 +103,7 @@ app.io.sockets.on('connection', function (socket) {
     var l = games.length;
     for (var i = 0; i < l; i++) {
       var game = games[i];
-      if (socket.id == game.socket) {
-        game.socket.emit('playerLeft', i);
+      if (socket.id == game.socket.id) {
         games.splice(i, 1);
         return;
       }

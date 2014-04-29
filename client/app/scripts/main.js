@@ -16,7 +16,7 @@ $(function() {
 	   // it is a phone : display phone pad !
 	   $('#gamePad').removeClass('hide');
 	   $('#game').remove();
-	   	   FastClick.attach(document.body);
+   	   FastClick.attach(document.body);
 
 	   	// init phonepad
 	   	var phonepad = new PhonePad();
