@@ -20,6 +20,7 @@ $(function() {
 
 	   	// init phonepad
 	   	var phonepad = new PhonePad();
+	   	phonepad.init();
 	} else {
 		// it is a screen : display game !
 		$('#mainPage').removeClass('hide');

@@ -1,6 +1,9 @@
 function PhonePad () {
 
 	this.PHONEPAD_ACCELEROMETER_THRESHOLD = 30.0;
+	this.COOKIE_GAME_ID = 'my_machines';
+	this.COOKIE_PLAYER_INDEX = 'my_machines_index';
+	this.COOKIE_EXPIRATION = 30; // in minutes
 
 	this.gameId = null;
 	this.socket = null;
@@ -14,40 +17,60 @@ function PhonePad () {
 
 	var _this = this;
 
-	// check if accelerometer is enabled
-	if ('deviceorientation' in window || window.DeviceMotionEvent || 'MozOrientation' in window) {
-		// $('#wheel').removeClass('hide');
-	}
-	
-	$('#joinGameDialog button').click(function () {
-		var gameId = $('input', '#joinGameDialog').val().toLowerCase();
-		if (gameId.length > 0) {
-			_this.connect(gameId);
+	this.init = function () {
+
+		// check if any cookie
+		this.gameId = getCookie(this.COOKIE_GAME_ID);
+		if (this.gameId != null) {
+			this.connect(this.gameId, getCookie(this.COOKIE_PLAYER_INDEX));
 		}
-		return false;
-	});
 
+		// check if accelerometer is enabled
+		// if ('deviceorientation' in window || window.DeviceMotionEvent || 'MozOrientation' in window) {
+			// $('#wheel').removeClass('hide');
+		// }
+		
+		$('#joinGameDialog button').click(function () {
+			var gameId = $('input', '#joinGameDialog').val().toLowerCase();
+			if (gameId.length > 0) {
+				_this.connect(gameId, null);
+			}
+			return false;
+		});
 
-	this.connect = function (gameId) {
+	};
+
+	this.connect = function (gameId, playerId) {
 		try {
 			this.socket = io.connect(SERVER_URL);
 
 			// join game
-			this.socket.emit('joinGame', gameId);
+			this.socket.emit('joinGame', { gameId: gameId, playerId: playerId });
 
 			// wait for response
 			this.socket.on('gameAccepted', function (playerId) {
 				_this.myCommand = new Command(playerId);
-				_this.isWheel = $('#wheel input').is(':checked') ;
+				_this.isWheel = $('#wheel input').is(':checked');
 				_this.bindEvents();
 				_this.gameId = gameId;
 				_this.acceleratePosition = $('#accelerateBtn').position();
 				_this.brakePosition = $('#brakeBtn').position();
 				_this.turnLeftPosition = $('#turnLeftBtn').position();
 				_this.turnRightPosition = $('#turnRightBtn').position();
-				requestFullscreen();
+				// set cookies
+				setCookie(_this.COOKIE_GAME_ID, gameId, _this.COOKIE_EXPIRATION);
+				setCookie(_this.COOKIE_PLAYER_INDEX, playerId, _this.COOKIE_EXPIRATION);
+
+				// update UI
 				$('#pad .header div').addClass('player' + playerId % 4);
 				$('#joinGameDialog').addClass('hide');
+			});
+
+			this.socket.on('gameNotFound', function () {
+				_this.gameId = null;
+				// delete cookies
+				setCookie(_this.COOKIE_GAME_ID, null, -1);
+				setCookie(_this.COOKIE_PLAYER_INDEX, null, -1);
 			});
 
 			// update player id
@@ -63,7 +86,6 @@ function PhonePad () {
 
 			});
 		} catch (e) {
-			$('#joinGameDialog').removeClass('loading');
 		}
 	};
 

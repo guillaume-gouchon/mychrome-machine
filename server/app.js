@@ -53,14 +53,23 @@ app.io.sockets.on('connection', function (socket) {
     socket.emit('gameCreated', randomGameId);
   });
 
-  socket.on('joinGame', function (gameId) {
-    console.log('a phonepad joined game '.debug + gameId);
-    var game = games[gameId];
+  socket.on('joinGame', function (data) {
+    var game = games[data.gameId];
     if (game != null) {
-      console.log('sending response to client...'.debug);
-      socket.emit('gameAccepted', game.players.length);
-      game.socket.emit('playerJoined');
-      game.players.push(socket);
+      console.log('a phonepad joined game '.debug + data.gameId);
+      var playerId = data.playerId;
+      if (playerId == null) {
+        // new player
+        socket.emit('gameAccepted', game.players.length);
+        game.socket.emit('playerJoined');
+        game.players.push(socket);
+      } else {
+        // player reconnection
+        socket.emit('gameAccepted', playerId);
+        game.players[playerId] = socket;
+      }      
+    } else {
+      socket.emit('gameNotFound');
     }
   });
 
@@ -90,17 +99,17 @@ app.io.sockets.on('connection', function (socket) {
     }
   });
 
-  socket.on('disconnect', function () {
-    var l = games.length;
-    for (var i = 0; i < l; i++) {
-      var game = games[i];
-      if (socket.id == game.socket) {
-        game.socket.emit('playerLeft', i);
-        games.splice(i, 1);
-        return;
-      }
-    }
-  });
+  // socket.on('disconnect', function () {
+  //   var l = games.length;
+  //   for (var i = 0; i < l; i++) {
+  //     var game = games[i];
+  //     if (socket.id == game.socket) {
+  //       game.socket.emit('playerLeft', i);
+  //       games.splice(i, 1);
+  //       return;
+  //     }
+  //   }
+  // });
 
 });
 
