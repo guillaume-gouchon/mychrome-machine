@@ -68,6 +68,8 @@ function PhonePad () {
 				// update UI
 				$('#pad .header div').addClass('player' + playerId % 4);
 				$('#joinGameDialog').addClass('hide');
+
+				requestFullScreen();
 			});
 
 			this.socket.on('gameNotFound', function () {
@@ -81,6 +83,7 @@ function PhonePad () {
 			this.socket.on('updatePlayerId', function (newPlayerId) {
 				$('#pad .header div').removeClass('player' + _this.myCommand.id).addClass('player' + newPlayerId % 4);
 				_this.myCommand = new Command(newPlayerId);
+				setCookie(_this.COOKIE_PLAYER_INDEX, newPlayerId, _this.COOKIE_EXPIRATION);
 			});
 
 			this.socket.on('disconnect', function () {
