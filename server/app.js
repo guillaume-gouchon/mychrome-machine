@@ -104,6 +104,7 @@ app.io.sockets.on('connection', function (socket) {
     for (var i = 0; i < l; i++) {
       var game = games[i];
       if (socket.id == game.socket.id) {
+        console.log('destroying game '.debug + i + '...'.debug);
         games.splice(i, 1);
         return;
       }

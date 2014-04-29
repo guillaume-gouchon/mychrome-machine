@@ -22,8 +22,9 @@ function PhonePad () {
 		// check if any cookie
 		this.gameId = getCookie(this.COOKIE_GAME_ID);
 		if (this.gameId != null) {
-			$('#rejoinBtn').removeClass('hide').click(function () {
-				_this.connect(this.gameId, getCookie(this.COOKIE_PLAYER_INDEX));
+			$('#rejoinBtn').removeClass('hide');
+			$('#rejoinBtn').click(function () {
+				_this.connect(_this.gameId, getCookie(_this.COOKIE_PLAYER_INDEX));
 				return false;
 			});
 		}
