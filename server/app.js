@@ -99,17 +99,17 @@ app.io.sockets.on('connection', function (socket) {
     }
   });
 
-  // socket.on('disconnect', function () {
-  //   var l = games.length;
-  //   for (var i = 0; i < l; i++) {
-  //     var game = games[i];
-  //     if (socket.id == game.socket) {
-  //       game.socket.emit('playerLeft', i);
-  //       games.splice(i, 1);
-  //       return;
-  //     }
-  //   }
-  // });
+  socket.on('disconnect', function () {
+    var l = games.length;
+    for (var i = 0; i < l; i++) {
+      var game = games[i];
+      if (socket.id == game.socket) {
+        game.socket.emit('playerLeft', i);
+        games.splice(i, 1);
+        return;
+      }
+    }
+  });
 
 });
 
