@@ -47,7 +47,7 @@ app.io.sockets.on('connection', function (socket) {
     var randomGameId = null;
     do {
       randomGameId = randomWords();
-    } while (games[randomGameId] != null);
+    } while (games[randomGameId] != null && randomGameId.length > 5);
     
     games[randomGameId] = new Game(socket);
     socket.emit('gameCreated', randomGameId);

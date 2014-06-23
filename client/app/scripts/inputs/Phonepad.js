@@ -1,13 +1,13 @@
 function PhonePad () {
 
-	this.PHONEPAD_ACCELEROMETER_THRESHOLD = 30.0;
+	this.PHONEPAD_ACCELEROMETER_THRESHOLD = 8.0;
 	this.COOKIE_GAME_ID = 'my_machines';
 	this.COOKIE_PLAYER_INDEX = 'my_machines_index';
 	this.COOKIE_EXPIRATION = 30; // in minutes
 
 	this.gameId = null;
 	this.socket = null;
-	this.myCommand = null;
+	this.myCommand = new Command();
 	this.isWheel = false;
 	this.baseAngle = null;
 	this.acceleratePosition = null;
@@ -33,6 +33,11 @@ function PhonePad () {
 		// if ('deviceorientation' in window || window.DeviceMotionEvent || 'MozOrientation' in window) {
 			// $('#wheel').removeClass('hide');
 		// }
+
+		$('input', '#joinGameDialog').on('focus', function () {
+			$(this).removeClass('bounce');
+			$('#joinGameBtn').addClass('bounce');
+		});
 		
 		$('#joinGameDialog button').click(function () {
 			var gameId = $('input', '#joinGameDialog').val().toLowerCase();
@@ -69,7 +74,7 @@ function PhonePad () {
 				$('#pad .header div').addClass('player' + playerId % 4);
 				$('#joinGameDialog').addClass('hide');
 
-				requestFullScreen();
+				// requestFullScreen();
 			});
 
 			this.socket.on('gameNotFound', function () {
@@ -162,17 +167,29 @@ function PhonePad () {
 	};
 
 	this.bindEvents = function () {
-		var el = $('.controls');
-		el.bind("touchstart", this.dispatchEvent);
-		el.bind("touchend", this.dispatchRelease);
-		el.bind("touchcancel", this.dispatchRelease);
-		el.bind("touchleave", this.dispatchRelease);
-		el.bind("touchmove", this.dispatchEvent);
+		// var el = $('.controls');
+		// el.bind("touchstart", this.dispatchEvent);
+		// el.bind("touchend", this.dispatchRelease);
+		// el.bind("touchcancel", this.dispatchRelease);
+		// el.bind("touchleave", this.dispatchRelease);
+		// el.bind("touchmove", this.dispatchEvent);
+		$('#accelerateBtn').bind('touchstart', this.accelerate);
+		$('.controls').bind('touchend', function () {
+				_this.release('#accelerateBtn');
+				_this.myCommand.accelerate = false;
+				_this.sendCommands();
+		});
 
-		if (this.isWheel) {
+		$('.controls').bind('touchcancel', function () {
+				_this.release('#accelerateBtn');
+				_this.myCommand.accelerate = false;
+				_this.sendCommands();
+		});
+
+		// if (this.isWheel) {
 			// add accelerometer events
 			if (window.DeviceOrientationEvent) {
-			    window.addEventListener("deviceorientation", function () {
+			    window.addEventListener('deviceorientation', function () {
 			        _this.acceleroTurn(event.alpha);
 			    }, true);
 			} else if (window.DeviceMotionEvent) {
@@ -180,28 +197,34 @@ function PhonePad () {
 			        _this.acceleroTurn(event.acceleration.z * 2);
 			    }, true);
 			} else {
-			    window.addEventListener("MozOrientation", function () {
+			    window.addEventListener('MozOrientation', function () {
 			        _this.acceleroTurn(orientation.z * 50);
 			    }, true);
 			}
-		}
+		// }
 	};
 
 	this.acceleroTurn = function (angle) {
+		// $('#accelerateBtn').html('angle ' + angle)
+
 		if (angle) {
 			if (this.baseAngle == null) {
 				this.baseAngle = angle;
 			}
-			console.log(this.baseAngle - angle)
-			if (this.myCommand.turnRight === false && this.baseAngle - angle > this.PHONEPAD_ACCELEROMETER_THRESHOLD) {
+			angle -= this.baseAngle;
+			console.log(angle)
+			if (this.myCommand.turnRight == false && angle > this.PHONEPAD_ACCELEROMETER_THRESHOLD && angle < 180) {
 				console.log('right')
+				// $('#accelerateBtn').html('right ' + angle)
 				this.turnRight();
-			} else if (this.myCommand.turnLeft === false && this.baseAngle - angle < - this.PHONEPAD_ACCELEROMETER_THRESHOLD) {
-				this.turnLeft();
+			} else if (this.myCommand.turnLeft == false && (angle < 360 - this.PHONEPAD_ACCELEROMETER_THRESHOLD && angle > 180 || angle < - this.PHONEPAD_ACCELEROMETER_THRESHOLD)) {
 				console.log('left')
-			} else if (this.myCommand.turnRight === true || this.myCommand.turnLeft === true) {
-				this.releaseDirections();
+				// $('#accelerateBtn').html('left ' + angle)
+				this.turnLeft();
+			} else if (angle < this.PHONEPAD_ACCELEROMETER_THRESHOLD || angle > 360 - this.PHONEPAD_ACCELEROMETER_THRESHOLD) {
 				console.log('release')
+				// $('#accelerateBtn').html('release ' + angle)
+				this.releaseDirections();
 			}
 		}
 	};
@@ -209,40 +232,40 @@ function PhonePad () {
 	this.turnLeft = function () {
 		this.myCommand.turnLeft = true;
 		this.myCommand.turnRight = false;
-		this.press('#turnLeftBtn');
-		this.release('#turnRightBtn');
+		// this.press('#turnLeftBtn');
+		// this.release('#turnRightBtn');
 		this.sendCommands();
 	};
 
 	this.turnRight = function () {
 		this.myCommand.turnLeft = false;
 		this.myCommand.turnRight = true;
-		this.press('#turnRightBtn');
-		this.release('#turnLeftBtn');
+		// this.press('#turnRightBtn');
+		// this.release('#turnLeftBtn');
 		this.sendCommands();
 	};
 
 	this.releaseDirections = function () {
 		this.myCommand.turnRight = false;
 		this.myCommand.turnLeft = false;
-		this.release('#turnLeftBtn');
-		this.release('#turnRightBtn');
+		// this.release('#turnLeftBtn');
+		// this.release('#turnRightBtn');
 		this.sendCommands();
 	};
 
 	this.accelerate = function () {
-		this.myCommand.accelerate = true;
-		this.myCommand.brake = false;
-		this.press('#accelerateBtn');
-		this.release('#brakeBtn');
-		this.sendCommands();
+		_this.press('#accelerateBtn');
+		_this.myCommand.accelerate = true;
+		_this.myCommand.brake = false;
+		// _this.release('#brakeBtn');
+		_this.sendCommands();
 	};
 
 	this.brake = function () {
 		this.myCommand.accelerate = false;
 		this.myCommand.brake = true;
-		this.press('#brakeBtn');
-		this.release('#accelerateBtn');
+		// this.press('#brakeBtn');
+		// this.release('#accelerateBtn');
 		this.sendCommands();
 	};
 

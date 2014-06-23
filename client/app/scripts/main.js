@@ -83,7 +83,11 @@ $(function() {
 });
 
 function addKeyboardPlayer (event) {
-	if (game == null && players.length < 8) {
+	if (event.keyCode == 13) {
+		if (players.length >= MINIMUM_NB_PLAYERS) {
+    	startGame(players.length, 1);
+		}
+	} else if (game == null && players.length < 8) {
 		for (var i in players) {
 			if (players[i].type == KEYBOARD_PLAYER) {
 				removePlayer(i);
