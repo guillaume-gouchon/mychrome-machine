@@ -1,18 +1,23 @@
 var ctx, screenwidth, screenheight;
 var game = null;
 var soundManager = null;
-var gameId = null;
+var gameId = randomWord();
 var players = [];
-var socket = null;
 var pendingPlayers = [];
-var SERVER_URL = 'http://warnode.com:443';
+var peer = null;
+var conn = null;
+
+var PEER_API_KEY = '609xv5np9cu15rk9';
 var IMAGES_PATH = '../images/';
 var PLAYER_NAMES = ['Blue', 'Red', 'Yellow', 'Green'];
 var PLAYER_START_POINTS = 3;
 var MINIMUM_NB_PLAYERS = 2;
 
+
 $(function() {
+
 	if (Modernizr.touch && ($(window).height() <= 480 || $(window).width() <= 480)) {
+
 	   // it is a phone : display phone pad !
 	   $('#gamePad').removeClass('hide');
 	   $('#game').remove();
@@ -21,7 +26,9 @@ $(function() {
 	   	// init phonepad
 	   	var phonepad = new PhonePad();
 	   	phonepad.init();
+
 	} else {
+
 		// it is a screen : display game !
 		$('#mainPage').removeClass('hide');
 		$('#gamepad').remove();
@@ -39,33 +46,6 @@ $(function() {
 		// play music
 		// soundManager.play(GAME_SOUNDS.mainMusic);
 
-		// phone pads
-		try {
-			socket = io.connect(SERVER_URL);
-
-			// create game
-			socket.emit('createGame');
-
-			// wait for response
-			socket.on('gameCreated', function (myGameId) {
-				gameId = myGameId;
-				$('#gameId').html(gameId);
-				for (var i in pendingPlayers) {
-					socket.emit('updatePlayers', { gameId: gameId });
-				}
-			});
-
-			// phonepads
-			socket.on('playerJoined', function () {
-				addPlayer(PHONEPAD_PLAYER);
-			});
-			socket.on('playerLeft', function (playerIndex) {
-				removePlayer(playerIndex);
-			});
-		} catch (e) {
-			console.log(e);
-		}
-
 		// gamepads
 		var gamepadHelper = new GamepadHelper();
 		gamepadHelper.init();
@@ -80,6 +60,14 @@ $(function() {
 		});
 	}
 
+	// create 'server'
+	peer = new Peer(gameId, { key: PEER_API_KEY });
+	// phonepads connections
+	peer.on('connection', function (conn) {
+		addPlayer(PHONEPAD_PLAYER);
+		// conn.send(); // TODO
+	});
+	
 });
 
 function addKeyboardPlayer (event) {

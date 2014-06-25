@@ -14,11 +14,13 @@ function Input () {
 			this.inputs.push(new Command(i));
 		}
 
-		if (socket != null) {
+		if (peer != null) {
 			var _this = this;
 			// init phone pad commands receiver
-			socket.on('commands', function (commands) {
-				_this.inputs[commands.id] = commands;
+			peer.on('connection', function (conn) {
+			  conn.on('commands', function (commands){
+			    _this.inputs[commands.id] = commands;
+			  });
 			});
 		}
 

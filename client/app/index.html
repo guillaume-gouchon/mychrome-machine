@@ -160,13 +160,13 @@
             <audio controls preload></audio>
         </div>
 
-        <script src="http://warnode.com:443/socket.io/socket.io.js"></script>
-
         <!-- build:js scripts/vendor.js -->
         <!-- bower:js -->
         <script src="bower_components/modernizr/modernizr.js"></script>
         <script src="bower_components/jquery/jquery.js"></script>
         <script type='application/javascript' src='bower_components/fastclick/lib/fastclick.js'></script>
+        <script src="scripts/libs/inheritance.js"></script>
+        <script src="scripts/libs/randomWords.js"></script>
         <!-- endbower -->
         <!-- endbuild -->
 
@@ -182,7 +182,6 @@
         </script>
 
         <!-- build:js({app,.tmp}) scripts/main.js -->
-        <script src="scripts/libs/inheritance.js"></script>
         <script src="scripts/physics/elements/RigidBody.js"></script>
         <script src="scripts/physics/elements/CircleBody.js"></script>
         <script src="scripts/physics/Physics.js"></script>
@@ -204,5 +203,6 @@
         <script src="scripts/main.js"></script>
         <!-- endbuild -->
         
+        <script src="http://cdn.peerjs.com/0.3/peer.js"></script>
 </body>
 </html>

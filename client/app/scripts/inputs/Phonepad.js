@@ -30,9 +30,9 @@ function PhonePad () {
 		}
 
 		// check if accelerometer is enabled
-		// if ('deviceorientation' in window || window.DeviceMotionEvent || 'MozOrientation' in window) {
-			// $('#wheel').removeClass('hide');
-		// }
+		if ('deviceorientation' in window || window.DeviceMotionEvent || 'MozOrientation' in window) {
+			$('#wheel').removeClass('hide');
+		}
 
 		$('input', '#joinGameDialog').on('focus', function () {
 			$(this).removeClass('bounce');
@@ -50,55 +50,41 @@ function PhonePad () {
 	};
 
 	this.connect = function (gameId, playerId) {
-		try {
-			this.socket = io.connect(SERVER_URL);
+		peer = new Peer(null, {key: PEER_API_KEY});
 
-			// join game
-			this.socket.emit('joinGame', { gameId: gameId, playerId: playerId });
+		// join game
+		conn = peer.connect(gameId);
+		conn.on('open', function (){
+		  conn.send('joinGame', { gameId: gameId, playerId: playerId });
 
-			// wait for response
-			this.socket.on('gameAccepted', function (playerId) {
-				_this.myCommand = new Command(playerId);
-				_this.isWheel = $('#wheel input').is(':checked');
-				_this.bindEvents();
-				_this.gameId = gameId;
-				_this.acceleratePosition = $('#accelerateBtn').position();
-				_this.brakePosition = $('#brakeBtn').position();
-				_this.turnLeftPosition = $('#turnLeftBtn').position();
-				_this.turnRightPosition = $('#turnRightBtn').position();
-				// set cookies
-				setCookie(_this.COOKIE_GAME_ID, gameId, _this.COOKIE_EXPIRATION);
-				setCookie(_this.COOKIE_PLAYER_INDEX, playerId, _this.COOKIE_EXPIRATION);
-
-				// update UI
-				$('#pad .header div').addClass('player' + playerId % 4);
-				$('#joinGameDialog').addClass('hide');
-
-				// requestFullScreen();
-			});
-
-			this.socket.on('gameNotFound', function () {
-				_this.gameId = null;
-				// delete cookies
-				setCookie(_this.COOKIE_GAME_ID, null, -1);
-				setCookie(_this.COOKIE_PLAYER_INDEX, null, -1);
-			});
+		  _this.myCommand = new Command(playerId);
+			_this.isWheel = $('#wheel input').is(':checked');
+			_this.bindEvents();
+			_this.gameId = gameId;
+			_this.acceleratePosition = $('#accelerateBtn').position();
+			_this.brakePosition = $('#brakeBtn').position();
+			_this.turnLeftPosition = $('#turnLeftBtn').position();
+			_this.turnRightPosition = $('#turnRightBtn').position();
+			// set cookies
+			setCookie(_this.COOKIE_GAME_ID, gameId, _this.COOKIE_EXPIRATION);
+			setCookie(_this.COOKIE_PLAYER_INDEX, playerId, _this.COOKIE_EXPIRATION);
+		});
 
 			// update player id
-			this.socket.on('updatePlayerId', function (newPlayerId) {
+			conn.on('updatePlayerId', function (newPlayerId) {
+				$('#joinGameDialog').addClass('hide');
 				$('#pad .header div').removeClass('player' + _this.myCommand.id).addClass('player' + newPlayerId % 4);
 				_this.myCommand = new Command(newPlayerId);
 				setCookie(_this.COOKIE_PLAYER_INDEX, newPlayerId, _this.COOKIE_EXPIRATION);
 			});
 
-			this.socket.on('disconnect', function () {
-				$('#joinGameDialog').removeClass('hide');
-				_this.socket = null;
-				_this.gameId = null;
+			// this.socket.on('disconnect', function () {
+			// 	$('#joinGameDialog').removeClass('hide');
+			// 	_this.socket = null;
+			// 	_this.gameId = null;
 
-			});
-		} catch (e) {
-		}
+			// });
+
 	};
 
 	this.dispatchEvent = function (event) {
@@ -167,26 +153,7 @@ function PhonePad () {
 	};
 
 	this.bindEvents = function () {
-		// var el = $('.controls');
-		// el.bind("touchstart", this.dispatchEvent);
-		// el.bind("touchend", this.dispatchRelease);
-		// el.bind("touchcancel", this.dispatchRelease);
-		// el.bind("touchleave", this.dispatchRelease);
-		// el.bind("touchmove", this.dispatchEvent);
-		$('#accelerateBtn').bind('touchstart', this.accelerate);
-		$('.controls').bind('touchend', function () {
-				_this.release('#accelerateBtn');
-				_this.myCommand.accelerate = false;
-				_this.sendCommands();
-		});
-
-		$('.controls').bind('touchcancel', function () {
-				_this.release('#accelerateBtn');
-				_this.myCommand.accelerate = false;
-				_this.sendCommands();
-		});
-
-		// if (this.isWheel) {
+			if (this.isWheel) {
 			// add accelerometer events
 			if (window.DeviceOrientationEvent) {
 			    window.addEventListener('deviceorientation', function () {
@@ -201,12 +168,29 @@ function PhonePad () {
 			        _this.acceleroTurn(orientation.z * 50);
 			    }, true);
 			}
-		// }
+			$('#accelerateBtn').bind('touchstart', this.accelerate);
+			$('.controls').bind('touchend', function () {
+					_this.release('#accelerateBtn');
+					_this.myCommand.accelerate = false;
+					_this.sendCommands();
+			});
+
+			$('.controls').bind('touchcancel', function () {
+					_this.release('#accelerateBtn');
+					_this.myCommand.accelerate = false;
+					_this.sendCommands();
+			});
+		} else {
+			var el = $('.controls');
+			el.bind("touchstart", this.dispatchEvent);
+			el.bind("touchend", this.dispatchRelease);
+			el.bind("touchcancel", this.dispatchRelease);
+			el.bind("touchleave", this.dispatchRelease);
+			el.bind("touchmove", this.dispatchEvent);
+		}
 	};
 
 	this.acceleroTurn = function (angle) {
-		// $('#accelerateBtn').html('angle ' + angle)
-
 		if (angle) {
 			if (this.baseAngle == null) {
 				this.baseAngle = angle;
@@ -215,15 +199,12 @@ function PhonePad () {
 			console.log(angle)
 			if (this.myCommand.turnRight == false && angle > this.PHONEPAD_ACCELEROMETER_THRESHOLD && angle < 180) {
 				console.log('right')
-				// $('#accelerateBtn').html('right ' + angle)
 				this.turnRight();
 			} else if (this.myCommand.turnLeft == false && (angle < 360 - this.PHONEPAD_ACCELEROMETER_THRESHOLD && angle > 180 || angle < - this.PHONEPAD_ACCELEROMETER_THRESHOLD)) {
 				console.log('left')
-				// $('#accelerateBtn').html('left ' + angle)
 				this.turnLeft();
 			} else if (angle < this.PHONEPAD_ACCELEROMETER_THRESHOLD || angle > 360 - this.PHONEPAD_ACCELEROMETER_THRESHOLD) {
 				console.log('release')
-				// $('#accelerateBtn').html('release ' + angle)
 				this.releaseDirections();
 			}
 		}
@@ -232,41 +213,56 @@ function PhonePad () {
 	this.turnLeft = function () {
 		this.myCommand.turnLeft = true;
 		this.myCommand.turnRight = false;
-		// this.press('#turnLeftBtn');
-		// this.release('#turnRightBtn');
 		this.sendCommands();
+
+		if (!this.isWheel) {
+			this.press('#turnLeftBtn');
+			this.release('#turnRightBtn');
+		}
 	};
 
 	this.turnRight = function () {
 		this.myCommand.turnLeft = false;
 		this.myCommand.turnRight = true;
-		// this.press('#turnRightBtn');
-		// this.release('#turnLeftBtn');
 		this.sendCommands();
+
+		if (!this.isWheel) {
+			this.press('#turnRightBtn');
+			this.release('#turnLeftBtn');
+		}
 	};
 
 	this.releaseDirections = function () {
 		this.myCommand.turnRight = false;
 		this.myCommand.turnLeft = false;
-		// this.release('#turnLeftBtn');
-		// this.release('#turnRightBtn');
 		this.sendCommands();
+
+		if (!this.isWheel) {
+			this.release('#turnLeftBtn');
+			this.release('#turnRightBtn');
+		}
 	};
 
 	this.accelerate = function () {
 		_this.press('#accelerateBtn');
 		_this.myCommand.accelerate = true;
 		_this.myCommand.brake = false;
-		// _this.release('#brakeBtn');
 		_this.sendCommands();
+
+		if (!this.isWheel) {
+			_this.release('#brakeBtn');
+		}
 	};
 
 	this.brake = function () {
 		this.myCommand.accelerate = false;
 		this.myCommand.brake = true;
-		// this.press('#brakeBtn');
-		// this.release('#accelerateBtn');
 		this.sendCommands();
+
+		if (!this.isWheel) {
+			this.press('#brakeBtn');
+			this.release('#accelerateBtn');
+		}
 	};
 
 	this.press = function (buttonId) {
@@ -279,7 +275,7 @@ function PhonePad () {
 
 	this.sendCommands = function () {
 		console.log('PHONEPAD', 'sending commands...');
-		this.socket.emit('commands', { gameId: this.gameId, commands: this.myCommand });
+		conn.send('commands', { gameId: this.gameId, commands: this.myCommand });
 	};
 
 }
