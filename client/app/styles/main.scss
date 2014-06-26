@@ -364,3 +364,13 @@ canvas {
         @include transform(rotate(360deg));
     }
 }
+
+#qrcode {
+    position: absolute;
+    top: 0px;
+    left:0px;
+    z-index: 10000;
+    opacity: 0.7;
+    height: 100px;
+    width: 100px;
+}

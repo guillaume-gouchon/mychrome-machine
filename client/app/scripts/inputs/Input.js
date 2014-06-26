@@ -1,42 +1,27 @@
 function Input () {
 
-	this.KEY_CODES = {
+	var KEY_CODES = {
 		A: 65,
 		D: 68,
 		Left: 37,
 		Right: 39
 	};
 
-	this.inputs = [];
-
 	this.init = function () {
-		for(var i = 0; i < game.nbPlayers; i++) {
-			this.inputs.push(new Command(i));
-		}
-
-		if (peer != null) {
-			var _this = this;
-			// init phone pad commands receiver
-			peer.on('connection', function (conn) {
-			  conn.on('commands', function (commands){
-			    _this.inputs[commands.id] = commands;
-			  });
-			});
-		}
-
-		// keyboard
-		for (var i in players) {
+		for(var i = 0; i < players.length; i++) {
 			var player = players[i];
+			player.commands = new Command(player.id);
+			
+			// add keyboard listener if needed
 			if (player.type == KEYBOARD_PLAYER) {
-				this.addKeyboardCommandsListener(player.id);
-				return;	
+				this.addKeyboardCommandsListener(i);
 			}
 		}
 	};
 	
 	this.update = function () {
-		for (var i = 0; i < this.inputs.length; i++) {
-			var input = this.inputs[i];
+		for (var i = 0; i < players.length; i++) {
+			var input = players[i].commands;
 			if (input.accelerate) {
 				game.cars[i].accelerate();
 			}
@@ -53,37 +38,38 @@ function Input () {
 	};
 
 	this.addKeyboardCommandsListener = function (playerIndex) {
-		var _this = this;
+		var commands = players[playerIndex].commands;
+		
 		window.addEventListener('keyup', function (event) {
 			switch(event.keyCode) {
-				case _this.KEY_CODES.A:
-					_this.inputs[playerIndex].accelerate = false;
+				case KEY_CODES.A:
+					commands.accelerate = false;
 					break;
-				case _this.KEY_CODES.D:
-					_this.inputs[playerIndex].brake = false;
+				case KEY_CODES.D:
+					commands.brake = false;
 					break;
-				case _this.KEY_CODES.Left:
-					_this.inputs[playerIndex].turnLeft = false;
+				case KEY_CODES.Left:
+					commands.turnLeft = false;
 					break;
-				case _this.KEY_CODES.Right:
-					_this.inputs[playerIndex].turnRight = false;
+				case KEY_CODES.Right:
+					commands.turnRight = false;
 					break;
 			}
 		},false);
 
 		window.addEventListener('keydown', function (event) {
 			switch(event.keyCode) {
-				case _this.KEY_CODES.A:
-					_this.inputs[playerIndex].accelerate = true;
+				case KEY_CODES.A:
+					commands.accelerate = true;
 					break;
-				case _this.KEY_CODES.D:
-					_this.inputs[playerIndex].brake = true;
+				case KEY_CODES.D:
+					commands.brake = true;
 					break;
-				case _this.KEY_CODES.Left:
-					_this.inputs[playerIndex].turnLeft = true;
+				case KEY_CODES.Left:
+					commands.turnLeft = true;
 					break;
-				case _this.KEY_CODES.Right:
-					_this.inputs[playerIndex].turnRight = true;
+				case KEY_CODES.Right:
+					commands.turnRight = true;
 					break;
 			}
 		},false);

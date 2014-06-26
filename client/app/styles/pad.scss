@@ -55,24 +55,6 @@
 		div {
 			display: inline-block;
 			text-shadow: 2px 2px 2px rgba(150, 150, 150, 1);
-
-			&:before {
-				content: url('../images/car_1.png');
-				float: left;
-				padding-right: 20px;
-			}
-			&.player0:before {
-				content: url('../images/car_0.png');
-			}
-			&.player1:before {
-				content: url('../images/car_1.png');
-			}
-			&.player2:before {
-				content: url('../images/car_2.png');
-			}
-			&.player3:before {
-				content: url('../images/car_3.png');
-			}
 		}		
 	}
 
@@ -92,12 +74,14 @@
 
 		button {
 			background: #ddd;
-			height: 100%;
-			width: 70%;
+			height: 0;
+			width: 20%;
+			padding-bottom: 20%;
 			margin: 0px 0px 0px 1%;
-			border-radius: 25%;
+			border-radius: 100%;
 			@include boxShadow(0px, -15px, 0px, 0px, #bbb, inset);
 			border: 0;
+			bottom: 10%;
 			display: inline-block;
 
 			&.active {
@@ -129,6 +113,22 @@
 			}
 
 			&#accelerateBtn {
+				background: #5c5;
+				@include boxShadow(0px, -15px, 0px, 0px, #3a3, inset);
+				
+				img {
+					@include transform(rotate(-90deg));
+				}
+
+				&.active {
+					@include boxShadow(0px, -5px, 0px, 0px, #3a3, inset);
+				}
+
+			}
+
+			&#vroom {
+				height: 100%;
+				width: 70%;
 				font-family: 'myFont';   
 	      background: #ddd;
 	      border-radius: 15px;
@@ -143,15 +143,10 @@
 	      color: #222;
 				background: #5c5;
 				@include boxShadow(0px, -15px, 0px, 0px, #3a3, inset);
-				
-				img {
-					@include transform(rotate(-90deg));
-				}
 
 				&.active {
 					@include boxShadow(0px, -5px, 0px, 0px, #3a3, inset);
 				}
-
 			}
 
 			&#brakeBtn {
@@ -176,7 +171,7 @@
 		left: 0px;
 		height: 100%;
 		width: 100%;
-		background: rgba(0, 0, 0, 0.8);
+		background: rgba(0, 0, 0, 0.75);
 		z-index: 100000;
 		display: table;
 		font-size: 1.2em;
@@ -186,7 +181,7 @@
 			padding: 20px;
 			color: #111;
 			@include box-shadow(0px 3px 6px 3px rgba(0, 0, 0, 0.15));
-        	background: rgba(220, 220, 220, 0.85);
+    	background: rgba(220, 220, 220, 0.85);
 		}
 
 		#inputName {
@@ -223,7 +218,7 @@
       text-transform: uppercase;
       color: #222;
 
-      &:active {
+      &.active {
           @include boxShadow(0px, -4px, 0px, 0px, $green, inset);
           @include transform(translateY(1px));
       }

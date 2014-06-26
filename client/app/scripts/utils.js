@@ -11,6 +11,17 @@ function degToRad(deg) {
 }
 
 
+function generateUUID(){
+    var d = new Date().getTime();
+    var uuid = 'xxxxxxxx-4xxx'.replace(/[xy]/g, function(c) {
+        var r = (d + Math.random()*16)%16 | 0;
+        d = Math.floor(d/16);
+        return (c=='x' ? r : (r&0x7|0x8)).toString(16);
+    });
+    return uuid;
+};
+
+
 function getTranslationDiff(distance, angle) {
     if (angle > 0  && angle < Math.PI) {
         return [distance * Math.cos(angle), distance * Math.sin(angle)];

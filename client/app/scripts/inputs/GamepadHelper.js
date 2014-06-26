@@ -155,6 +155,7 @@ function GamepadCallbacks () {
    		for (var i in gamepads) {
  				var gamepad = gamepads[i];
         var playerIndex = gamepad.playerIndex;
+        var commands = players[playerIndex].commands;
 	   		if (game == null) {
 	   			if (gamepad.buttons[0] instanceof Object && (gamepad.buttons[0].pressed || gamepad.buttons[1].pressed || gamepad.buttons[2].pressed || gamepad.buttons[3].pressed)
 	   				|| gamepad.buttons[0] == 1 || gamepad.buttons[1] == 1 || gamepad.buttons[2] == 1 || gamepad.buttons[3] == 1
@@ -163,16 +164,16 @@ function GamepadCallbacks () {
 	   			} else if ($('#playersList div:nth(' + playerIndex + ')').hasClass('bounce')) {
 	   				$('#playersList div:nth(' + playerIndex + ')').removeClass('bounce');
 	   			}
-	   		} else if (game.input.inputs[playerIndex] != null) {
+	   		} else if (commands != null) {
 	   				if (gamepad.buttons[0] instanceof Object) {
-			        game.input.inputs[playerIndex].brake = gamepad.buttons[0].pressed;
-			        game.input.inputs[playerIndex].accelerate = gamepad.buttons[1].pressed;
+			        commands.brake = gamepad.buttons[0].pressed;
+			        commands.accelerate = gamepad.buttons[1].pressed;
 		      	} else {
-		      		game.input.inputs[playerIndex].brake = gamepad.buttons[0];
-			        game.input.inputs[playerIndex].accelerate = gamepad.buttons[1];
+		      		commands.brake = gamepad.buttons[0];
+			        commands.accelerate = gamepad.buttons[1];
 		      	}
-		        game.input.inputs[playerIndex].turnLeft = gamepad.axes[0] < -0.2;
-		        game.input.inputs[playerIndex].turnRight = gamepad.axes[0] > 0.2;
+		        commands.turnLeft = gamepad.axes[0] < -0.2;
+		        commands.turnRight = gamepad.axes[0] > 0.2;
 				}
 			}
 		}

@@ -40,10 +40,15 @@
                 <div><img src="images/car_3.png"/></div>
             </div>
             <div id="startGameDialog">
+
+                <img id="qrcode" alt="QR Code" src="images/qrcode.png"/>
+                
                 <div id="logo">
                     <h2 class="farTop">Mychrome Machines</h2>
                 </div>
+
                 <h4>How to Play ?</h4>
+                
                 <div id="tutorials">
                     <div class="col-4">
                         <div class="redText"><i class="fa fa-gamepad fa-2x"></i> Plug USB Gamepads</div>
@@ -126,29 +131,29 @@
                 </div>
                 <div class="controls">
                     <div class="centerVertical">
-                        <!-- <button id="turnLeftBtn"><div><img alt="arrow left" src="images/arrow_pad.png"/></div></button>
-                        <button id="turnRightBtn"><div><img alt="arrow right" src="images/arrow_pad.png"/></div></button> -->
-                        <button id="accelerateBtn">
-                            <!-- <div> -->
-                                Vroooooooom !
-                        <!--         <img alt="accelerate button" src="images/arrow_pad.png"/>
-                            </div> -->
+                        <button id="turnLeftBtn" class="noWheel"><div><img alt="arrow left" src="images/arrow_pad.png"/></div></button>
+                        <button id="turnRightBtn" class="noWheel"><div><img alt="arrow right" src="images/arrow_pad.png"/></div></button>
+                        <button id="accelerateBtn" class="noWheel">
+                            <div><img  alt="accelerate button" src="images/arrow_pad.png"/></div>
                         </button>
-                        <!-- <button id="brakeBtn"><div><img alt="brake button" src="images/arrow_pad.png"/></div></button> -->
+                        <button id="vroom" class="withWheel hide">
+                            Vroooooooom !
+                        </button>
+                        <button id="brakeBtn" class="noWheel"><div><img alt="brake button" src="images/arrow_pad.png"/></div></button>
                     </div>
                 </div>
             </div>
             <div id="joinGameDialog">
                 <div class="centerVertical">
                     <h3>Enter the name of the game you want to join</h3>
-                    <input id="inputName" class="bounce" type="text" placeholder="name of the game..." tabindex="1" />
+                    <input id="inputName" class="bounce" type="text" placeholder="game id..." tabindex="1" />
                     <button id="joinGameBtn" >Join Game !</button>
                     <br/>
                     <br/>
-                    <button id="rejoinBtn" class="hide">Rejoin Game you just left ?</button>
                     <label id="wheel" class="hide">
-                        <input type="checkbox" value="1"/> Use Phone as Wheel ?
+                        <input type="checkbox" value="1" tabindex="2" /> Use Phone as Wheel ?
                     </label>
+                    <p><button id="rejoinBtn" class="hide">Rejoin Game you just left ?</button></p>
                 </div>
             </div>
         </div>
@@ -177,7 +182,7 @@
           m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
           })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-          ga('create', 'UA-30940327-10', 'gouchstudio.com');
+          ga('create', 'UA-30940327-10', 'machines.gouchon.com');
           ga('send', 'pageview');
         </script>
 
@@ -191,7 +196,8 @@
         <script src="scripts/models/Player.js"></script>
         <script src="scripts/models/Obstacle.js"></script>
         <script src="scripts/models/Race.js"></script>
-        
+
+        <script src="scripts/p2p.js"></script>
         <script src="scripts/utils.js"></script>
         <script src="scripts/GUI.js"></script>
         <script src="scripts/sounds/Sound.js"></script>

@@ -2,12 +2,9 @@ var ctx, screenwidth, screenheight;
 var game = null;
 var soundManager = null;
 var gameId = randomWord();
+$('#gameId').html(gameId);
 var players = [];
-var pendingPlayers = [];
-var peer = null;
-var conn = null;
 
-var PEER_API_KEY = '609xv5np9cu15rk9';
 var IMAGES_PATH = '../images/';
 var PLAYER_NAMES = ['Blue', 'Red', 'Yellow', 'Green'];
 var PLAYER_START_POINTS = 3;
@@ -60,14 +57,7 @@ $(function() {
 		});
 	}
 
-	// create 'server'
-	peer = new Peer(gameId, { key: PEER_API_KEY });
-	// phonepads connections
-	peer.on('connection', function (conn) {
-		addPlayer(PHONEPAD_PLAYER);
-		// conn.send(); // TODO
-	});
-	
+	createReceiver();	
 });
 
 function addKeyboardPlayer (event) {
@@ -82,7 +72,7 @@ function addKeyboardPlayer (event) {
 				return;	
 			}
 		}
-		addPlayer(KEYBOARD_PLAYER);
+		addPlayer(KEYBOARD_PLAYER, 'keyboard1');
 	}
 }
 
@@ -108,24 +98,27 @@ function restartGame() {
 	startGame(game.nbPlayers, game.race.id);
 }
 
-function addPlayer(playerType, extra) {
-	var player = new Player(players.length, playerType, extra);
-	players.push(player);
-	updatePlayersLayout();
-	if (player.type != PHONEPAD_PLAYER) {
-		if (socket != null && gameId != null) {
-			socket.emit('updatePlayers', { gameId: gameId });
-		} else {
-			pendingPlayers.push('pendingPlayer');
+function addPlayer(playerType, playerId) {
+	if (getPlayerIndex(playerId) == -1) {
+		var player = new Player(playerId, playerType);
+		players.push(player);
+		updatePlayersLayout();
+	} else {
+		console.log('Player rejoined !');
+	}
+}
+
+function getPlayerIndex(playerId) {
+	for (var i in players) {
+		if (players[i].id == playerId) {
+			return i;
 		}
 	}
+	return -1;
 }
 
 function removePlayer(index) {
 	var player = players[index];
-	if (socket != null && player.type != PHONEPAD_PLAYER) {
-		socket.emit('updatePlayers', { gameId: gameId, playerIndex: index });
-	}
 	players.splice(index, 1);
 	updatePlayersLayout();
 }
