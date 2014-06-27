@@ -25,7 +25,7 @@ module.exports = function (grunt) {
         yeoman: {
             // Configurable paths
             app: 'app',
-            dist: '../build'
+            dist: 'dist'
         },
 
         // Watches files for changes and runs tasks based on the changed files
@@ -360,7 +360,7 @@ module.exports = function (grunt) {
               port: 21,
               authKey: 'key1'
             },
-            src: '../build',
+            src: '<%= yeoman.dist %>',
             dest: '/machines',
             exclusions: []
           }

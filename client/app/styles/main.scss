@@ -232,11 +232,6 @@ canvas {
             color: #222;
             font-weight: bold;
 
-            &:hover {
-                @include boxShadow(0px, -6px, 0px, 0px, $green, inset);
-                @include transform(translateY(1px));
-            }
-
             &:active {
                 @include boxShadow(0px, -4px, 0px, 0px, $green, inset);
                 @include transform(translateY(2px));
