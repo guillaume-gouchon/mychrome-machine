@@ -11,33 +11,37 @@ var MESSAGE_TYPES = {
 
 function createReceiver() {
 	// initalize webRTC connection
-	peer = new Peer(gameId, { key: PEER_API_KEY });
-	
-	// listen for phonepads connections
-	peer.on('connection', function (conn) {
-
-		// register message receiver
-		conn.on('data', function (data) {
-			switch(data.type) {
-				case MESSAGE_TYPES.playerId:
-					console.log('Receiving player id from webRTC...');
-					addPlayer(PHONEPAD_PLAYER, data.content);
-					break;
-				case MESSAGE_TYPES.commands:
-					console.log('Receiving commands from webRTC...');
-					var commands = JSON.parse(data.content);
-					dispatchCommand(commands);
-					break;
-			}
+	try {
+		peer = new Peer(gameId, { key: PEER_API_KEY });
 		
-	  });
+		// listen for phonepads connections
+		peer.on('connection', function (conn) {
 
-	  // remove disconnected players
-	  conn.on('close', function () {
-	  	console.log('A player has been disconnected');
-	  });
+			// register message receiver
+			conn.on('data', function (data) {
+				switch(data.type) {
+					case MESSAGE_TYPES.playerId:
+						console.log('Receiving player id from webRTC...');
+						addPlayer(PHONEPAD_PLAYER, data.content);
+						break;
+					case MESSAGE_TYPES.commands:
+						console.log('Receiving commands from webRTC...');
+						var commands = JSON.parse(data.content);
+						dispatchCommand(commands);
+						break;
+				}
+			
+		  });
 
-	});
+		  // remove disconnected players
+		  conn.on('close', function () {
+		  	console.log('A player has been disconnected');
+		  });
+
+		});
+	} catch (e) {
+		console.error(e);
+	}
 
 	// connect websockets as well for non-webRTC clients
 	socket = io.connect(SERVER_URL);

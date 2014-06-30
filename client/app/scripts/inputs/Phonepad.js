@@ -198,11 +198,6 @@ function PhonePad () {
 					_this.myCommand.accelerate = false;
 					_this.sendCommands();
 			});
-			$('#vroom').bind('touchcancel', function () {
-					_this.release('#vroom');
-					_this.myCommand.accelerate = false;
-					_this.sendCommands();
-			});
 		} else {
 			var el = $('.controls');
 			el.bind("touchstart", this.dispatchEvent);
