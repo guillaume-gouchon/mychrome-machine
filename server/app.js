@@ -1,11 +1,15 @@
 var PORT = 443;
+var express = require("express");
 
-var app = require('http').createServer(handler);
-
-function handler (req, res) {
-  res.writeHead(200);
-  res.end('hello');
-}
+// server config
+var app = module.exports = express();
+app.configure(function () {
+  app.use(express.compress());
+  app.use(express.bodyParser());
+  app.use(express.methodOverride());
+  app.use(app.router);
+  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+});
 
 var server = app.listen(PORT);
 
