@@ -1,18 +1,7 @@
-var express = require("express");
+var PORT = 10000;
 
-// server config
-var app = module.exports = express();
-app.configure(function () {
-  app.use(express.compress());
-  app.use(express.bodyParser());
-  app.use(express.methodOverride());
-  app.use(app.router);
-  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-});
-
-// start server
-var port = 10000;
-var server = app.listen(port);
+var app = require('http').createServer();
+var server = app.listen(PORT);
 
 // initializes Socket IO
 app.io = require('socket.io').listen(server);
@@ -54,4 +43,4 @@ app.io.sockets.on('connection', function (socket) {
 
 });
 
-console.info("Mychrome Machines server is running on port " + port + " !");
+console.info("Mychrome Machines server is running on port " + PORT + " !");
