@@ -1,5 +1,5 @@
 var PEER_API_KEY = '609xv5np9cu15rk9';
-var SERVER_URL = 'http://warnode.com:443';
+var SERVER_URL = 'http://warnode.com:10000';
 var peer = null;
 var conn = null;
 var socket = null;
