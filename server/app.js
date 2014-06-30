@@ -1,6 +1,12 @@
 var PORT = 443;
 
-var app = require('http').createServer();
+var app = require('http').createServer(handler);
+
+function handler (req, res) {
+  res.writeHead(200);
+  res.end('hello');
+}
+
 var server = app.listen(PORT);
 
 // initializes Socket IO
@@ -29,7 +35,7 @@ app.io.sockets.on('connection', function (socket) {
   socket.on('comm', function (data) {
      var gameSocket = games[data.gameId];
     if (gameSocket != null) {
-      gameSocket.emit('pId', data.pId);
+      gameSocket.emit('comm', data.comm);
     }
   });
 
