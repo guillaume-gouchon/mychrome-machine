@@ -1,4 +1,4 @@
-var PORT = 443;
+var PORT = 8000;
 var express = require("express");
 
 // server config
@@ -11,7 +11,7 @@ app.configure(function () {
   app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 });
 
-var server = app.listen(PORT);
+var server = http.createServer(app);
 
 // initializes Socket IO
 app.io = require('socket.io').listen(server);
@@ -53,4 +53,5 @@ app.io.sockets.on('connection', function (socket) {
 
 });
 
+server.listen(PORT);
 console.info("Mychrome Machines server is running on port " + PORT + " !");
