@@ -20,21 +20,13 @@ function createReceiver() {
 		conn.on('data', function (data) {
 			switch(data.type) {
 				case MESSAGE_TYPES.playerId:
-					console.log('Receiving player id...');
+					console.log('Receiving player id from webRTC...');
 					addPlayer(PHONEPAD_PLAYER, data.content);
 					break;
 				case MESSAGE_TYPES.commands:
-					console.log('Receiving commands...');
+					console.log('Receiving commands from webRTC...');
 					var commands = JSON.parse(data.content);
-					if (game != null) {
-				  	players[getPlayerIndex(commands.id)].commands = commands;
-					} else {
-						if (commands.accelerate || commands.turnRight || commands.turnLeft || commands.brake) {
-							$('#playersList div:nth(' + getPlayerIndex(commands.id) + ')').addClass('bounce');
-						} else {
-							$('#playersList div:nth(' + getPlayerIndex(commands.id) + ')').removeClass('bounce');
-						}
-					}
+					dispatchCommand(commands);
 					break;
 			}
 		
@@ -47,30 +39,34 @@ function createReceiver() {
 
 	});
 
-
 	// connect websockets as well for non-webRTC clients
 	socket = io.connect(SERVER_URL);
 
+	console.log('Creating new game', gameId);
 	socket.emit('newGame', gameId);
 
 	socket.on('pId', function (pId) {
-		console.log('Receiving player id...');
+		console.log('Receiving player id from websockets...');
 		addPlayer(PHONEPAD_PLAYER, pId);
 	});
 
 	socket.on('comm', function (commands) {
-		console.log('Receiving commands...');
-		if (game != null) {
-	  	players[getPlayerIndex(commands.id)].commands = commands;
-		} else {
-			if (commands.accelerate || commands.turnRight || commands.turnLeft || commands.brake) {
-				$('#playersList div:nth(' + getPlayerIndex(commands.id) + ')').addClass('bounce');
-			} else {
-				$('#playersList div:nth(' + getPlayerIndex(commands.id) + ')').removeClass('bounce');
-			}
-		}
+		console.log('Receiving commands from websockets...');
+		dispatchCommand(commands);
 	});
 
+}
+
+function dispatchCommand(commands) {
+	if (game != null) {
+  	players[getPlayerIndex(commands.id)].commands = commands;
+	} else {
+		if (commands.accelerate || commands.turnRight || commands.turnLeft || commands.brake) {
+			$('#playersList div:nth(' + getPlayerIndex(commands.id) + ')').addClass('bounce');
+		} else {
+			$('#playersList div:nth(' + getPlayerIndex(commands.id) + ')').removeClass('bounce');
+		}
+	}
 }
 
 function connectToGame(gameId, playerId, onConnected) {
@@ -82,7 +78,7 @@ function connectToGame(gameId, playerId, onConnected) {
 	}
 	console.log('Player id is', playerId);
 
-	if(!/iP(hone|od)/.test(window.navigator.userAgent)) {
+	if(/iP(hone|od)/.test(window.navigator.userAgent)) {
 		socket = io.connect(SERVER_URL);
 
 	  // send player id to game
@@ -107,9 +103,11 @@ function connectToGame(gameId, playerId, onConnected) {
 
 function sendCommands(commands) {
 	if (conn != null) {
+		console.log('Sending commands through webRTC...')
 		var message = buildMessage(MESSAGE_TYPES.commands, JSON.stringify(commands));
 	  conn.send(message);
 	} else if (socket != null) {
+		console.log('Sending commands through websockets...')
 		socket.emit('comm', { gameId: gameId, comm: commands });
 	}
 }

@@ -55,9 +55,10 @@ $(function() {
 		    	startGame(players.length, 1);
 			}
 		});
+
+		createReceiver();
 	}
 
-	createReceiver();	
 });
 
 function addKeyboardPlayer (event) {
