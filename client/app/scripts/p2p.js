@@ -1,5 +1,5 @@
 var PEER_API_KEY = '609xv5np9cu15rk9';
-var SERVER_URL = 'http://warnode.com:10000';
+var SERVER_URL = 'http://warnode.com:9090';
 var peer = null;
 var conn = null;
 var socket = null;
@@ -82,7 +82,7 @@ function connectToGame(gameId, playerId, onConnected) {
 	}
 	console.log('Player id is', playerId);
 
-	if(/iP(hone|od)/.test(window.navigator.userAgent)) {
+	if(!/iP(hone|od)/.test(window.navigator.userAgent)) {
 		socket = io.connect(SERVER_URL);
 
 	  // send player id to game

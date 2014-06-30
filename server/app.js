@@ -1,30 +1,21 @@
-var PORT = 10000;
-var express = require("express");
-var http = require("http");
+var PORT = 9090;
 
-// server config
-var app = module.exports = express();
-app.configure(function () {
-  app.use(express.compress());
-  app.use(express.bodyParser());
-  app.use(express.methodOverride());
-  app.use(app.router);
-  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-});
+var app = require('http').createServer(handler);
+var io = require('socket.io')(app);
 
-var server = http.createServer(app);
+app.listen(PORT);
 
-// initializes Socket IO
-app.io = require('socket.io').listen(server);
-// removes debug logs
-app.io.set('log level', 1);
+function handler (req, res) {
+  res.writeHead(200);
+  res.end('yo');
+}
 
 
 // current games socket list
 var games = {};
 
 // init socket.io
-app.io.sockets.on('connection', function (socket) {
+io.sockets.on('connection', function (socket) {
 
   socket.on('newGame', function (data) {
     games[data] = socket;
@@ -54,5 +45,4 @@ app.io.sockets.on('connection', function (socket) {
 
 });
 
-server.listen(PORT);
 console.info("Mychrome Machines server is running on port " + PORT + " !");
