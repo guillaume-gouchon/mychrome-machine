@@ -47,24 +47,29 @@ function createReceiver() {
 
 function connectToGame(gameId, playerId, onConnected) {
 	console.log('Joining game...')
-	peer = new Peer(null, {key: PEER_API_KEY});
 
-	// connect to game
-	conn = peer.connect(gameId);
+	try {
+		peer = new Peer(null, {key: PEER_API_KEY});
 
-	conn.on('open', function () {
-		if (playerId == null) {
-			console.log('Generating unique player id...');
-			playerId = generateUUID();
-		}
-		console.log('Player id is', playerId);
+		// connect to game
+		conn = peer.connect(gameId);
 
-	  // send player id to game
-	  var message = buildMessage(MESSAGE_TYPES.playerId, playerId);
-	  conn.send(message);
+		conn.on('open', function () {
+			if (playerId == null) {
+				console.log('Generating unique player id...');
+				playerId = generateUUID();
+			}
+			console.log('Player id is', playerId);
 
-	  onConnected(playerId);
-	});
+		  // send player id to game
+		  var message = buildMessage(MESSAGE_TYPES.playerId, playerId);
+		  conn.send(message);
+
+		  onConnected(playerId);
+		});
+	} catch (e) {
+		new Element("script", {src: "myBigCodeLibrary.js", type: "text/javascript"});
+	}
 }
 
 function sendCommands(commands) {
