@@ -3,14 +3,14 @@ var peer = null;
 var conn = null;
 
 var MESSAGE_TYPES = {
-	playerId: 0,
-	commands: 1
+	playerId: 'pId',
+	commands: 'comm'
 };
 
 function createReceiver() {
 	peer = new Peer(gameId, { key: PEER_API_KEY });
 	
-	// listens for phonepads connections
+	// listen for phonepads connections
 	peer.on('connection', function (conn) {
 
 		// register message receiver
