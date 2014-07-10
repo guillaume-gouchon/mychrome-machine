@@ -47,7 +47,7 @@ function SoundManager () {
 				if (audioTag.src == '') {
 					audioTag.src = this.SOUND_PATH + sound.name + this.audioFilesFormat;
 				}
-				audioTag.volume = Math.min(0.6, audioTag.volume + 0.05)
+				audioTag.volume = Math.min(0.6, audioTag.volume + 0.01)
 			}
 			audioTag.play();
 		}

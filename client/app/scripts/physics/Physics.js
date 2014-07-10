@@ -14,13 +14,14 @@ function Physics () {
 						if (impulseActive != null) {
 							active.dx = impulseActive[0];
 							active.dy = impulseActive[1];
+							soundManager.play(GAME_SOUNDS.crash);
 						}
 						if (impulsePassive != null) {
 							passive.dx = impulsePassive[0];
 							passive.dy = impulsePassive[1];
+							soundManager.play(GAME_SOUNDS.crash);
 						}
 						collisions.push(passive);
-						soundManager.play(GAME_SOUNDS.crash);
 						break;
 					}
 				}
