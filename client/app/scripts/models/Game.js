@@ -13,7 +13,7 @@ function Game(nbPlayers, race) {
 	this.victory = 8;
 
 	this.GUI = new GUI(this.nbPlayers, this.victory);
-	this.input = new Input(this.nbPlayers);
+	this.input = new Input();
 	this.physics = new Physics();
 
 	// game states
@@ -44,7 +44,7 @@ function Game(nbPlayers, race) {
 		for (var i = 0; i < Math.random() * 3; i++) {
 			this.popNewObstacle();
 		}
-		this.input.init(this.nbPlayers);
+		this.input.init();
 		this.GUI.init();
 		this.startRound();
 	};

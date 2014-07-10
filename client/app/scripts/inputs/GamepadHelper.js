@@ -60,43 +60,44 @@ function GamepadHelper () {
 	    	(navigator.webkitGetGamepads && navigator.webkitGetGamepads());
 
     	if (rawGamepads) {
-			this.gamepads = [];
-      		var gamepadsChanged = false;
-
-			for (var i = 0; i < rawGamepads.length; i++) {
-				if (typeof rawGamepads[i] != this.prevRawGamepadTypes[i]) {
-					gamepadsChanged = true;
-					this.prevRawGamepadTypes[i] = typeof rawGamepads[i];
-				}
-
-				if (rawGamepads[i]) {
-					this.gamepads.push(rawGamepads[i]);
-				}
-			}
-
-			if (gamepadsChanged) {
-				// add new gamepads
-				for (var i in this.gamepads) {
-					this.addPlayer(this.gamepads[i]);
-				}
-
-				// remove the left gamepads
+				// remove the gamepads that left
 				loopPlayer: for (var i in players) {
 					var player = players[i];
 					if (player.type == GAMEPAD_PLAYER) {
-						for (var j in this.gamepads) {
-							if (player.extra == this.gamepads[j].id) {
+						for (var j in rawGamepads) {
+							if (player.extra == rawGamepads[j].id) {
 								break loopPlayer;
 							}
 						}
-						removePlayer(i);
+						delete this.prevRawGamepadTypes[i];
+						this.removePlayer(this.gamepads[i]);
 					}
 				}
-			}
 
-			this.callbacks.updateGamepads(this.gamepads);
-		}
-	};
+				this.gamepads = [];
+    		var gamepadsChanged = false;
+
+				for (var i = 0; i < rawGamepads.length; i++) {
+					if (rawGamepads[i] != null && rawGamepads[i].id != this.prevRawGamepadTypes[i]) {
+						gamepadsChanged = true;
+						this.prevRawGamepadTypes[i] = rawGamepads[i].id;
+					}
+
+					if (rawGamepads[i]) {
+						this.gamepads.push(rawGamepads[i]);
+					}
+				}
+
+				if (gamepadsChanged) {
+					// add new gamepads
+					for (var i in this.gamepads) {
+						this.addPlayer(this.gamepads[i]);
+					}
+				}
+
+				this.callbacks.updateGamepads(this.gamepads);
+			}
+		};
 
 	this.onGamepadConnect = function (event) {
 		console.log('GAMEPAD', 'Gamepad connected');
@@ -121,22 +122,13 @@ function GamepadHelper () {
 	};
 
 	this.addPlayer = function (newGamepad) {
-		newGamepad.playerIndex = players.length;
-		for (var i in players) {
-			var player = players[i]
-			if (player.extra == newGamepad.id) {
-				newGamepad.playerIndex = player.id;
-				this.gamepads.push(newGamepad);
-				return;
-			}
-		}
-		
+		newGamepad.playerId = generateUUID();		
 		addPlayer(GAMEPAD_PLAYER, newGamepad.id);
 		this.gamepads.push(newGamepad);
 	};
 
 	this.removePlayer = function (gamepad) {
-		removePlayer(gamepad.playerIndex);
+		removePlayer(getPlayerIndex(gamepad.playerId));
 		this.gamepads.splice(gamepad.index, 1);
 	};
 
@@ -149,22 +141,40 @@ function GamepadCallbacks () {
 		$('#tutorials .col-4:nth(0)').css('opacity', 0.2);
 	};
 
-   	this.updateGamepads = function (gamepads) {
-   		if (game == null) return;
-
-	   	if (gamepads) {
-	   		for (var i in gamepads) {
-   				var gamepad = gamepads[i];
-		        var playerIndex = gamepad.playerIndex;
-		        if (game.input.inputs[playerIndex] != null) {
-			        game.input.inputs[playerIndex].brake = gamepad.buttons[0];
-			        game.input.inputs[playerIndex].accelerate = gamepad.buttons[1];
-			        game.input.inputs[playerIndex].turnLeft = gamepad.axes[0] < -0.2;
-			        game.input.inputs[playerIndex].turnRight = gamepad.axes[0] > 0.2;
-			    }
+ 	this.updateGamepads = function (gamepads) {
+ 		if (gamepads) {
+   		for (var i in gamepads) {
+ 				var gamepad = gamepads[i];
+	   		if (game == null) {
+	   			// animations before game
+	   			if (gamepad.buttons[0] instanceof Object && (gamepad.buttons[0].pressed || gamepad.buttons[1].pressed || gamepad.buttons[2].pressed || gamepad.buttons[3].pressed)
+	   				|| gamepad.buttons[0] == 1 || gamepad.buttons[1] == 1 || gamepad.buttons[2] == 1 || gamepad.buttons[3] == 1
+	   				|| gamepad.axes[0] > 0.2 || gamepad.axes[0] < -0.2) {
+	   				// bounce !
+	   				$('#playersList div:nth(' + playerIndex + ')').addClass('bounce');
+	   			} else if ($('#playersList div:nth(' + playerIndex + ')').hasClass('bounce')) {
+	   				// stop bouncing
+	   				$('#playersList div:nth(' + playerIndex + ')').removeClass('bounce');
+	   			}
+	   		} else {
+	   			// commands updates during game
+	   			var commands = players[getPlayerIndex(gamepad.playerId)].commands;
+	   			if (commands != null) {
+	   				if (gamepad.buttons[0] instanceof Object) {
+	   					// for analogic buttons gamepads
+			        commands.brake = gamepad.buttons[0].pressed;
+			        commands.accelerate = gamepad.buttons[1].pressed;
+		      	} else {
+	 			     	// for non-analogic (binary) buttons gamepads
+		      		commands.brake = gamepad.buttons[0];
+			        commands.accelerate = gamepad.buttons[1];
+		      	}
+		        commands.turnLeft = gamepad.axes[0] < -0.2;
+		        commands.turnRight = gamepad.axes[0] > 0.2;
+		      }
+				}
 			}
 		}
-
 	};
 
 }

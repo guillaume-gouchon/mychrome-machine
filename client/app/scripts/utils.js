@@ -1,6 +1,6 @@
-window.requestAnimFrame = (function(callback) {
+window.requestAnimFrame = (function (callback) {
 	return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame ||
-	function(callback) {
+	function (callback) {
 	  window.setTimeout(callback, 1000 / 60);
 	};
 })();
@@ -9,6 +9,17 @@ window.requestAnimFrame = (function(callback) {
 function degToRad(deg) {
 	return deg * Math.PI / 180;
 }
+
+
+function generateUUID(){
+    var d = new Date().getTime();
+    var uuid = 'xxxxxxxx-4xxx'.replace(/[xy]/g, function(c) {
+        var r = (d + Math.random()*16)%16 | 0;
+        d = Math.floor(d/16);
+        return (c=='x' ? r : (r&0x7|0x8)).toString(16);
+    });
+    return uuid;
+};
 
 
 function getTranslationDiff(distance, angle) {
@@ -74,4 +85,21 @@ function requestFullscreen () {
 
 function getDistanceBetween(x1, y1, x2, y2) {
 	return Math.pow(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2), 0.5);
+}
+
+function setCookie(cname, cvalue, exminutes) {
+	var d = new Date();
+	d.setTime(d.getTime() + exminutes * 60 * 1000);
+	var expires = "expires=" + d.toGMTString();
+	document.cookie = cname + "=" + cvalue + "; " + expires;
+}
+
+function getCookie(cname) {
+	var name = cname + "=";
+	var ca = document.cookie.split(';');
+	for(var i = 0; i < ca.length; i++) {
+		var c = ca[i].trim();
+		if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
+	}
+	return null;
 }

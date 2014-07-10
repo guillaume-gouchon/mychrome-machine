@@ -1,26 +1,31 @@
 var ctx, screenwidth, screenheight;
 var game = null;
 var soundManager = null;
-var gameId = null;
+var gameId = randomWord();
+$('#gameId').html(gameId);
 var players = [];
-var socket = null;
-var pendingPlayers = [];
-var SERVER_URL = 'http://warnode.com:443';
+
 var IMAGES_PATH = '../images/';
 var PLAYER_NAMES = ['Blue', 'Red', 'Yellow', 'Green'];
 var PLAYER_START_POINTS = 3;
 var MINIMUM_NB_PLAYERS = 2;
 
+
 $(function() {
+
 	if (Modernizr.touch && ($(window).height() <= 480 || $(window).width() <= 480)) {
+
 	   // it is a phone : display phone pad !
 	   $('#gamePad').removeClass('hide');
 	   $('#game').remove();
-	   	   FastClick.attach(document.body);
+   	   FastClick.attach(document.body);
 
 	   	// init phonepad
 	   	var phonepad = new PhonePad();
+	   	phonepad.init();
+
 	} else {
+
 		// it is a screen : display game !
 		$('#mainPage').removeClass('hide');
 		$('#gamepad').remove();
@@ -38,33 +43,6 @@ $(function() {
 		// play music
 		// soundManager.play(GAME_SOUNDS.mainMusic);
 
-		// phone pads
-		try {
-			socket = io.connect(SERVER_URL);
-
-			// create game
-			socket.emit('createGame');
-
-			// wait for response
-			socket.on('gameCreated', function (myGameId) {
-				gameId = myGameId;
-				$('#gameId').html(gameId);
-				for (var i in pendingPlayers) {
-					socket.emit('updatePlayers', { gameId: gameId });
-				}
-			});
-
-			// phonepads
-			socket.on('playerJoined', function () {
-				addPlayer(PHONEPAD_PLAYER);
-			});
-			socket.on('playerLeft', function (playerIndex) {
-				removePlayer(playerIndex);
-			});
-		} catch (e) {
-			console.log(e);
-		}
-
 		// gamepads
 		var gamepadHelper = new GamepadHelper();
 		gamepadHelper.init();
@@ -77,19 +55,25 @@ $(function() {
 		    	startGame(players.length, 1);
 			}
 		});
+
+		createReceiver();
 	}
 
 });
 
 function addKeyboardPlayer (event) {
-	if (game == null && players.length < 8) {
+	if (event.keyCode == 13) {
+		if (players.length >= MINIMUM_NB_PLAYERS) {
+    	startGame(players.length, 1);
+		}
+	} else if (game == null && players.length < 8) {
 		for (var i in players) {
 			if (players[i].type == KEYBOARD_PLAYER) {
 				removePlayer(i);
 				return;	
 			}
 		}
-		addPlayer(KEYBOARD_PLAYER);
+		addPlayer(KEYBOARD_PLAYER, 'keyboard1');
 	}
 }
 
@@ -115,24 +99,27 @@ function restartGame() {
 	startGame(game.nbPlayers, game.race.id);
 }
 
-function addPlayer(playerType, extra) {
-	var player = new Player(players.length, playerType, extra);
-	players.push(player);
-	updatePlayersLayout();
-	if (player.type != PHONEPAD_PLAYER) {
-		if (socket != null && gameId != null) {
-			socket.emit('updatePlayers', { gameId: gameId });
-		} else {
-			pendingPlayers.push('pendingPlayer');
+function addPlayer(playerType, playerId) {
+	if (getPlayerIndex(playerId) == -1) {
+		var player = new Player(playerId, playerType);
+		players.push(player);
+		updatePlayersLayout();
+	} else {
+		console.log('Player rejoined !');
+	}
+}
+
+function getPlayerIndex(playerId) {
+	for (var i in players) {
+		if (players[i].id == playerId) {
+			return i;
 		}
 	}
+	return -1;
 }
 
 function removePlayer(index) {
 	var player = players[index];
-	if (socket != null && player.type != PHONEPAD_PLAYER) {
-		socket.emit('updatePlayers', { gameId: gameId, playerIndex: index });
-	}
 	players.splice(index, 1);
 	updatePlayersLayout();
 }

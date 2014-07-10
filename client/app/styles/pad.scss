@@ -55,24 +55,6 @@
 		div {
 			display: inline-block;
 			text-shadow: 2px 2px 2px rgba(150, 150, 150, 1);
-
-			&:before {
-				content: url('../images/car_1.png');
-				float: left;
-				padding-right: 20px;
-			}
-			&.player0:before {
-				content: url('../images/car_0.png');
-			}
-			&.player1:before {
-				content: url('../images/car_1.png');
-			}
-			&.player2:before {
-				content: url('../images/car_2.png');
-			}
-			&.player3:before {
-				content: url('../images/car_3.png');
-			}
 		}		
 	}
 
@@ -85,7 +67,7 @@
 		position: absolute;
 		top: 20%;
 		left: 0px;
-		height: 70%;
+		height: 75%;
 		width: 100%;
 		text-align: center;
 		display: table;
@@ -115,6 +97,13 @@
 
 				img {
 					width: 100%;
+					-webkit-touch-callout:none;
+					-webkit-user-select:none;
+					-khtml-user-select:none;
+					-moz-user-select:none;
+					-ms-user-select:none;
+					user-select:none;
+					-webkit-tap-highlight-color:rgba(0,0,0,0);
 				}
 			}
 
@@ -144,6 +133,29 @@
 
 			}
 
+			&#vroom {
+				height: 100%;
+				width: 70%;
+				font-family: 'myFont';   
+	      background: #ddd;
+	      border-radius: 15px;
+	      @include boxShadow(0px, -4px, 0px, 0px, #aaa, inset);
+	      border: 0;
+	      display: inline-block;
+	      margin: 10px;
+	      padding: 20px;
+	      cursor: pointer;
+	      font-size: 2.0em;
+	      text-transform: uppercase;
+	      color: #222;
+				background: #5c5;
+				@include boxShadow(0px, -15px, 0px, 0px, #3a3, inset);
+
+				&.active {
+					@include boxShadow(0px, -5px, 0px, 0px, #3a3, inset);
+				}
+			}
+
 			&#brakeBtn {
 				background: #c55;
 				@include boxShadow(0px, -15px, 0px, 0px, #a33, inset);
@@ -166,7 +178,7 @@
 		left: 0px;
 		height: 100%;
 		width: 100%;
-		background: rgba(0, 0, 0, 0.8);
+		background: rgba(0, 0, 0, 0.75);
 		z-index: 100000;
 		display: table;
 		font-size: 1.2em;
@@ -176,23 +188,23 @@
 			padding: 20px;
 			color: #111;
 			@include box-shadow(0px 3px 6px 3px rgba(0, 0, 0, 0.15));
-        	background: rgba(220, 220, 220, 0.85);
+    	background: rgba(220, 220, 220, 0.85);
 		}
 
 		#inputName {
 			width: 30%;
 			font-family: 'myFont';   
-            background: #ddd;
-            border-radius: 15px;
-            @include boxShadow(0px, -4px, 0px, 0px, #aaa, inset);
-            border: 0;
-            display: inline-block;
-            margin: 10px;
-            padding: 20px;
-            cursor: pointer;
-            font-size: 0.8em;
-            text-transform: uppercase;
-            color: #222;
+      background: #ddd;
+      border-radius: 15px;
+      @include boxShadow(0px, -4px, 0px, 0px, #aaa, inset);
+      border: 0;
+      display: inline-block;
+      margin: 10px;
+      padding: 20px;
+      cursor: pointer;
+      font-size: 0.8em;
+      text-transform: uppercase;
+      color: #222;
 		}
 
 		#wheel {
@@ -201,22 +213,22 @@
 
 		button {
 			font-family: 'myFont';   
-            background: #60c165;
-            border-radius: 15px;
-            @include boxShadow(0px, -8px, 0px, 0px, $green, inset);
-            border: 0;
-            display: inline-block;
-            margin: 10px;
-            padding: 20px;
-            cursor: pointer;
-            font-size: 0.8em;
-            text-transform: uppercase;
-            color: #222;
+      background: #60c165;
+      border-radius: 15px;
+      @include boxShadow(0px, -8px, 0px, 0px, $green, inset);
+      border: 0;
+      display: inline-block;
+      margin: 10px;
+      padding: 20px;
+      cursor: pointer;
+      font-size: 0.8em;
+      text-transform: uppercase;
+      color: #222;
 
-            &:active {
-                @include boxShadow(0px, -4px, 0px, 0px, $green, inset);
-                @include transform(translateY(1px));
-            }
+      &.active {
+          @include boxShadow(0px, -4px, 0px, 0px, $green, inset);
+          @include transform(translateY(1px));
+      }
 		}
 
 		&.loading {
@@ -225,4 +237,26 @@
 
 	}
 
+}
+
+.bounce {
+	@include animation(bounce 500ms alternate infinite);
+}
+
+@keyframes bounce {
+    0% {
+        @include transform(scale(1.0));
+    }
+    100% {
+        @include transform(scale(0.9));
+    }
+}
+
+@-webkit-keyframes bounce {
+    0% {
+        @include transform(scale(1.0));
+    }
+    100% {
+        @include transform(scale(0.9));
+    }
 }
