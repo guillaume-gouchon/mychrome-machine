@@ -1,0 +1,384 @@
+@import "compass";
+@import "variables";
+@include font-face("myFont", font-files("font.ttf"));
+
+body {
+    background-color: #000;
+    overflow: hidden;
+    font-family: 'myFont';
+    margin: 0;
+    font-size: 0.8em;
+}
+
+#audioTags {
+    display: none;
+}
+
+canvas {
+    height: 100%;
+    width: 100%;
+}
+
+.hide {
+	display: none!important;
+}
+
+.car {
+    @extend .hide;
+}
+
+*:focus {
+    outline: 0;
+}
+
+.greenText {
+    color: $green;
+}
+
+.redText {
+    color: $red;
+}
+
+.blueText {
+    color: $blue;
+}
+
+.box {
+    @include box-shadow(0px 3px 6px 3px rgba(0, 0, 0, 0.15));
+    padding: 20px;
+    background: rgba(220, 220, 220, 0.85);
+}
+
+#mainPage {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    height: 100%;
+    width: 100%;
+    background: url('../images/bg_home.png') repeat;
+    text-align: center;
+    z-index: 100000;
+    color: #111;
+    text-shadow: 1px 1px 2px #aaa;
+    overflow: auto;
+
+    #animatedCars {
+        height: 100%;
+        width: 100%;
+
+        div {
+            position: absolute;
+
+            &:nth-child(1) {
+                top: 170px;
+                left: 600px;
+            }
+
+            &:nth-child(2) {
+                top: 270px;
+                left: 200px;
+            }
+
+            &:nth-child(3) {
+                top: 420px;
+                left: 300px;
+            }
+
+            &:nth-child(4) {
+                top: 140px;
+                left: 500px;
+            }
+        }
+
+        &.animated {
+
+            div {
+                @include animation(animateCars 10s infinite linear);
+            }
+
+            img {
+                @include animation(turn 10s infinite linear);
+            }
+        }
+    }
+
+    #startGameDialog {
+        position: absolute;
+        top : 0%;
+        left: 0%;
+        height: 100%;
+        width: 100%;
+        font-size: 1.8em;
+
+        #logo {
+            
+            h2 {
+                margin-top: 20px;
+                @extend .box;
+                font-style: italic;
+                @include single-transition(all, 1000ms, false, false);
+
+                &.farTop {
+                    @include transform(translateY(-300px));
+                }
+
+                &:before {
+                    display: inline-block;
+                    @include transform(rotate(0deg));
+                    content: url('../images/car_1.png');
+                    padding-right: 24px;
+                }
+                &:after {
+                    display: inline-block;
+                    @include transform(rotate(0deg));
+                    content: url('../images/car_0.png');
+                    padding-left: 24px;
+                }
+            }
+
+        }
+
+        h4 {
+            font-size: 0.8em;
+            padding-left: 30px;
+            text-align: left;
+            text-decoration: underline;
+            margin: 30px 0px 10px 0px;
+        }
+
+        #tutorials {
+            @include box-shadow(0px 3px 6px 3px rgba(0, 0, 0, 0.15));
+            padding: 16px;
+            margin-left: 3%;
+            margin-right: 3%;
+            background: rgba(220, 220, 220, 0.85);
+            font-size: 0.8em;
+
+            .col-6 {
+                display:inline-block;
+                width: 45%;
+                color: #111;
+
+                i {
+                    vertical-align: middle;
+                    margin-right: 10px;
+                }
+            }
+
+            small {
+                font-size: 0.7em;
+            }
+        }
+
+        #playersList {
+            @include box-shadow(0px 3px 6px 3px rgba(0, 0, 0, 0.15));
+            padding: 16px;
+            margin-left: 3%;
+            margin-right: 3%;
+            background: rgba(220, 220, 220, 0.85);
+
+            div {
+                display: inline-block;
+                height: 60px;
+                line-height: 60px;
+                width : 20%;
+                @include box-shadow(0px 3px 6px 3px rgba(0, 0, 0, 0.15) inset   );
+                text-align: center;
+                padding-left: 20px;
+                margin-bottom: 10px;
+                background: none;
+                opacity: 0.6;
+                @include single-transition(all, 500ms, false, false);
+
+                &.active span, &.active i {
+                    color: #ddd;
+                }
+
+                &:nth-child(1).active, &:nth-child(5).active {
+                    background: $blue;
+                }
+
+                &:nth-child(2).active, &:nth-child(6).active {
+                    background: $red;
+                }
+
+                &:nth-child(3).active, &:nth-child(7).active {
+                    background: $yellow;
+                }
+
+                &:nth-child(4).active, &:nth-child(8).active {
+                    background: $green;
+                }
+
+                span {
+                    float: left;
+                    color: #999;
+                }
+            }
+        }
+
+        #startGameBtn {
+            font-family: 'myFont';   
+            background: #60c165;
+            border-radius: 20px;
+            @include boxShadow(0px, -8px, 0px, 0px, $green, inset);
+            border: 0;
+            display: inline-block;
+            margin: 30px;
+            padding: 30px;
+            cursor: pointer;
+            font-size: 0.8em;
+            text-transform: uppercase;
+            color: #222;
+            font-weight: bold;
+
+            &:active {
+                @include boxShadow(0px, -4px, 0px, 0px, $green, inset);
+                @include transform(translateY(2px));
+            }
+        }
+    }
+
+    #credits {
+        z-index: 1000000;
+        position: fixed;
+        bottom: 0px;
+        width: 100%;
+        text-align:right;
+        background: rgba(220, 220, 220, 0.85);
+        padding: 5px;
+
+        a {
+            @extend .blueText;
+            text-decoration: none;
+            margin-right: 30px;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+
+}
+
+
+@-webkit-keyframes animateCars {
+    0% {
+        @include transform(translate(0, 0px));
+    }
+    33% {
+        @include transform(translate(800px, 0px));
+    }
+    50% {
+        @include transform(translate(800px, 300px));
+    }
+    83% {
+        @include transform(translate(0px, 300px));
+    }
+    100% {
+        @include transform(translate(0px, 0px));
+    }
+}
+
+@-webkit-keyframes turn {
+    0% {
+        @include transform(rotate(0deg));
+    }
+    30% {
+        @include transform(rotate(0deg));
+    }
+    33% {
+        @include transform(rotate(90deg));
+    }
+    47% {
+        @include transform(rotate(90deg));
+    }
+    50% {
+        @include transform(rotate(180deg));
+    }
+    80% {
+        @include transform(rotate(180deg));
+    }
+    83% {
+        @include transform(rotate(270deg));
+    }
+    97% {
+        @include transform(rotate(270deg));
+    }
+    100% {
+        @include transform(rotate(360deg));
+    }
+}
+
+
+
+@keyframes animateCars {
+    0% {
+        @include transform(translate(0, 0px));
+    }
+    33% {
+        @include transform(translate(800px, 0px));
+    }
+    50% {
+        @include transform(translate(800px, 300px));
+    }
+    83% {
+        @include transform(translate(0px, 300px));
+    }
+    100% {
+        @include transform(translate(0px, 0px));
+    }
+}
+
+@keyframes turn {
+    0% {
+        @include transform(rotate(0deg));
+    }
+    30% {
+        @include transform(rotate(0deg));
+    }
+    33% {
+        @include transform(rotate(90deg));
+    }
+    47% {
+        @include transform(rotate(90deg));
+    }
+    50% {
+        @include transform(rotate(180deg));
+    }
+    80% {
+        @include transform(rotate(180deg));
+    }
+    83% {
+        @include transform(rotate(270deg));
+    }
+    97% {
+        @include transform(rotate(270deg));
+    }
+    100% {
+        @include transform(rotate(360deg));
+    }
+}
+
+#qrcode {
+    position: absolute;
+    top: 25px;
+    left: 20px;
+    z-index: 10000;
+    opacity: 0.7;
+    height: 70px;
+    width: 70px;
+}
+
+.bounce {
+    @include animation(bounce 500ms alternate infinite);
+}
+
+@keyframes bounce {
+    0% {
+        @include transform(scale(1.0));
+    }
+    100% {
+        @include transform(scale(0.9));
+    }
+}
