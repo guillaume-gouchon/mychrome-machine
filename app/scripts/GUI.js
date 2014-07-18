@@ -1,9 +1,6 @@
 function GUI (nbPlayers, victory) {
 
-	this.TRAFFIC_LIGHTS_EACH_DURATION = 700;
-
-	this.nbPlayers = nbPlayers;
-	this.victory = victory;
+	var TRAFFIC_LIGHTS_EACH_DURATION = 700;
 
 	this.init = function () {
 		console.log('GUI', 'init');
@@ -86,7 +83,7 @@ function GUI (nbPlayers, victory) {
 				}
 			}
 			nbLightOn++;
-		}, this.TRAFFIC_LIGHTS_EACH_DURATION);
+		}, TRAFFIC_LIGHTS_EACH_DURATION);
 	}
 
 }

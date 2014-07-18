@@ -1,3 +1,8 @@
+function Sound (name, category) {
+	this.name = name;
+	this.category = category;
+}
+
 // list of different sounds
 var GAME_SOUNDS = {
 	mainMusic: new Sound('main_music', 0),

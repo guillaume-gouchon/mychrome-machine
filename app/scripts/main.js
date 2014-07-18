@@ -14,8 +14,9 @@ $(function() {
 	// animate title and cars
 	setTimeout(function () {
 		$('#logo h2').removeClass('farTop');
-		$('#animatedCars').addClass('animated');
 	}, 200);
+
+	$('#animatedCars').addClass('animated');
 
 	// init sound
 	soundManager = new SoundManager();

@@ -44,7 +44,6 @@ function Game(nbPlayers, race) {
 		for (var i = 0; i < Math.random() * 3; i++) {
 			this.popNewObstacle();
 		}
-		this.input.init();
 		this.GUI.init();
 		this.startRound();
 	};
@@ -189,7 +188,7 @@ function Game(nbPlayers, race) {
 			var leaderCar = this.cars[i % 4];// when more than 4 players, there are teams
 			if (car.isOut) {
 				if (car.outRank == 1) {
-					leaderCar.life = Math.max(0, leaderCar.life - 2);
+					leaderCar.life = Math.max(0, leaderCar.life - 1);
 				} else if (car.outRank == 2) {
 					leaderCar.life = Math.max(0, leaderCar.life - 1);
 				} else if (car.outRank == this.nbPlayers  - 1) {

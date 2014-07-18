@@ -3,166 +3,167 @@
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js" manifest="machines.appcache"> <!--<![endif]-->
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Mychrome Machines - Local Multiplayer Racing Car Game</title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Mychrome Machines - Local Multiplayer Racing Car Game</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 
-        <link rel="icon" href="favicon.ico" />
-        <link rel="icon" sizes="196x196" href="images/icon.png">
-        <link rel="icon" sizes="128x128" href="images/icon_128.png">
-        <link rel="apple-touch-icon" sizes="128x128" href="images/icon_128.png">
+  <link rel="icon" href="favicon.ico" />
+  <link rel="icon" sizes="196x196" href="images/icon.png">
+  <link rel="icon" sizes="128x128" href="images/icon_128.png">
+  <link rel="apple-touch-icon" sizes="128x128" href="images/icon_128.png">
 
-        <!-- build:css styles/vendor.css -->
-        <link rel="stylesheet" href="styles/font-awesome.min.css">
-        <!-- endbuild -->
+  <!-- build:css styles/vendor.css -->
+  <link rel="stylesheet" href="styles/font-awesome.min.css">
+  <!-- endbuild -->
 
-        <!-- build:css(.tmp) styles/main.css -->
-        <link rel="stylesheet" href="styles/main.css">
-        <link rel="stylesheet" href="styles/gui.css">
-        <!-- endbuild -->
-    </head>
-    <body>
-        <!--[if lt IE 10]>
-            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-        <![endif]-->
+  <!-- build:css(.tmp) styles/main.css -->
+  <link rel="stylesheet" href="styles/main.css">
+  <link rel="stylesheet" href="styles/gui.css">
+  <!-- endbuild -->
+</head>
 
-        <div id="mainPage">
-            <div id="animatedCars">
-                <div><img src="images/car_0.png"/></div>
-                <div><img src="images/car_1.png"/></div>
-                <div><img src="images/car_2.png"/></div>
-                <div><img src="images/car_3.png"/></div>
-            </div>
-            <div id="startGameDialog">
+<body>
+  <!--[if lt IE 10]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+  <![endif]-->
 
-                <img id="qrcode" alt="QR Code" src="images/qrcode.png"/>
-                
-                <div id="logo">
-                    <h2 class="farTop">Mychrome Machines</h2>
-                </div>
+  <div id="mainPage">
+      <div id="credits">Credits&nbsp;&nbsp;<a href="http://gouchon.com" target="_blank">Guillaume Gouchon</a></div>
+      <div id="animatedCars">
+          <div><img src="images/car_0.png"/></div>
+          <div><img src="images/car_1.png"/></div>
+          <div><img src="images/car_2.png"/></div>
+          <div><img src="images/car_3.png"/></div>
+      </div>
+      <div id="startGameDialog">
+          
+          <div id="logo">
+              <h2 class="farTop">Mychrome Machines</h2>
+          </div>
 
-                <h4>How to Play ?</h4>
-                
-                <div id="tutorials">
-                    <div class="col-6">
-                        <div class="redText"><i class="fa fa-gamepad fa-2x"></i> Plug USB Gamepads</div>
-                        <small>Press any button to add a player<br/>A to accelerate, X to brake</small>
-                    </div>
-                    <div class="col-6">
-                        <div class="blueText"><i class="fa fa-mobile-phone fa-2x"></i> Use your phone as a Gamepad</div>
-                        <small>Go on <a href="http://pad.gouchon.com" target="_blank">pad.gouchon.com</a> with your phone<br/>and enter this :</small>
-                        <strong id="gameId"></strong>
-                    </div>
-                </div>
-                <h4>Players</h4>
-                <div id="playersList">
-                    <div><span>1</span><i class="fa fa-1x"></i></div>
-                    <div><span>2</span><i class="fa fa-1x"></i></div>
-                    <div><span>3</span><i class="fa fa-1x"></i></div>
-                    <div><span>4</span><i class="fa fa-1x"></i></div>
-                    <div><span>5</span><i class="fa fa-1x"></i></div>
-                    <div><span>6</span><i class="fa fa-1x"></i></div>
-                    <div><span>7</span><i class="fa fa-1x"></i></div>
-                    <div><span>8</span><i class="fa fa-1x"></i></div>
-                </div>
-                <button id="startGameBtn">Start&nbsp;Game !</button>
-            </div>
-            <div id="credits">Credits&nbsp;&nbsp;<a href="http://gouchon.com" target="_blank">Guillaume Gouchon</a></div>
-        </div>
+          <h4>How to Play ?</h4>
+          
+          <div id="tutorials">
+              <div class="col-6">
+                  <div class="redText"><i class="fa fa-gamepad fa-2x"></i> Plug USB Gamepads</div>
+                  <small>Press any button to add a player</small>
+              </div>
+              <div class="col-6">
+                  <div class="blueText"><i class="fa fa-mobile-phone fa-2x"></i> Use your phone as a Gamepad</div>
+                  <small>Go on <a href="http://pad.gouchon.com" target="_blank">pad.gouchon.com</a> with your phone<br/>and enter :</small>
+                  <strong id="gameId"></strong>
+              </div>
+              <div id="commands">
+                  <img alt="gamepad axis" src="images/axes.png"/> Turn <span class="green dot"></span> Accelerate <span class="red dot"></span> Brake
+              </div>
+          </div>
+          <h4>Players</h4>
+          <div id="playersList">
+              <div><span>1</span><i class="fa fa-1x"></i></div>
+              <div><span>2</span><i class="fa fa-1x"></i></div>
+              <div><span>3</span><i class="fa fa-1x"></i></div>
+              <div><span>4</span><i class="fa fa-1x"></i></div>
+              <div><span>5</span><i class="fa fa-1x"></i></div>
+              <div><span>6</span><i class="fa fa-1x"></i></div>
+              <div><span>7</span><i class="fa fa-1x"></i></div>
+              <div><span>8</span><i class="fa fa-1x"></i></div>
+          </div>
+          <button id="startGameBtn">Start&nbsp;Game !</button>
+      </div>
+  </div>
 
 
-        <div id="game" class="hide">
-            <canvas id="cars"></canvas>
+  <div id="game" class="hide">
+      <canvas id="cars"></canvas>
 
-            <div id="gui">
-                <div class="playerPoints"></div>
-                <div class="playerPoints"></div>
-                <div class="playerPoints"></div>
-                <div class="playerPoints"></div>
+      <div id="gui">
+          <div class="playerPoints"></div>
+          <div class="playerPoints"></div>
+          <div class="playerPoints"></div>
+          <div class="playerPoints"></div>
 
-                <div id="trafficLights">
-                    <div class="lights">
-                        <div>&nbsp;</div>
-                        <div>&nbsp;</div>
-                        <div>&nbsp;</div>
-                    </div>
-                    <div class="lights">
-                        <div>&nbsp;</div>
-                        <div>&nbsp;</div>
-                        <div>&nbsp;</div>
-                    </div>
-                </div>
+          <div id="trafficLights">
+              <div class="lights">
+                  <div>&nbsp;</div>
+                  <div>&nbsp;</div>
+                  <div>&nbsp;</div>
+              </div>
+              <div class="lights">
+                  <div>&nbsp;</div>
+                  <div>&nbsp;</div>
+                  <div>&nbsp;</div>
+              </div>
+          </div>
 
-                <div id="victory" class="hide">
-                    <img alt="victorious car" src=""/>
-                </div>
-                <div id="bigMessage"></div>
-            </div>
+          <div id="victory" class="hide">
+              <img alt="victorious car" src=""/>
+          </div>
+          <div id="bigMessage"></div>
+      </div>
 
-            <img id="table" class="hide" src="images/table.png"/>
-            <img id="arrow" class="hide" src="images/arrow.png"/>
-            <img id="car0" class="car" src="images/car_0.png"/>
-            <img id="car1" class="car" src="images/car_1.png"/>
-            <img id="car2" class="car" src="images/car_2.png"/>
-            <img id="car3" class="car" src="images/car_3.png"/>
-            <img id="smoke" class="hide" src="images/smoke.png"/>
-            <img id="explosion" class="hide" src="images/explosion.png"/>
-            <img id="sugar" class="hide" src="images/sugar.png"/>
-            <img id="coffee" class="hide" src="images/coffee.png"/>
-            <img id="macaron" class="hide" src="images/macaron.png"/>
-        </div>
+      <img id="table" class="hide" src="images/table.png"/>
+      <img id="arrow" class="hide" src="images/arrow.png"/>
+      <img id="car0" class="car" src="images/car_0.png"/>
+      <img id="car1" class="car" src="images/car_1.png"/>
+      <img id="car2" class="car" src="images/car_2.png"/>
+      <img id="car3" class="car" src="images/car_3.png"/>
+      <img id="smoke" class="hide" src="images/smoke.png"/>
+      <img id="explosion" class="hide" src="images/explosion.png"/>
+      <img id="sugar" class="hide" src="images/sugar.png"/>
+      <img id="coffee" class="hide" src="images/coffee.png"/>
+      <img id="macaron" class="hide" src="images/macaron.png"/>
+  </div>
 
-        <div id="audioTags">
-            <audio controls preload></audio>
-            <audio controls preload></audio>
-            <audio controls preload></audio>
-            <audio controls preload></audio>
-        </div>
+  <div id="audioTags">
+      <audio controls preload></audio>
+      <audio controls preload></audio>
+      <audio controls preload></audio>
+      <audio controls preload></audio>
+  </div>
 
-        <!-- Google Analytics -->
-        <script>
-          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  <!-- Google Analytics -->
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-          ga('create', 'UA-30940327-10', 'machines.gouchon.com');
-          ga('send', 'pageview');
-        </script>
+    ga('create', 'UA-30940327-10', 'machines.gouchon.com');
+    ga('send', 'pageview');
+  </script>
 
-        <!-- build:js scripts/vendor.js -->
-        <!-- bower:js -->
-        <script src="bower_components/peerjs/peer.js"></script>
-        <script src="bower_components/modernizr/modernizr.js"></script>
-        <script src="bower_components/jquery/jquery.js"></script>
-        <script src="scripts/libs/inheritance.js"></script>
-        <script src="bower_components/phonepad.js/dist/phonepad.js"></script>
-        <!-- endbower -->
-        <!-- endbuild -->
+  <!-- build:js scripts/vendor.js -->
+  <!-- bower:js -->
+  <script src="bower_components/peerjs/peer.js"></script>
+  <script src="bower_components/modernizr/modernizr.js"></script>
+  <script src="bower_components/jquery/jquery.js"></script>
+  <script src="scripts/libs/inheritance.js"></script>
+  <script src="bower_components/phonepad.js/dist/phonepad.js"></script>
+  <!-- endbower -->
+  <!-- endbuild -->
 
-        <!-- build:js({app,.tmp}) scripts/main.js -->
-        <script src="scripts/physics/elements/RigidBody.js"></script>
-        <script src="scripts/physics/elements/CircleBody.js"></script>
-        <script src="scripts/physics/Physics.js"></script>
+  <!-- build:js({app,.tmp}) scripts/main.js -->
+  <script src="scripts/physics/elements/RigidBody.js"></script>
+  <script src="scripts/physics/elements/CircleBody.js"></script>
+  <script src="scripts/physics/Physics.js"></script>
 
-        <script src="scripts/models/Game.js"></script>
-        <script src="scripts/models/Car.js"></script>
-        <script src="scripts/models/Player.js"></script>
-        <script src="scripts/models/Obstacle.js"></script>
-        <script src="scripts/models/Race.js"></script>
+  <script src="scripts/models/Game.js"></script>
+  <script src="scripts/models/Car.js"></script>
+  <script src="scripts/models/Player.js"></script>
+  <script src="scripts/models/Obstacle.js"></script>
+  <script src="scripts/models/Race.js"></script>
 
-        <script src="scripts/utils.js"></script>
-        <script src="scripts/GUI.js"></script>
-        <script src="scripts/sounds/Sound.js"></script>
-        <script src="scripts/sounds/SoundManager.js"></script>
-        <script src="scripts/inputs/Command.js"></script>
-        <script src="scripts/inputs/Input.js"></script>
-        <script src="scripts/main.js"></script>
-        <!-- endbuild -->
-        
-        <script src="http://warnode.com:7070/socket.io/socket.io.js"></script>
+  <script src="scripts/utils.js"></script>
+  <script src="scripts/GUI.js"></script>
+  <script src="scripts/soundManager.js"></script>
+  <script src="scripts/input.js"></script>
+  <script src="scripts/main.js"></script>
+  <!-- endbuild -->
+  
+  <script src="http://warnode.com:7070/socket.io/socket.io.js"></script>
+
 </body>
 </html>

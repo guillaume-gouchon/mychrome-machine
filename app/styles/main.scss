@@ -158,6 +158,7 @@ canvas {
                 display:inline-block;
                 width: 45%;
                 color: #111;
+                vertical-align: top;
 
                 i {
                     vertical-align: middle;
@@ -223,14 +224,14 @@ canvas {
             border-radius: 20px;
             @include boxShadow(0px, -8px, 0px, 0px, $green, inset);
             border: 0;
-            display: inline-block;
-            margin: 30px;
+            margin: 30px 0px 0px 10px;
             padding: 30px;
             cursor: pointer;
             font-size: 0.8em;
             text-transform: uppercase;
             color: #222;
             font-weight: bold;
+            width: 40%;
 
             &:active {
                 @include boxShadow(0px, -4px, 0px, 0px, $green, inset);
@@ -243,74 +244,49 @@ canvas {
         z-index: 1000000;
         position: fixed;
         bottom: 0px;
-        width: 100%;
-        text-align:right;
-        background: rgba(220, 220, 220, 0.85);
+        right: 0px;
         padding: 5px;
+        font-size: 0.9em;
+        margin-right: 20px;
 
         a {
             @extend .blueText;
             text-decoration: none;
-            margin-right: 30px;
 
             &:hover {
                 text-decoration: underline;
             }
         }
     }
-
 }
 
+#commands {
+    margin: 35px 0px 10px 0px;
 
-@-webkit-keyframes animateCars {
-    0% {
-        @include transform(translate(0, 0px));
-    }
-    33% {
-        @include transform(translate(800px, 0px));
-    }
-    50% {
-        @include transform(translate(800px, 300px));
-    }
-    83% {
-        @include transform(translate(0px, 300px));
-    }
-    100% {
-        @include transform(translate(0px, 0px));
+    img {
+        height: 30px;
+        width: 30px;
+        vertical-align: middle;
     }
 }
 
-@-webkit-keyframes turn {
-    0% {
-        @include transform(rotate(0deg));
-    }
-    30% {
-        @include transform(rotate(0deg));
-    }
-    33% {
-        @include transform(rotate(90deg));
-    }
-    47% {
-        @include transform(rotate(90deg));
-    }
-    50% {
-        @include transform(rotate(180deg));
-    }
-    80% {
-        @include transform(rotate(180deg));
-    }
-    83% {
-        @include transform(rotate(270deg));
-    }
-    97% {
-        @include transform(rotate(270deg));
-    }
-    100% {
-        @include transform(rotate(360deg));
-    }
+.dot {
+    height: 30px;
+    width: 30px;
+    border-radius: 100%;
+    display: inline-block;
+    box-shadow: inset 0px 0px 4px 2px #333;
+    vertical-align: middle;
+    margin-left: 20px;
 }
 
+.red {
+    background: red;
+}
 
+.green {
+    background: green;
+}
 
 @keyframes animateCars {
     0% {
@@ -360,16 +336,6 @@ canvas {
     }
 }
 
-#qrcode {
-    position: absolute;
-    top: 25px;
-    left: 20px;
-    z-index: 10000;
-    opacity: 0.7;
-    height: 70px;
-    width: 70px;
-}
-
 .bounce {
     @include animation(bounce 500ms alternate infinite);
 }
@@ -379,6 +345,6 @@ canvas {
         @include transform(scale(1.0));
     }
     100% {
-        @include transform(scale(0.9));
+        @include transform(scale(0.7));
     }
 }
