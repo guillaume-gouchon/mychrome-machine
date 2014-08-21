@@ -4,10 +4,10 @@ function GUI (nbPlayers, victory) {
 
 	this.init = function () {
 		console.log('GUI', 'init');
-		for (var i = 0; i < this.nbPlayers; i++) {
+		for (var i = 0; i < nbPlayers; i++) {
 			var s = '';
-			for (var n = 0; n < this.victory; n++) {
-				s += '<div class="point ' + (n >= this.victory - PLAYER_START_POINTS ? 'active' : '') + '">&nbsp;</div>';
+			for (var n = 0; n < victory; n++) {
+				s += '<div class="point ' + (n >= victory - PLAYER_START_POINTS ? 'active' : '') + '">&nbsp;</div>';
 			}
 			$('.playerPoints:nth(' + i + ')').html(s);
 		}
@@ -33,13 +33,13 @@ function GUI (nbPlayers, victory) {
 
 	this.updatePoints = function (cars) {
 		console.log('GUI', 'updatePoints');
-		for (var i = 0; i < this.nbPlayers; i++) {
+		for (var i = 0; i < nbPlayers; i++) {
 			var car = cars[i];
-			for (var n = 0; n < this.victory; n++) {
+			for (var n = 0; n < victory; n++) {
 				var element = $('.playerPoints:nth(' + i + ') .point:nth(' + n + ')');
-				if (n >= this.victory - car.life && !element.hasClass('active')) {
+				if (n >= victory - car.life && !element.hasClass('active')) {
 					element.addClass('active new');
-				} else if (n < this.victory - car.life && element.hasClass('active')) {
+				} else if (n < victory - car.life && element.hasClass('active')) {
 					element.removeClass('active');
 					element.outerWidth();// trick to stop the CSS animation and start another one
 					element.addClass('new');
