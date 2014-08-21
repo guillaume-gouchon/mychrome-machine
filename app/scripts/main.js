@@ -6,7 +6,7 @@ var players = [];
 var IMAGES_PATH = '../images/';
 var PLAYER_NAMES = ['Blue', 'Red', 'Yellow', 'Green'];
 var PLAYER_START_POINTS = 3;
-var MINIMUM_NB_PLAYERS = 1;
+var MINIMUM_NB_PLAYERS = 2;
 
 
 $(function() {
